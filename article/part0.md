@@ -111,8 +111,9 @@
 ## 2. 特殊情况
 
 - 当线性变化后 区域 **面积** 为 0 时（点，线）
+  说明发生了由 **高维到低维** 的线性变换
   ![](../images/determinant1.png)
-  
+
 - 当线性变化后 区域 **体积** 为 0 时（点，线，面）
   ![](../images/determinant4.png)
 
@@ -161,7 +162,7 @@
 
 # 六、向量的点积
 
-##1. 标准
+##1. 概念
 - 数学计算，遵循乘法交换律（都是长度乘长度）
   ​
   $$
@@ -199,9 +200,11 @@ V * W = 0 互相垂直
   ![](../images/dot5.png)
 
 
+
+
 # 七、向量的叉乘
 
-## 1. 标准
+## 1. 概念
 
 - 叉乘计算：求两个向量组合成的矩阵的行列式值（矩阵的转置矩阵不改变行列式的值）
   ![](../images/cross1.png)
@@ -259,6 +262,7 @@ V * W = 0 互相垂直
    ![](../images/cross5.png)
 
 2. 由于函数线性，就会存在一个 1 X 3 矩阵来代表这个变换
+
    ​
    $$
    \begin{bmatrix} \color{red}{p_1} &  \color{red}{p_2} & \color{red}{p_3}\\ \end{bmatrix} \cdot 
@@ -272,6 +276,8 @@ V * W = 0 互相垂直
    \end{bmatrix} 
    \end{pmatrix}
    $$
+
+
 
 
 
@@ -304,8 +310,154 @@ $$
    P 的长度 == V、W 确定的平行四边形面积 == V、W 的叉乘
    ![](../images/cross4.png)
 
+
+
+
 #八、基变换
 
+##1. 概念
+
+- 基向量：**基向量的比值**可以表示坐标系中的任何向量
+- 变换前提：同一原点
+- 几何意义：实现 **同一个向量** 在不同 **基向量（坐标系）**下的转换
+
+##2. 不同坐标系的互相转换
+
+- 目标 1：A 坐标系的向量 v 转 B 坐标系的向量 w
+- 公式 1：矩阵向量乘法
+  向量 a：A 坐标系，x 轴上的基向量在 B 坐标系的向量
+  向量 b：A 坐标系，y 轴上的基向量在 B 坐标系的向量
+  矩阵 M：A 坐标系的基向量在 B 坐标系的表示
+$$
+\begin{align}
+\overrightarrow M \cdot \overrightarrow v &= \overrightarrow w \\
+\overrightarrow v &= {\overrightarrow M}^{-1} \cdot \overrightarrow w \\ \\
+\begin{bmatrix} 
+\color{green}{a_x} & \color{red}{b_x}\\ 
+\color{green}{a_y} & \color{red}{b_y}\\
+\end{bmatrix} \cdot 
+\begin{bmatrix} 
+v_1 \\ v_2\\ 
+\end{bmatrix} 
+&= 
+\begin{bmatrix} 
+w_1 \\ w_2\\ 
+\end{bmatrix} \\ 
+\begin{bmatrix} 
+v_1 \\ v_2\\ 
+\end{bmatrix} 
+&= 
+{ \begin{bmatrix} 
+\color{green}{a_x} & \color{red}{b_x}\\ 
+\color{green}{a_y} & \color{red}{b_y}\\
+\end{bmatrix} 
+}^{-1}\cdot 
+\begin{bmatrix} 
+w_1 \\ w_2\\ 
+\end{bmatrix} \\
+\end{align}
+$$
+
+- 目标 2：用 B 坐标系计算 A 坐标系的线性变换（矩阵 M）后的**向量** a
+
+- 公式 2：
+  矩阵 M：向量 b 在 B 坐标系的线性变换
+  矩阵 A：A 坐标系的基向量 到 B 坐标系的线性变换
+  向量 v ：在 A 坐标系的向量（输入）
+  向量 w ：在 A 坐标系 矩阵 M 线性变换后的结果（输出）
+  $$
+  \color{#F0F}{\overrightarrow A^{-1}} \cdot 
+  \color{#00F}{\overrightarrow M} \cdot 
+  \color{#F0F}{\overrightarrow A} \cdot 
+  \color{red}{\overrightarrow v} = \color{red}{\overrightarrow w} \\
+  $$
+
+
+
+
+
 #九、特征向量与特征值
+
+## 1. 概念
+
+- 几何意义：
+  特征向量：向量在 **线性变换前后** 向量的 **张成空间（二、1）不变**
+  特征值：特征向量 线性变换**后 **的长度 / 线性变换**前** 的长度，向量翻转时特征值为负
+- 特殊情况：
+  部分旋转的线性变换 **没有特征值和特征向量**
+  属于单个特征值的特征向量可能不止在一条线上
+  ![](../images/eigenvalue.png)
+- 公式：
+  矩阵 A：变换矩阵
+  矩阵 I：单位矩阵
+  向量 v：特征向量
+  lambda：特征值
+
+$$
+\begin{align}
+A \overrightarrow v &= \lambda \overrightarrow v \\
+A \overrightarrow v &= \lambda  
+\begin{bmatrix} 
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1\\
+\end{bmatrix}
+\cdot
+\overrightarrow v \\
+(A - 
+\begin{bmatrix} 
+\lambda & 0 & 0\\
+0 & \lambda & 0\\
+0 & 0 & \lambda\\
+\end{bmatrix}
+) \cdot \overrightarrow v &= 0 \\
+\\
+(A - \lambda I) \cdot \overrightarrow v &= 0 \\
+\end{align}
+$$
+
+ - 求解：
+   特征向量 v 为 0，上述公式恒成立
+   特征向量 v 非 0，可知 **矩阵 [ A - lambda * I ] **的 **行列式** 值为 0（四、2），可以求出 特征值，然后代入公式求特征向量
+
+## 2. 应用
+
+- 特征向量作为旋转轴：**（特征值必须 == 1）**
+  由于特征向量在线性变换后不影响其方向，可以**作为旋转轴**
+- 对角矩阵：
+  除了对角元素以外其他元素均为 0 的矩阵
+  所有基向量 都是 特征向量，对角元素之积是 特征值
+  多次相乘对角矩阵容易计算
+- 特征基：
+  几个特征向量的张成空间是基向量的张成空间，这几个特征向量可以作为基向量使用
+- 降低矩阵计算量：
+  对于部分矩阵，如果特征基存在，通过基变换（八、2）选取特征基作为新的基向量，可以得出对角矩阵，在利用对角矩阵易计算的特性，降低计算量
+  例：
+  X 轴上的基向量由 (0, 1) 到 (0, 1)
+  Y 轴上的基向量由 (1, 0) 到 (-1, 1)
+
+$$
+{ \begin{bmatrix} 
+\color{green}{1} & \color{#FA0}{-1}\\ 
+\color{green}{0} & \color{#FA0}{1}\\
+\end{bmatrix} 
+}^{-1}\cdot 
+\begin{bmatrix} 
+\color{green}{3} & \color{red}{1}\\ 
+\color{green}{0} & \color{red}{2}\\
+\end{bmatrix} 
+\cdot
+\begin{bmatrix} 
+\color{green}{1} & \color{#FA0}{-1}\\ 
+\color{green}{0} & \color{#FA0}{1}\\
+\end{bmatrix} 
+= 
+\begin{bmatrix} 
+\color{red}{3} & 0\\ 
+0 & \color{red}{2}\\
+\end{bmatrix}
+$$
+
+
 
 #十、抽象向量空间
