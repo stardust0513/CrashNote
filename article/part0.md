@@ -66,7 +66,7 @@
   ![](../images/linearTransform.png)
   ​
 
-## 2. 矩阵左乘
+## 2. 矩阵左乘（列向量矩阵）
 
 - 实质：求出右边的向量 **对应基坐标变化后的值**
 
@@ -102,11 +102,12 @@
 ## 1. 概念
 
 - 表示：区域 **面积** 线性变换后增大和减小的 **比例**
+  **符号取决于** 区域是否发生了翻转变换（翻转为 负）
   ![](../images/determinant.png)
-  
+
 - 表示：区域 **体积** 线性变换后增大和减小的 **比例**
+  **符号取决于** 构成矩阵的这三个向量**是否满足右手定则**（不满足为 负）
   ![](../images/determinant3.png)
-  
 ## 2. 特殊情况
 
 - 当线性变化后 区域 **面积** 为 0 时（点，线）
@@ -158,11 +159,19 @@
 - 3 X 2 矩阵的几何意义：将 **二维** 空间映射到 **三维**空间上
 
 
-# 六、向量的点乘
+# 六、向量的点积
 
 ##1. 标准
 - 数学计算，遵循乘法交换律（都是长度乘长度）
-  ![](../images/dot.png)
+  ​
+  $$
+  \begin{bmatrix} 
+  \color{green}{1} \\  \color{red}{2} \\ 
+  \end{bmatrix} \cdot
+  \begin{bmatrix} 
+  \color{green}{3} \\  \color{red}{4} \\ 
+  \end{bmatrix} = \color{green}{1} \cdot \color{green}{3} + \color{red}{2} \cdot \color{red}{4}
+  $$
 
 - 几何解释
 V * W > 0 方向相同
@@ -186,7 +195,7 @@ V * W = 0 互相垂直
   向量B 和 向量C 的**点积的值**可以用 向量B 到 C 的投影值 和 向量 C 的值的积求出
   ![](../images/dot3.png)
 
-4. 综上，矩阵A 这样的线性变换过程 可以用 向量C 表示，并且 **矩阵A 和 向量C** 一一对一
+4. 综上，矩阵A 这样的由二维到一维的线性变换过程 可以用 向量C 表示，并且 **矩阵A 和 向量C** 一一对一
   ![](../images/dot5.png)
 
 
@@ -194,13 +203,109 @@ V * W = 0 互相垂直
 
 ## 1. 标准
 
-- 叉乘计算：求两个向量组合成的矩阵的行列式值
+- 叉乘计算：求两个向量组合成的矩阵的行列式值（矩阵的转置矩阵不改变行列式的值）
   ![](../images/cross1.png)
 
-- 叉乘和方向有关， **不遵循交换律**
+- 几何意义：叉乘的两个向量的面积（叉乘和方向有关， **不遵循交换律**）
   正方向：右边向量 X **左边向量**
   反方向：**左边向量** X 右边向量
   ![](../images/cross.png)
 
+- 实际作用：通过 2 个三维向量生成 1 个**新的三维向量**
+**叉乘的结果是一个向量**
+  ![](../images/cross2.png)
+
+- 公式
+  ​
+  $$
+  \begin{bmatrix} 
+  \color{green}{v_1} \\  \color{red}{v_2} \\ \color{blue}{v_3}\\ 
+  \end{bmatrix} \times
+  \begin{bmatrix} 
+  \color{green}{w_1}  \\ \color{red}{w_2} \\ \color{blue}{w_3} \\ 
+  \end{bmatrix} = 
+  \begin{bmatrix} 
+  \color{red}{v_2} \cdot  \color{blue}{w_3} - \color{blue}{v_3}\cdot \color{red}{w_2} \\
+  \color{blue}{v_3} \cdot  \color{green}{w_1} - \color{green}{v_1}\cdot \color{blue}{w_3} \\
+  \color{green}{v_1} \cdot  \color{red}{w_2} - \color{red}{v_2}\cdot \color{green}{w_1} \\
+  \end{bmatrix}
+  \\ \Downarrow \\
+  \begin{bmatrix} 
+  \color{#F80}{v_1} \\  \color{#F80}{v_2} \\ \color{#F80}{v_3}\\ 
+  \end{bmatrix} \times
+  \begin{bmatrix} 
+  \color{#F0F}{w_1}  \\ \color{#F0F}{w_2} \\ \color{#F0F}{w_3} \\ 
+  \end{bmatrix} = 
+  det
+  \begin{pmatrix} 
+  \begin{bmatrix} 
+  \color{green}{\hat x}  & \color{#F80}{v_1} & \color{#F0F}{w_1} \\
+  \color{red}{\hat y}  & \color{#F80}{v_2} & \color{#F0F}{w_2} \\ 
+  \color{blue}{\hat z}  & \color{#F80}{v_3} & \color{#F0F}{w_3} \\ 
+  \end{bmatrix} 
+  \end{pmatrix}
+  \\ \Downarrow \\
+  \color{#F80}{\overrightarrow V} \times \color{#F0F}{\overrightarrow W}
+  = 
+  \color{green}{\hat x}(\color{#F80}{v_2} \cdot  \color{#F0F}{w_3} - \color{#F80}{v_3}\cdot \color{#F0F}{w_2}) + 
+  \color{red}{\hat y}(\color{#F80}{v_3} \cdot  \color{#F0F}{w_1} - \color{#F80}{v_1}\cdot \color{#F0F}{w_3}) + 
+  \color{blue}{\hat z}(\color{#F80}{v_1} \cdot  \color{#F0F}{w_2} - \color{#F80}{v_2}\cdot \color{#F0F}{w_1})
+  $$
+  ​
 
 ## 2. 通过线性变换理解叉乘
+
+1. 通过第一列的向量的**三个坐标得到一个行列式的值**，构造 三维空间 到 一维空间的**线性变换**（由于，所以是线性变换）关系
+   ![](../images/cross5.png)
+
+2. 由于函数线性，就会存在一个 1 X 3 矩阵来代表这个变换
+   ​
+   $$
+   \begin{bmatrix} \color{red}{p_1} &  \color{red}{p_2} & \color{red}{p_3}\\ \end{bmatrix} \cdot 
+   \begin{bmatrix} x \\ y \\ z\\ \end{bmatrix} =  
+   det
+   \begin{pmatrix} 
+   \begin{bmatrix} 
+   x & \color{green}{v_1} & \color{#F80}{w_1} \\
+   y & \color{green}{v_2} & \color{#F80}{w_2} \\ 
+   z & \color{green}{v_3} & \color{#F80}{w_3} \\ 
+   \end{bmatrix} 
+   \end{pmatrix}
+   $$
+
+
+
+3. 从多维到一维的线性变换矩阵可以用向量代替（见 六.2）
+$$
+\begin{bmatrix} \color{red}{p_1}\\ \color{red}{p_2}\\ \color{red}{p_3}\\ \end{bmatrix} \cdot 
+\begin{bmatrix} x \\ y \\ z\\ \end{bmatrix} =  
+det
+\begin{pmatrix} 
+\begin{bmatrix} 
+x & \color{green}{v_1} & \color{#F80}{w_1} \\
+y & \color{green}{v_2} & \color{#F80}{w_2} \\ 
+z & \color{green}{v_3} & \color{#F80}{w_3} \\ 
+\end{bmatrix} 
+\end{pmatrix} 
+\\ \Downarrow \\
+\color{red}{p_1} \cdot x +  \color{red}{p_2} \cdot y +  \color{red}{p_3} \cdot z = x(\color{green}{v_2} \cdot  \color{#F80}{w_3} - \color{green}{v_3}\cdot \color{#F80}{w_2}) + 
+ y(\color{green}{v_3} \cdot  \color{#F80}{w_1} - \color{green}{v_1}\cdot \color{#F80}{w_3}) + 
+ z(\color{green}{v_1} \cdot  \color{#F80}{w_2} - \color{green}{v_2}\cdot \color{#F80}{w_1})
+\\ \Downarrow \\
+\color{red}{p_1} = \color{green}{v_2} \cdot  \color{#F80}{w_3} - \color{green}{v_3}\cdot \color{#F80}{w_2} \\
+\color{red}{p_2} = \color{green}{v_3} \cdot  \color{#F80}{w_1} - \color{green}{v_1}\cdot \color{#F80}{w_3} \\
+\color{red}{p_3} = \color{green}{v_1} \cdot  \color{#F80}{w_2} - \color{green}{v_2}\cdot \color{#F80}{w_1}
+$$
+
+4. P * 未知向量  == 未知向量、V、W 确定的平行六面体的体积
+   ![](../images/cross3.png)
+5. P * 未知向量 == Z 的长度（P 在 z 轴投影）* P 的长度（见 六.1）
+6. 联立 4、5 结果可得：
+   P 的长度 == V、W 确定的平行四边形面积 == V、W 的叉乘
+   ![](../images/cross4.png)
+
+#八、基变换
+
+#九、特征向量与特征值
+
+#十、抽象向量空间
