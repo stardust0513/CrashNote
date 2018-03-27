@@ -7,7 +7,7 @@
 - 起点是原点
 - 向量 = 方向 + 大小
 - **位置移动** 的数值记录
-- **线性变换 ** 的数值记录
+- **线性变换** 的数值记录
   ​
 
 ##2. 基本运算 
@@ -282,6 +282,7 @@ V * W = 0 互相垂直
 
 
 
+
 3. 从多维到一维的线性变换矩阵可以用向量代替（见 六.2）
 $$
 \begin{bmatrix} \color{red}{p_1}\\ \color{red}{p_2}\\ \color{red}{p_3}\\ \end{bmatrix} \cdot 
@@ -378,6 +379,7 @@ $$
   \overrightarrow v &= \overrightarrow w \\
   \end{align}
   $$
+
 
 
 
