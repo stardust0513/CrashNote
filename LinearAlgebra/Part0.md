@@ -13,10 +13,10 @@
 ##2. 基本运算 
 
 - 向量的加法
-  ![](../images/vectorAdd.png)
+  ![](images/vectorAdd.png)
   ​
 - 向量的缩放
-  ![](../images/vectorScale.png)
+  ![](images/vectorScale.png)
   ​
 
 
@@ -25,7 +25,7 @@
 - 向量的基 == 单位向量
 
 - 向量的值 **依赖** 于基
-  ![](../images/vectorBase.png)
+  ![](images/vectorBase.png)
 
 - 向量空间的一个基是 **张成** 该空间的 **线性无关** 向量集
 
@@ -36,10 +36,10 @@
 ## 1. 概念
 
 - 二维的张成空间
-  ![](../images/span1.png)
+  ![](images/span1.png)
 
 - 三维的张成空间
-  ![](../images/span2.png)
+  ![](images/span2.png)
   ​
 
 ## 2. 线性相关
@@ -48,7 +48,7 @@
 线性无关： 所有向量 给张成空间增添了新的维度
 
 - 线性相关：多组向量中，有向量 = 其他向量的线性组合
-  ![](../images/linear.png)
+  ![](images/linear.png)
   ​
   
 # 三、线性变换
@@ -63,7 +63,7 @@
 
 - 网格保持 **平行** 且 **等距分布**
 
-  ![](../images/linearTransform.png)
+  ![](images/linearTransform.png)
   ​
 
 ## 2. 矩阵左乘（列向量矩阵）
@@ -71,11 +71,11 @@
 - 实质：求出右边的向量 **对应基坐标变化后的值**
 
 - 线性变换后的基坐标 == 矩阵
-  ![](../images/LinearTransform1.png)
+  ![](images/LinearTransform1.png)
 
 - 矩阵 * 向量 == 该向量对应 **基坐标的线性变换** 后的值
 
-  ![](../images/LinearTransform2.png)
+  ![](images/LinearTransform2.png)
 
 
 
@@ -83,7 +83,7 @@
 
 - 实质：先后切换**基坐标**的状态
   例子：矩阵B * 矩阵A * 向量C == 将向量C **先按照 矩阵A 变换**，再按照矩阵B 变换
-  ![](../images/matrix.png)
+  ![](images/matrix.png)
 
 - 矩阵相乘**不遵循**交换律
 
@@ -93,7 +93,7 @@
   由于**都是从 最右边的 C 开始变换**，从几何角度看没有区别
 
 - 矩阵相乘公式
-  ![](../images/matrix1.png)
+  ![](images/matrix1.png)
 
 
 
@@ -104,26 +104,26 @@
 - 表示：区域 **面积** 线性变换后增大和减小的 **比例**
   **符号取决于** 区域是否发生了翻转变换（翻转为 负）
   行列式的值与所选坐标系无关
-  ![](../images/determinant.png)
+  ![](images/determinant.png)
 
 - 表示：区域 **体积** 线性变换后增大和减小的 **比例**
   **符号取决于** 构成矩阵的这三个向量**是否满足右手定则**（不满足为 负）
-  ![](../images/determinant3.png)
+  ![](images/determinant3.png)
 ## 2. 特殊情况
 
 - 当线性变化后 区域 **面积** 为 0 时（点，线）
   说明发生了由 **高维到低维** 的线性变换
-  ![](../images/determinant1.png)
+  ![](images/determinant1.png)
 
 - 当线性变化后 区域 **体积** 为 0 时（点，线，面）
-  ![](../images/determinant4.png)
+  ![](images/determinant4.png)
 
 - 当线性变化后 比例为 **负数**  时，平面翻转
-  ![](../images/determinant2.png)
+  ![](images/determinant2.png)
   
 ## 3. 公式
 
-- ![](../images/determinant5.png)
+- ![](images/determinant5.png)
   ​
 
 #五、矩阵和线性方程组
@@ -131,12 +131,12 @@
 ## 1. 线性方程组 转 矩阵
 
 - 求线性方程组的解，就是求线性变化的向量
- ![](../images/equation.png)
+ ![](images/equation.png)
 
 ## 2. 列空间
 
 - **零向量** 一定在列空间中（因为线性变换必须保持原点不变）
- ![](../images/columSpace.png)
+ ![](images/columSpace.png)
 
 ## 3. 秩
 
@@ -155,7 +155,7 @@
 - 前提：矩阵的行列式的值不为 0
 - 可以利用矩阵的逆阵求解方程组。
 - 实质：矩阵A 线性变换后，在变换矩阵A 的逆矩阵，向量的基不变。且无论先后顺序，向量的基都不变。（恒等变换）
-   ![](../images/inverseMatrix.png)
+   ![](images/inverseMatrix.png)
    
 ## 6. 非方阵
 - 3 X 2 矩阵的几何意义：将 **二维** 空间映射到 **三维**空间上
@@ -180,7 +180,7 @@ V * W > 0 方向相同
 V * W < 0 方向反相
 V * W = 0 互相垂直
   **W** 到 V 的投影的长度 * V 的长度
-  ![](../images/dot1.png)
+  ![](images/dot1.png)
   
 ##2. 通过线性变换理解点积
 1. 二维向量 线性变换到 一维向量
@@ -188,17 +188,17 @@ V * W = 0 互相垂直
   `基向量 X: (0, 1) -> 1`
   `基向量 Y: (1, 0) -> -2`
 
-  ![](../images/dot2.png)
+  ![](images/dot2.png)
 
 2. 利用对称性，二维平面上一个向量 u，变换到 一维的一条线上
-  ![](../images/dot4.png)
+  ![](images/dot4.png)
 
 3. 上述 1- 2 情况下，矩阵A * 向量B == 向量C * 向量B
   向量B 和 向量C 的**点积的值**可以用 向量B 到 C 的投影值 和 向量 C 的值的积求出
-  ![](../images/dot3.png)
+  ![](images/dot3.png)
 
 4. 综上，矩阵A 这样的由二维到一维的线性变换过程 可以用 向量C 表示，并且 **矩阵A 和 向量C** 一一对一
-  ![](../images/dot5.png)
+  ![](images/dot5.png)
 
 
 
@@ -208,16 +208,16 @@ V * W = 0 互相垂直
 ## 1. 概念
 
 - 叉乘计算：求两个向量组合成的矩阵的行列式值（矩阵的转置矩阵不改变行列式的值）
-  ![](../images/cross1.png)
+  ![](images/cross1.png)
 
 - 几何意义：叉乘的两个向量的面积（叉乘和方向有关， **不遵循交换律**）
   正方向：右边向量 X **左边向量**
   反方向：**左边向量** X 右边向量
-  ![](../images/cross.png)
+  ![](images/cross.png)
 
 - 实际作用：通过 2 个三维向量生成 1 个**新的三维向量**
 **叉乘的结果是一个向量**
-  ![](../images/cross2.png)
+  ![](images/cross2.png)
 
 - 公式
   ​
@@ -260,7 +260,7 @@ V * W = 0 互相垂直
 ## 2. 通过线性变换理解叉乘
 
 1. 通过第一列的向量的**三个坐标得到一个行列式的值**，构造 三维空间 到 一维空间的**线性变换**（由于，所以是线性变换）关系
-   ![](../images/cross5.png)
+   ![](images/cross5.png)
 
 2. 由于函数线性，就会存在一个 1 X 3 矩阵来代表这个变换
 
@@ -277,6 +277,8 @@ V * W = 0 互相垂直
    \end{bmatrix} 
    \end{pmatrix}
    $$
+
+
 
 
 
@@ -306,11 +308,11 @@ z & \color{green}{v_3} & \color{#F80}{w_3} \\
 $$
 
 4. P * 未知向量  == 未知向量、V、W 确定的平行六面体的体积
-   ![](../images/cross3.png)
+   ![](images/cross3.png)
 5. P * 未知向量 == Z 的长度（P 在 z 轴投影）* P 的长度（见 六.1）
 6. 联立 4、5 结果可得：
    P 的长度 == V、W 确定的平行四边形面积 == V、W 的叉乘
-   ![](../images/cross4.png)
+   ![](images/cross4.png)
 
 
 
@@ -385,6 +387,8 @@ $$
 
 
 
+
+
 #九、特征向量与特征值
 
 ## 1. 概念
@@ -395,7 +399,7 @@ $$
 - 特殊情况：
   部分旋转的线性变换 **没有特征值和特征向量**
   属于单个特征值的特征向量可能不止在一条线上
-  ![](../images/eigenvalue.png)
+  ![](images/eigenvalue.png)
 - 公式：
   矩阵 A：变换矩阵
   矩阵 I：单位矩阵
