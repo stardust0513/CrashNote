@@ -8,7 +8,7 @@
 - 向量 = 方向 + 大小
 - **位置移动** 的数值记录
 - **线性变换** 的数值记录
-  ​
+
 
 ##2. 基本运算 
 
@@ -23,12 +23,10 @@
 ## 3. 向量的基
 
 - 向量的基 == 单位向量
-
 - 向量的值 **依赖** 于基
   ![](images/vectorBase.png)
 
 - 向量空间的一个基是 **张成** 该空间的 **线性无关** 向量集
-
   ​
 
 # 二、张成空间
@@ -49,8 +47,8 @@
 
 - 线性相关：多组向量中，有向量 = 其他向量的线性组合
   ![](images/linear.png)
-  ​
   
+- 齐次向量：表示同一条直线的一类向量
 # 三、线性变换
 
 ## 1. 概念
@@ -165,7 +163,7 @@
 
 ##1. 概念
 - 数学计算，遵循乘法交换律（都是长度乘长度）
-  ​
+  
   $$
   \begin{bmatrix} 
   \color{green}{1} \\  \color{red}{2} \\ 
@@ -176,12 +174,12 @@
   $$
 
 - 几何解释
-V * W > 0 方向相同
-V * W < 0 方向反相
-V * W = 0 互相垂直
+  V * W > 0 方向相同
+  V * W < 0 方向反相
+  V * W = 0 互相垂直
   **W** 到 V 的投影的长度 * V 的长度
   ![](images/dot1.png)
-  
+
 ##2. 通过线性变换理解点积
 1. 二维向量 线性变换到 一维向量
 
@@ -264,9 +262,9 @@ V * W = 0 互相垂直
 
 2. 由于函数线性，就会存在一个 1 X 3 矩阵来代表这个变换
 
-   ​
-   $$
-   \begin{bmatrix} \color{red}{p_1} &  \color{red}{p_2} & \color{red}{p_3}\\ \end{bmatrix} \cdot 
+
+$$
+\begin{bmatrix} \color{red}{p_1} &  \color{red}{p_2} & \color{red}{p_3}\\ \end{bmatrix} \cdot 
    \begin{bmatrix} x \\ y \\ z\\ \end{bmatrix} =  
    det
    \begin{pmatrix} 
@@ -276,14 +274,7 @@ V * W = 0 互相垂直
    z & \color{green}{v_3} & \color{#F80}{w_3} \\ 
    \end{bmatrix} 
    \end{pmatrix}
-   $$
-
-
-
-
-
-
-
+$$
 
 3. 从多维到一维的线性变换矩阵可以用向量代替（见 六.2）
 $$
@@ -370,7 +361,7 @@ $$
   向量 w：A 坐标系中对应 B 坐标系中的线性变换（矩阵 P）后的结果（输出）
   矩阵 M：A 坐标系的基向量在 B 坐标系的表示
   矩阵 P：向量 v 在 B 坐标系的线性变换（这种线性变换矩阵直接转成对应的坐标系矩阵没有意义）
-  ​
+
   $$
   \begin{align}
   \overrightarrow M^{-1} \cdot 
@@ -381,11 +372,6 @@ $$
   \overrightarrow v &= \overrightarrow w \\
   \end{align}
   $$
-
-
-
-
-
 
 
 
@@ -405,7 +391,6 @@ $$
   矩阵 I：单位矩阵
   向量 v：特征向量
   lambda：特征值
-
 $$
 \begin{align}
 A \overrightarrow v &= \lambda \overrightarrow v \\
@@ -448,7 +433,6 @@ $$
   例：
   X 轴上的基向量由 (0, 1) 到 (0, 1)
   Y 轴上的基向量由 (1, 0) 到 (-1, 1)
-
 $$
 { \begin{bmatrix} 
 \color{green}{1} & \color{#FA0}{-1}\\ 
@@ -470,3 +454,107 @@ $$
 0 & \color{red}{2}\\
 \end{bmatrix}
 $$
+
+#十、实际应用
+
+##1. GPU 里矩阵间的计算方式
+- 阵列操作：图像的矩阵中每个对应元素之间的操作
+  例，**阵列**相乘
+  $$
+  \begin{bmatrix}
+  \color{red}{a_{11}} & \color{red}{a_{21}} \\
+  a_{12} & a_{22} \\
+  \end{bmatrix}
+  \begin{bmatrix}
+  \color{green}{b_{11}} & b_{21} \\
+  \color{green}{b_{12}} & b_{22} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \color{red}{a_{11}}\color{green}{b_{11}} & \color{red}{a_{21}}b_{21} \\
+  a_{12}\color{green}{b_{12}} & a_{22}b_{22} \\
+  \end{bmatrix}
+  $$
+
+- 符合线性代数的条件下使用线性代数公式
+  例，**矩阵**相乘：行 X 列
+  $$
+  \begin{bmatrix}
+  \color{red}{a_{11}} & \color{red}{a_{21}} \\
+  a_{12} & a_{22} \\
+  \end{bmatrix}
+  \begin{bmatrix}
+  \color{green}{b_{11}} & b_{21} \\
+  \color{green}{b_{12}} & b_{22} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \color{red}{a_{11}}\color{green}{b_{11}}+\color{red}{a_{21}}\color{green}{b_{12}} &
+  \color{red}{a_{11}}b_{21}+\color{red}{a_{21}}b_{22} \\
+  a_{12}\color{green}{b_{11}}+a_{22}\color{green}{b_{12}} & a_{12}b_{21}+a_{22}b_{22} \\
+  \end{bmatrix}
+  $$
+
+
+
+
+
+
+## 2. 几何变换
+
+###2.1 线性变换
+
+定义：
+
+- 原点固定
+- 直线变换后保持直线
+- 网格保持 **平行** 且 **等距分布**
+  
+变换矩阵：例，恒等变换
+$$
+\begin{pmatrix} x & y & z \end{pmatrix} \cdot
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+=  \begin{pmatrix} x & y & z \end{pmatrix}
+$$
+
+###2.2 仿射变换（仿射映射）
+
+定义：
+- 直线变换后保持直线
+- 网格保持 **平行** 且 **等距分布**
+
+实质：
+- 仿射变换 = 线性变换 + 平移
+- 一个向量空间 变换为 另一个向量空间
+- 增加一个维度后可以同过 **高维度的线性变换** 代替 **低维度的仿射变换**
+
+变换矩阵：例子，平移变换
+$$
+\begin{pmatrix}x & y & z & \color{red}1\end{pmatrix} \cdot 
+\begin{bmatrix}
+1 & 0 & 0 & \color{red}{\Delta x}\\
+0 & 1 & 0 & \color{red}{\Delta y}\\
+0 & 0 & 1 & \color{red}{\Delta z}\\
+0 & 0 & 0 & \color{red}{1}\\
+\end{bmatrix}
+= \begin{pmatrix}x + \color{red}{\Delta x} & y + \color{red}{\Delta y} & z + \color{red}{\Delta z} & \color{red}1\end{pmatrix}
+$$
+
+同过 **高维度的线性变换** 代替 **低维度的仿射变换**
+  ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/affine.gif)
+
+
+###2.3 投影变换
+
+定义：
+
+
+
+## 3. 常用的几何变换矩阵
+
+2D 变换矩阵
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/2D_affine_transformation_matrix.svg)
