@@ -375,6 +375,8 @@ $$
 
 
 
+
+
 #九、特征向量与特征值
 
 ## 1. 概念
@@ -499,7 +501,6 @@ $$
 
 
 
-
 ## 2. 几何变换
 
 ###2.1 线性变换
@@ -521,7 +522,9 @@ $$
 =  \begin{pmatrix} x & y & z \end{pmatrix}
 $$
 
-###2.2 仿射变换（仿射映射）
+###2.2 仿射变换
+
+仿射变换：*用于改变模型的位置和形状*
 
 定义：
 - 直线变换后保持直线
@@ -545,16 +548,89 @@ $$
 $$
 
 同过 **高维度的线性变换** 代替 **低维度的仿射变换**
-  ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/affine.gif)
+ ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/affine.gif)
 
 
 ###2.3 投影变换
 
-定义：
+**正交投影**
+
+**透视投影**
 
 
 
-## 3. 常用的几何变换矩阵
+## 3. 常用的线形变换矩阵
 
-2D 变换矩阵
+### 3.1 2D 变换矩阵
 ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/2D_affine_transformation_matrix.svg)
+
+### 3.2 3D 变换矩阵
+
+**Rotate**：旋转角 $\theta$ 设为顺时针方向为正
+
+- 核心公式
+  $$
+  R_{旋转矩阵} = 
+  \begin{bmatrix}
+  1 & 0 & 0\\
+  0 & 1 & 0\\
+  0 & 0 & 1
+  \end{bmatrix}
+  + sin\theta \cdot S + (1 - cos\theta)\cdot S^2R
+  $$
+
+- 沿基坐标旋转的对照表
+    $$
+    \begin{array}{c|llll}
+    条件 & 沿 X 轴旋转 & 沿 Y 轴旋转 & 沿 Z 轴旋转 & 沿任意向量(x,y,z)旋转 \\
+    \hline
+    R & 
+    \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & cos\theta & sin\theta\\
+    0 &-sin\theta & cos\theta
+    \end{bmatrix} &
+    \begin{bmatrix}
+    cos\theta & 0 & -sin\theta\\
+    0 & 1 & 0\\
+    sin\theta & 0 & cos\theta
+    \end{bmatrix} &
+    \begin{bmatrix}
+     cos\theta & sin\theta & 0\\
+    -sin\theta & cos\theta & 0\\
+    0 & 0 & 1
+    \end{bmatrix} &
+    \begin{bmatrix}
+    cos\theta + (1-sin\theta)x^2 & -sin\theta z+(1-cos\theta)xy & sin\theta y+(1-cos\theta)xz\\
+    sin\theta z+(1-cos\theta)xy & cos\theta + (1-sin\theta)y^2 & -sin\theta x+(1-cos\theta)yz\\
+    -sin\theta y+(1-cos\theta)xz & sin\theta x+(1-cos\theta)yz & cos\theta + (1-sin\theta)z^2
+    \end{bmatrix}
+    \\
+    S & 
+    \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & 0 & 1\\
+    0 &-1 & 0
+    \end{bmatrix} & 
+    \begin{bmatrix}
+    0 & 0 & -1\\
+    0 & 1 & 0\\
+    1 & 0 & 0
+    \end{bmatrix} &
+    \begin{bmatrix}
+     0 & 1 & 0\\
+    -1 & 0 & 0\\
+     0 & 0 & 1
+    \end{bmatrix} &
+    \begin{bmatrix}
+    0 & z &-y\\
+    z & 0 & x\\
+    y &-x & 0
+    \end{bmatrix}\\
+    \end{array}
+    $$
+
+
+**Reflect**
+
+**Shear**

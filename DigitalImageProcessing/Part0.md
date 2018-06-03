@@ -394,9 +394,25 @@ $$
 
 
 # 三、频率域滤波
+> 傅立叶概念：$任何周期函数 = (系数 1 \times 正弦) 和/或 (系数2 \times 余弦)$
+
+常用数学公式
+$$
+\begin{align}
+复数 &= 实数_{实部} + 实数_{虚部}\cdot i_{虚数单位}, (i_{虚数单位} = \sqrt{-1} )\\
+复数的共轭 &= 实数_{实部} - 实数_{虚部}\cdot i\\
+f(x)_{复数} &= R(x)_{实部} + J(x)_{虚部} \cdot i\\
+f(x)_{复数的共轭} &= R(x)_{实部} - J(x)_{虚部} \cdot i\\
+复数_{极坐标下} &= \sqrt{实部^2 + 虚部^2}(cos\theta + i \cdot sin\theta)\\
+复数_{极坐标下}  &= \sqrt{实部^2 + 虚部^2}e^{i\theta},(欧拉公式: e^{\theta i} = cos\theta + i\cdot sin\theta，e = 2.71828 …)\\
+f(x)_{傅立叶级数} &= \sum_{n = -\infty}^\infty c_n e^{i{2\pi n\over T_{周期}}x},(i = \sqrt{-1}, c_n = {1 \over T}\int_{-{T \over 2}}^{T \over 2} f(x)e^{-i{2\pi n\over T}x}dx, n = 0, \pm1, \pm2...)
+\end{align}
+$$
 
 ## 1. 频率域滤波基础
 ###1.1 基本概念
+
+
 ###1.2 傅立叶变换
 ####1.2.1 取样函数的傅立叶变换
 ####1.2.2 单变量的离散傅立叶变换(DTF)
