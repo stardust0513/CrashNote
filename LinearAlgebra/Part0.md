@@ -77,7 +77,7 @@
 
 
 
-## 3. 矩阵相乘
+## 3. 矩阵相乘（状态变化）
 
 - 实质：先后切换**基坐标**的状态
   例子：矩阵B * 矩阵A * 向量C == 将向量C **先按照 矩阵A 变换**，再按照矩阵B 变换
@@ -95,7 +95,7 @@
 
 
 
-# 四、行列式
+# 四、行列式（面积变化比例）
 
 ## 1. 概念
 
@@ -159,7 +159,7 @@
 - 3 X 2 矩阵的几何意义：将 **二维** 空间映射到 **三维**空间上
 
 
-# 六、向量的点积
+# 六、向量的点积（投影）
 
 ##1. 概念
 - 数学计算，遵循乘法交换律（都是长度乘长度）
@@ -201,7 +201,7 @@
 
 
 
-# 七、向量的叉乘
+# 七、向量的叉乘（面积）
 
 ## 1. 概念
 
@@ -305,9 +305,6 @@ $$
    P 的长度 == V、W 确定的平行四边形面积 == V、W 的叉乘
    ![](images/cross4.png)
 
-
-
-
 #八、基变换
 
 ##1. 概念
@@ -324,36 +321,36 @@ $$
   向量 v：A 坐标系中的向量（输入）
   向量 w：**B 坐标系中**对应 A 坐标系的向量（输出）
   矩阵 M：A 坐标系的基向量在 B 坐标系的表示
-$$
-\begin{align}
-\overrightarrow M \cdot \overrightarrow v &= \overrightarrow w \\
-\overrightarrow v &= {\overrightarrow M}^{-1} \cdot \overrightarrow w \\ \\
-\begin{bmatrix} 
-\color{green}{a_x} & \color{red}{b_x}\\ 
-\color{green}{a_y} & \color{red}{b_y}\\
-\end{bmatrix} \cdot 
-\begin{bmatrix} 
-v_1 \\ v_2\\ 
-\end{bmatrix} 
-&= 
-\begin{bmatrix} 
-w_1 \\ w_2\\ 
-\end{bmatrix} \\ 
-\begin{bmatrix} 
-v_1 \\ v_2\\ 
-\end{bmatrix} 
-&= 
-{ \begin{bmatrix} 
-\color{green}{a_x} & \color{red}{b_x}\\ 
-\color{green}{a_y} & \color{red}{b_y}\\
-\end{bmatrix} 
-}^{-1}\cdot 
-\begin{bmatrix} 
-w_1 \\ w_2\\ 
-\end{bmatrix} \\
-\end{align}
-$$
-
+    $$
+    \begin{align}
+    \overrightarrow M \cdot \overrightarrow v &= \overrightarrow w \\
+    \overrightarrow v &= {\overrightarrow M}^{-1} \cdot \overrightarrow w \\ \\
+    \begin{bmatrix} 
+    \color{green}{a_x} & \color{red}{b_x}\\ 
+    \color{green}{a_y} & \color{red}{b_y}\\
+    \end{bmatrix} \cdot 
+    \begin{bmatrix} 
+    v_1 \\ v_2\\ 
+    \end{bmatrix} 
+    &= 
+    \begin{bmatrix} 
+    w_1 \\ w_2\\ 
+    \end{bmatrix} \\ 
+    \begin{bmatrix} 
+    v_1 \\ v_2\\ 
+    \end{bmatrix} 
+    &= 
+    { \begin{bmatrix} 
+    \color{green}{a_x} & \color{red}{b_x}\\ 
+    \color{green}{a_y} & \color{red}{b_y}\\
+    \end{bmatrix} 
+    }^{-1}\cdot 
+    \begin{bmatrix} 
+    w_1 \\ w_2\\ 
+    \end{bmatrix} \\
+    \end{align}
+    $$
+    
 - 目标 2： B 坐标系的线性变换（矩阵 P）转 A 坐标系的线性变换（矩阵 Q）
 
 - 公式 2：矩阵与矩阵相乘（三、3）
@@ -361,7 +358,6 @@ $$
   向量 w：A 坐标系中对应 B 坐标系中的线性变换（矩阵 P）后的结果（输出）
   矩阵 M：A 坐标系的基向量在 B 坐标系的表示
   矩阵 P：向量 v 在 B 坐标系的线性变换（这种线性变换矩阵直接转成对应的坐标系矩阵没有意义）
-
   $$
   \begin{align}
   \overrightarrow M^{-1} \cdot 
@@ -372,10 +368,6 @@ $$
   \overrightarrow v &= \overrightarrow w \\
   \end{align}
   $$
-
-
-
-
 
 #九、特征向量与特征值
 
@@ -435,202 +427,24 @@ $$
   例：
   X 轴上的基向量由 (0, 1) 到 (0, 1)
   Y 轴上的基向量由 (1, 0) 到 (-1, 1)
-$$
-{ \begin{bmatrix} 
-\color{green}{1} & \color{#FA0}{-1}\\ 
-\color{green}{0} & \color{#FA0}{1}\\
-\end{bmatrix} 
-}^{-1}\cdot 
-\begin{bmatrix} 
-\color{green}{3} & \color{red}{1}\\ 
-\color{green}{0} & \color{red}{2}\\
-\end{bmatrix} 
-\cdot
-\begin{bmatrix} 
-\color{green}{1} & \color{#FA0}{-1}\\ 
-\color{green}{0} & \color{#FA0}{1}\\
-\end{bmatrix} 
-= 
-\begin{bmatrix} 
-\color{red}{3} & 0\\ 
-0 & \color{red}{2}\\
-\end{bmatrix}
-$$
-
-#十、实际应用
-
-##1. GPU 里矩阵间的计算方式
-- 阵列操作：图像的矩阵中每个对应元素之间的操作
-  例，**阵列**相乘
-  $$
-  \begin{bmatrix}
-  \color{red}{a_{11}} & \color{red}{a_{21}} \\
-  a_{12} & a_{22} \\
-  \end{bmatrix}
-  \begin{bmatrix}
-  \color{green}{b_{11}} & b_{21} \\
-  \color{green}{b_{12}} & b_{22} \\
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  \color{red}{a_{11}}\color{green}{b_{11}} & \color{red}{a_{21}}b_{21} \\
-  a_{12}\color{green}{b_{12}} & a_{22}b_{22} \\
-  \end{bmatrix}
-  $$
-
-- 符合线性代数的条件下使用线性代数公式
-  例，**矩阵**相乘：行 X 列
-  $$
-  \begin{bmatrix}
-  \color{red}{a_{11}} & \color{red}{a_{21}} \\
-  a_{12} & a_{22} \\
-  \end{bmatrix}
-  \begin{bmatrix}
-  \color{green}{b_{11}} & b_{21} \\
-  \color{green}{b_{12}} & b_{22} \\
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  \color{red}{a_{11}}\color{green}{b_{11}}+\color{red}{a_{21}}\color{green}{b_{12}} &
-  \color{red}{a_{11}}b_{21}+\color{red}{a_{21}}b_{22} \\
-  a_{12}\color{green}{b_{11}}+a_{22}\color{green}{b_{12}} & a_{12}b_{21}+a_{22}b_{22} \\
-  \end{bmatrix}
-  $$
-
-
-
-
-
-## 2. 几何变换
-
-###2.1 线性变换
-
-定义：
-
-- 原点固定
-- 直线变换后保持直线
-- 网格保持 **平行** 且 **等距分布**
-  
-变换矩阵：例，恒等变换
-$$
-\begin{pmatrix} x & y & z \end{pmatrix} \cdot
-\begin{bmatrix}
-1 & 0 & 0 \\
-0 & 1 & 0 \\
-0 & 0 & 1
-\end{bmatrix}
-=  \begin{pmatrix} x & y & z \end{pmatrix}
-$$
-
-###2.2 仿射变换
-
-仿射变换：*用于改变模型的位置和形状*
-
-定义：
-- 直线变换后保持直线
-- 网格保持 **平行** 且 **等距分布**
-
-实质：
-- 仿射变换 = 线性变换 + 平移
-- 一个向量空间 变换为 另一个向量空间
-- 增加一个维度后可以同过 **高维度的线性变换** 代替 **低维度的仿射变换**
-
-变换矩阵：例子，平移变换
-$$
-\begin{pmatrix}x & y & z & \color{red}1\end{pmatrix} \cdot 
-\begin{bmatrix}
-1 & 0 & 0 & \color{red}{\Delta x}\\
-0 & 1 & 0 & \color{red}{\Delta y}\\
-0 & 0 & 1 & \color{red}{\Delta z}\\
-0 & 0 & 0 & \color{red}{1}\\
-\end{bmatrix}
-= \begin{pmatrix}x + \color{red}{\Delta x} & y + \color{red}{\Delta y} & z + \color{red}{\Delta z} & \color{red}1\end{pmatrix}
-$$
-
-同过 **高维度的线性变换** 代替 **低维度的仿射变换**
- ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/affine.gif)
-
-
-###2.3 投影变换
-
-**正交投影**
-
-**透视投影**
-
-
-
-## 3. 常用的线形变换矩阵
-
-### 3.1 2D 变换矩阵
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/2D_affine_transformation_matrix.svg)
-
-### 3.2 3D 变换矩阵
-
-**Rotate**：旋转角 $\theta$ 设为顺时针方向为正
-
-- 核心公式
-  $$
-  R_{旋转矩阵} = 
-  \begin{bmatrix}
-  1 & 0 & 0\\
-  0 & 1 & 0\\
-  0 & 0 & 1
-  \end{bmatrix}
-  + sin\theta \cdot S + (1 - cos\theta)\cdot S^2R
-  $$
-
-- 沿基坐标旋转的对照表
     $$
-    \begin{array}{c|llll}
-    条件 & 沿 X 轴旋转 & 沿 Y 轴旋转 & 沿 Z 轴旋转 & 沿任意向量(x,y,z)旋转 \\
-    \hline
-    R & 
-    \begin{bmatrix}
-    1 & 0 & 0\\
-    0 & cos\theta & sin\theta\\
-    0 &-sin\theta & cos\theta
-    \end{bmatrix} &
-    \begin{bmatrix}
-    cos\theta & 0 & -sin\theta\\
-    0 & 1 & 0\\
-    sin\theta & 0 & cos\theta
-    \end{bmatrix} &
-    \begin{bmatrix}
-     cos\theta & sin\theta & 0\\
-    -sin\theta & cos\theta & 0\\
-    0 & 0 & 1
-    \end{bmatrix} &
-    \begin{bmatrix}
-    cos\theta + (1-sin\theta)x^2 & -sin\theta z+(1-cos\theta)xy & sin\theta y+(1-cos\theta)xz\\
-    sin\theta z+(1-cos\theta)xy & cos\theta + (1-sin\theta)y^2 & -sin\theta x+(1-cos\theta)yz\\
-    -sin\theta y+(1-cos\theta)xz & sin\theta x+(1-cos\theta)yz & cos\theta + (1-sin\theta)z^2
+    { \begin{bmatrix} 
+    \color{green}{1} & \color{#FA0}{-1}\\ 
+    \color{green}{0} & \color{#FA0}{1}\\
+    \end{bmatrix} 
+    }^{-1}\cdot 
+    \begin{bmatrix} 
+    \color{green}{3} & \color{red}{1}\\ 
+    \color{green}{0} & \color{red}{2}\\
+    \end{bmatrix} 
+    \cdot
+    \begin{bmatrix} 
+    \color{green}{1} & \color{#FA0}{-1}\\ 
+    \color{green}{0} & \color{#FA0}{1}\\
+    \end{bmatrix} 
+    = 
+    \begin{bmatrix} 
+    \color{red}{3} & 0\\ 
+    0 & \color{red}{2}\\
     \end{bmatrix}
-    \\
-    S & 
-    \begin{bmatrix}
-    1 & 0 & 0\\
-    0 & 0 & 1\\
-    0 &-1 & 0
-    \end{bmatrix} & 
-    \begin{bmatrix}
-    0 & 0 & -1\\
-    0 & 1 & 0\\
-    1 & 0 & 0
-    \end{bmatrix} &
-    \begin{bmatrix}
-     0 & 1 & 0\\
-    -1 & 0 & 0\\
-     0 & 0 & 1
-    \end{bmatrix} &
-    \begin{bmatrix}
-    0 & z &-y\\
-    z & 0 & x\\
-    y &-x & 0
-    \end{bmatrix}\\
-    \end{array}
     $$
-
-
-**Reflect**
-
-**Shear**
