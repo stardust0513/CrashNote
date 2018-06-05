@@ -49,7 +49,7 @@
   ![](images/linear.png)
   
 - 齐次向量：表示同一条直线的一类向量
-# 三、线性变换
+# 三、线性变换（矩阵）
 
 ## 1. 概念
 
@@ -155,8 +155,48 @@
 - 实质：矩阵A 线性变换后，在变换矩阵A 的逆矩阵，向量的基不变。且无论先后顺序，向量的基都不变。（恒等变换）
    ![](images/inverseMatrix.png)
    
-## 6. 非方阵
+##6. 转置矩阵
+
+- 定义：若 $V_1 \times V_2 = M$ ，则 M 的转置矩阵 $M^T = V_2 \times V_1$
+  例：
+  $$
+  \begin{array}{cc}
+  \begin{bmatrix}
+  1 & 2 & 3\\
+  4 & 5 & 6\\
+  7 & 8 & 9\\
+  10 & 11 & 12
+  \end{bmatrix}^T =
+  \begin{bmatrix}
+  1 & 4 & 7 & 10\\
+  2 & 5 & 8 & 11\\
+  3 & 6 & 9 & 12\\
+  \end{bmatrix}
+  &
+  \begin{bmatrix}
+  1 & 2 & 3\\
+  4 & 5 & 6\\
+  7 & 8 & 9
+  \end{bmatrix}^T = 
+  \begin{bmatrix}
+  1 & 4 & 7\\
+  2 & 5 & 8\\
+  3 & 6 & 9
+  \end{bmatrix}
+  \end{array}
+  $$
+
+
+##7. 正交矩阵
+
+- 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
+- 几何意义：矩阵每 行/列 向量互相垂直，矩阵每 行/列 向量都是单位向量
+  
+
+## 8. 非方阵
+
 - 3 X 2 矩阵的几何意义：将 **二维** 空间映射到 **三维**空间上
+  
 
 
 # 六、向量的点积（投影）
@@ -321,7 +361,7 @@ $$
   向量 v：A 坐标系中的向量（输入）
   向量 w：**B 坐标系中**对应 A 坐标系的向量（输出）
   矩阵 M：A 坐标系的基向量在 B 坐标系的表示
-    $$
+  $$
     \begin{align}
     \overrightarrow M \cdot \overrightarrow v &= \overrightarrow w \\
     \overrightarrow v &= {\overrightarrow M}^{-1} \cdot \overrightarrow w \\ \\
@@ -349,8 +389,8 @@ $$
     w_1 \\ w_2\\ 
     \end{bmatrix} \\
     \end{align}
-    $$
-    
+  $$
+  
 - 目标 2： B 坐标系的线性变换（矩阵 P）转 A 坐标系的线性变换（矩阵 Q）
 
 - 公式 2：矩阵与矩阵相乘（三、3）
@@ -368,6 +408,7 @@ $$
   \overrightarrow v &= \overrightarrow w \\
   \end{align}
   $$
+
 
 #九、特征向量与特征值
 
@@ -427,7 +468,7 @@ $$
   例：
   X 轴上的基向量由 (0, 1) 到 (0, 1)
   Y 轴上的基向量由 (1, 0) 到 (-1, 1)
-    $$
+  $$
     { \begin{bmatrix} 
     \color{green}{1} & \color{#FA0}{-1}\\ 
     \color{green}{0} & \color{#FA0}{1}\\
@@ -447,4 +488,4 @@ $$
     \color{red}{3} & 0\\ 
     0 & \color{red}{2}\\
     \end{bmatrix}
-    $$
+  $$
