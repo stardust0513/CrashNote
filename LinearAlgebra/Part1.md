@@ -504,4 +504,4 @@ cosB  cosP sinH - sinB sinP cosH\\
 cosB  cosP cosH + sinB sinP sinH\\
 \end{bmatrix}
 $$
-[more](http://www.wy182000.com/2012/07/17/quaternion%E5%9B%9B%E5%85%83%E6%95%B0%E5%92%8C%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8Ayaw-pitch-roll-%E7%9A%84%E5%90%AB%E4%B9%89/)
+其他见 《3D 数学基础 图形与游戏开发》11 章 C++ 实现[more](http://www.wy182000.com/2012/07/17/quaternion%E5%9B%9B%E5%85%83%E6%95%B0%E5%92%8C%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8Ayaw-pitch-roll-%E7%9A%84%E5%90%AB%E4%B9%89/)
