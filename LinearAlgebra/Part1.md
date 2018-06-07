@@ -46,11 +46,6 @@
 
 
 
-
-
-
-
-
 ### 1.2 矩阵变换组合
 
 这里按照 OpenGL 里的向量默认为**行向量**，矩阵默认由列向量构成
@@ -72,6 +67,21 @@ $$
 - 将 4D 点 B$(x,y,z,w)$ 投影到 3D 中为 B$(x/w, y/w, z/w)$
 - 当 w = 0 时，B$(x,y,z, 0)$ 描述的**是无限远的方向**而不是位置
   
+
+### 1.4 左右手坐标系
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/LRHandCoordinate.jpeg)
+
+
+
+### 1.5 惯性坐标系
+
+定义：原点在模型坐标系原点上，坐标轴平行于世界坐标轴
+作用：简化世界坐标系到模型坐标系的转换
+
+与其他坐标系的转化：物体坐标系 ${旋转 \over \to}$ 惯性坐标系 ${平移 \over \to}$ 世界坐标系
+
+
 
 ## 2. 线形变换矩阵
 
@@ -105,11 +115,6 @@ $$
     沿坐标轴缩放 & 沿任意向量缩放
     \end{array}
     $$
-
-
-
-
-
 
 
 
@@ -153,11 +158,6 @@ $$
 
 
 
-
-
-
-
-
 ### 2.4 Rotate
 
 设 旋转角 $\theta$ 顺时针为正方向
@@ -197,12 +197,6 @@ $$
 
 
 
-
-
-
-
-
-
 ### 2.5 Shear
 变化后体积和面积保持不变
 
@@ -235,6 +229,7 @@ $$
   
 
 
+
 ## 3. 几何变换
 
 ### 3.1 基本变换
@@ -250,7 +245,6 @@ $$
 - 变换后向量的**夹角不变**
 - 包括：平移、旋转、均匀缩放（镜像不是）
 
-  
 **正交变换**
 - 变换矩阵 列/行 互相保持垂直，切为单位向量
 - 包括：平移、旋转、镜像
@@ -280,8 +274,6 @@ F(a + b) &= F(a) + F(b)\\
 F(ka) &= kF(a)
 \end{align}
 $$
-
-
 
 ###3.3 仿射变换（可逆）
 
@@ -363,3 +355,153 @@ $$
   $$
   G_{投影后} (x^, , y^,, z^,) = (d \cdot x/z, d \cdot y/z, d), A_{投影前}(x,y,z)
   $$
+
+
+
+
+
+
+
+
+## 4. 3D 中的方位与角位移
+### 4.1 基本概念
+
+**方位**：相对于上一方位的旋转（单一状态），用欧拉角表示
+**角位移**：相对于上一方位旋转的 量（两个状态间的差别），用矩阵、四元数表示
+
+### 4.2 欧拉角
+
+定义：欧拉角可以用来描述任意旋转，将一个角位移分解为三个互相垂直轴的**顺序旋转步骤**（旋转后，原来互相垂直的轴可能不再垂直，当前步骤只能影响下一个旋转步骤，不能影响之前的旋转步骤）
+> 这里默认右手坐标系，顺时针为正，任意三个轴可以作为旋转轴，下图仅为举例
+> heading 和 yaw 有区别：
+> - heading：绕**惯性坐标系**的 Y 轴旋转
+> - yaw：绕**模型坐标系**的 Y 轴旋转
+> ![](images/rollPichYaw.svg)
+
+
+优点：
+
+- 仅需要三个角度值，节省内存
+- 表示直观（便于显示和输入方位）
+- 任意三个数对于欧拉角都是合法的
+
+缺点：
+
+- 欧拉角之间求差值（角位移）困难
+
+- 欧拉角的方位表达方式不唯一（通过限制角的范围解决，heading 和 bank 限制在 -180 ～ 180，pitch 限制在 -90 ～90）
+  不同欧拉角表述之间的转换要先转为矩阵在转为目标的欧拉角
+
+  [万向锁](http://v.youku.com/v_show/id_XNzkyOTIyMTI=.html)：当沿着任意角位移 90 度时，导致两个方向的旋转轴同线，导致三次旋转中有两次旋转的效果是一样的，当前的旋转组合不能达到某些角度（要重新排列角度的旋转顺序，但万向锁仍可能产生）
+
+  ![](images/gimbalLock.png)
+
+
+
+### 4.3 四元数
+
+定义：通过四个数表示方位，从而避免了万向锁这样的问题
+优点：
+
+- 平滑差值：slerp 和 squad 提供了方位间的平滑差值**（只有四元数有这个功能）**
+- 快速连接和角位移求逆：
+  多个角位移${四元数叉乘 \over \to}$单个角位移（比矩阵快）
+  反角位移 = 四元数的共轭（比矩阵快）
+
+缺点：
+
+- 四元数比欧拉角多存储一个数（当保存大量角位移时尤为明显，如存储动画数据）
+- 浮点数舍入误差和随意输入，会导致四元数不合法（可以通过四元数标准化解决，确保四元数为单位大小）
+- 难于直接使用
+  
+
+单位四元数：
+
+ - $[1, \overrightarrow  0] 和  [-1, \overrightarrow  0] $
+ - 单位四元数模为 1
+ - 几何上存在两个单位四元数 $-\overrightarrow  v$ 和 $\overrightarrow  v$，因为他们几何意义相同都表示没有位移，但数学上只有 $\overrightarrow  v$
+
+四元数的常用公式：
+$$
+\begin{array}{rl}
+绕 N 旋转 \theta 角 & \overrightarrow  v = [cos{\theta \over 2},\overrightarrow n \cdot sin{\theta \over 2}]=[cos{\theta \over 2}, n_x\cdot sin{\theta \over 2},n_y\cdot sin{\theta \over 2},n_z\cdot sin{\theta \over 2}]\\
+普通四元数 & 
+\overrightarrow  v = [w, \overrightarrow  n] =  [w, (x, y, z)]\\
+求负 & -\overrightarrow  v = -[w, x, y, z] = [-w, -x, -y, -z]\\
+求模 & ||\overrightarrow  v||= \sqrt{w^2 + ||\overrightarrow  n ||^2} = \sqrt{w^2 + x^2 + y^2 + z^2} \\
+共轭 & \overrightarrow  v^* = [w, \overrightarrow  n]^* = [w, -\overrightarrow  n]\\
+求逆 & \overrightarrow  v^{-1} = {\overrightarrow  v 的共轭 \over ||\overrightarrow  v ||^2}\\
+单位化 & \overrightarrow  v = {\overrightarrow  v \over ||\overrightarrow  v|| } \\
+叉乘 & [w_1, \overrightarrow  v_1][w_2, \overrightarrow  v_2] = [w_1w_2 - \overrightarrow  v_1 \cdot \overrightarrow  v_2, w_1\overrightarrow  v_2 + w_2\overrightarrow  v_1 + \overrightarrow  v2 \times \overrightarrow  v_1] \\
+点乘 & (w_1, x_1, y_1, z_1)(w_2, x_2, y_2, z_2) = w_1w_2 + x_1 x_2 + y_1y_2 + z_1z_2\\
+与常量相乘 & k(w, x, y, z) = (kw, kx, ky, kz)\\
+对数 & log_e([cos{\theta \over 2}, \overrightarrow n \cdot sin{\theta \over 2}]) = [0, \overrightarrow n \cdot {\theta \over 2}]\\
+指数 & e^{[0, \overrightarrow n \cdot {\theta \over 2}]} = [0, \overrightarrow n \cdot {\theta \over 2}]\\
+\end{array}
+$$
+
+旋转操作
+
+- 将点 P 绕 $\overrightarrow n$ 旋转 $\theta$ 度
+  $P_{旋转后} = aPa^{-1}, a = [cos{\theta \over 2}, \overrightarrow n \cdot sin{\theta \over 2}]$
+- 将点 P 绕 $\overrightarrow n$ 旋转 $\theta$ 度后在旋转 $\alpha$ 度（方位的叠加是点乘）
+  $P_{旋转后} = baPa^{-1}b^{-1} = (ba)P(ba)^{-1},a = [cos{\theta \over 2}, \overrightarrow n \cdot sin{\theta \over 2}],b = [cos{\alpha \over 2}, \overrightarrow n \cdot sin{\alpha \over 2}]$
+- 连续多次相同的旋转操作：**四元数求幂**（多次方位的叠加）
+  $[cos{\theta \over 2}, \overrightarrow n \cdot sin{\theta \over 2}]^x = [cos({\theta \over 2}x), {sin({\theta \over 2}x)\over sin{\theta \over 2}} \overrightarrow n]$
+
+四元数的差
+
+- 给定方位 a 和 b，求 a 旋转到 b 的角位移 d，即：ad = b
+
+- $d = a^{-1}b$
+
+**旋转角度球面线性插值**（slerp：**S**pherical **L**inear Int**erp**olation）
+
+- 方法：插值 = 开始 + 插值比例 * （结束 - 开始）
+- 公式：$V_{插值} = V_{开始}(V_{开始}^{-1}V_{结束})^x$, $x$ 为插值比例
+  注意：$V$ 和 $-V$ 代表相同的方位，但在插值时会有不同的结果
+
+**平滑过渡连接不同方向的旋转角**（squad：**S**pherical and **Quad**rangle）：四元数样条
+
+
+
+### 4.4 欧拉角、矩阵、四元数的相互转化
+
+欧拉角 -> 矩阵
+
+- 欧拉角相对于模型坐标，要改变的是模型在世界坐标的角度，所以改变的角度要取反：$\theta \to -\theta$
+  因此这里的旋转矩阵和 2.2.4 Rotate  类似
+
+- 设 在右手坐标系，旋转角 $\theta$ 顺时针为正方向，则
+  $$
+  \begin{array}{cccc}
+    \begin{bmatrix}
+    1 & 0 & 0\\
+    0 & cosP & -sinP\\
+    0 & sinP & cosP
+    \end{bmatrix} &
+    \begin{bmatrix}
+    cosH & 0 & sinH\\
+    0 & 1 & 0\\
+    -sinH & 0 & cosH
+    \end{bmatrix} &
+    \begin{bmatrix}
+     cosB & -sinB & 0\\
+    sinB & cosB & 0\\
+    0 & 0 & 1
+    \end{bmatrix} \\
+    Pich & Heading/Yaw & Bank/Roll
+    \end{array}
+  $$
+
+
+欧拉角 -> 四元数
+$$
+\begin{bmatrix}
+sinB cosP cosH - cosB sinP sinH\\
+cosB sinP cosH + sinB cosP sinH\\
+cosB  cosP sinH - sinB sinP cosH\\
+cosB  cosP cosH + sinB sinP sinH\\
+\end{bmatrix}
+$$
+[more](http://www.wy182000.com/2012/07/17/quaternion%E5%9B%9B%E5%85%83%E6%95%B0%E5%92%8C%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8Ayaw-pitch-roll-%E7%9A%84%E5%90%AB%E4%B9%89/)
