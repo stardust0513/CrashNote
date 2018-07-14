@@ -12,8 +12,8 @@
 
 ##2. 基本运算 
 
-- 向量的加法
-  ![](images/vectorAdd.png)
+- 向量的加减
+  ![](images/vectorOperator.png)
   ​
 - 向量的缩放
   ![](images/vectorScale.png)
@@ -22,7 +22,10 @@
 
 ## 3. 向量的基
 
-- 向量的基 == 单位向量
+- 向量的长度：$||v|| = \sqrt{x^2 + y^2 +z^2}​$
+
+- 向量的基 == 单位向量：$({x \over ||v||},{y \over ||v||},{z \over ||v||})$
+
 - 向量的值 **依赖** 于基
   ![](images/vectorBase.png)
 
@@ -187,6 +190,9 @@
   $$
 
 
+
+
+
 ##7. 正交矩阵
 
 - 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
@@ -197,13 +203,14 @@
 
 - 3 X 2 矩阵的几何意义：将 **二维** 空间映射到 **三维**空间上
   
+  
 
 
 # 六、向量的点积（投影）
 
 ##1. 概念
 - 数学计算，遵循乘法交换律（都是长度乘长度）
-  
+
   $$
   \begin{bmatrix} 
   \color{green}{1} \\  \color{red}{2} \\ 
@@ -212,13 +219,21 @@
   \color{green}{3} \\  \color{red}{4} \\ 
   \end{bmatrix} = \color{green}{1} \cdot \color{green}{3} + \color{red}{2} \cdot \color{red}{4}
   $$
-
+  
+- 特殊的点积
+  两个单位向量的点积 = 这个两个向量夹角 $\theta​$ 的 $cos\theta​$
+  $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1$
+  $$
+  \vec v \cdot \vec k = ||\vec v|| \cdot ||\vec k|| \cdot cos\theta
+  $$
+  
 - 几何解释
   V * W > 0 方向相同
   V * W < 0 方向反相
   V * W = 0 互相垂直
   **W** 到 V 的投影的长度 * V 的长度
   ![](images/dot1.png)
+
 
 ##2. 通过线性变换理解点积
 1. 二维向量 线性变换到 一维向量
@@ -235,7 +250,7 @@
   向量B 和 向量C 的**点积的值**可以用 向量B 到 C 的投影值 和 向量 C 的值的积求出
   ![](images/dot3.png)
 
-4. 综上，矩阵A 这样的由二维到一维的线性变换过程 可以用 向量C 表示，并且 **矩阵A 和 向量C** 一一对一
+4. 综上，矩阵A 这样的由二维到一维的线性变换过程 可以用 向量C 表示，并且 **矩阵A 和 向量C** 一一对应
   ![](images/dot5.png)
 
 
@@ -254,7 +269,7 @@
   ![](images/cross.png)
 
 - 实际作用：通过 2 个三维向量生成 1 个**新的三维向量**
-**叉乘的结果是一个向量**
+  **叉乘的结果是一个向量**
   ![](images/cross2.png)
 
 - 公式
@@ -293,7 +308,9 @@
   \color{red}{\hat y}(\color{#F80}{v_3} \cdot  \color{#F0F}{w_1} - \color{#F80}{v_1}\cdot \color{#F0F}{w_3}) + 
   \color{blue}{\hat z}(\color{#F80}{v_1} \cdot  \color{#F0F}{w_2} - \color{#F80}{v_2}\cdot \color{#F0F}{w_1})
   $$
-  ​
+
+
+
 
 ## 2. 通过线性变换理解叉乘
 
@@ -410,6 +427,8 @@ $$
   $$
 
 
+
+
 #九、特征向量与特征值
 
 ## 1. 概念
@@ -489,3 +508,10 @@ $$
     0 & \color{red}{2}\\
     \end{bmatrix}
   $$
+
+
+
+
+
+
+
