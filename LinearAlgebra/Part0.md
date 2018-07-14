@@ -30,9 +30,12 @@
   ![](images/vectorBase.png)
 
 - 向量空间的一个基是 **张成** 该空间的 **线性无关** 向量集
-  ​
 
-# 二、张成空间
+  
+
+  
+
+# 二、张成空间（向量的表达范围）
 
 ## 1. 概念
 
@@ -46,12 +49,16 @@
 ## 2. 线性相关
 
 - 线性相关：有多组向量构成张成空间，移除其中一个 **不减少** 张成空间的大小
-线性无关： 所有向量 给张成空间增添了新的维度
+  线性无关：所有向量 给张成空间增添了新的维度
 
 - 线性相关：多组向量中，有向量 = 其他向量的线性组合
   ![](images/linear.png)
-  
+
 - 齐次向量：表示同一条直线的一类向量
+
+  
+
+  
 # 三、线性变换（矩阵）
 
 ## 1. 概念
@@ -98,17 +105,20 @@
 
 
 
-# 四、行列式（面积变化比例）
+
+
+# 四、行列式（面积/体积）
 
 ## 1. 概念
 
-- 表示：区域 **面积** 线性变换后增大和减小的 **比例**
+- 二维表示：二维行列式中两个二维向量构成的 **面积**
   **符号取决于** 区域是否发生了翻转变换（翻转为 负）
   行列式的值与所选坐标系无关
   ![](images/determinant.png)
 
-- 表示：区域 **体积** 线性变换后增大和减小的 **比例**
+- 三维 表示：三维行列式中三个三维向量构成的 **体积**
   **符号取决于** 构成矩阵的这三个向量**是否满足右手定则**（不满足为 负）
+
   ![](images/determinant3.png)
 ## 2. 特殊情况
 
@@ -125,9 +135,13 @@
 ## 3. 公式
 
 - ![](images/determinant5.png)
-  ​
+  
 
-#五、矩阵和线性方程组
+  
+
+  
+
+#五、矩阵和线性方程组（计算工具）
 
 ## 1. 线性方程组 转 矩阵
 
@@ -191,9 +205,7 @@
 
 
 
-
-
-##7. 正交矩阵
+##7. 正交矩阵（专置 = 逆）
 
 - 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
 - 几何意义：矩阵每 行/列 向量互相垂直，矩阵每 行/列 向量都是单位向量
@@ -202,11 +214,12 @@
 ## 8. 非方阵
 
 - 3 X 2 矩阵的几何意义：将 **二维** 空间映射到 **三维**空间上
-  
-  
 
 
-# 六、向量的点积（投影）
+
+
+
+# 六、向量的点积（两向量的夹角）
 
 ##1. 概念
 - 数学计算，遵循乘法交换律（都是长度乘长度）
@@ -219,39 +232,50 @@
   \color{green}{3} \\  \color{red}{4} \\ 
   \end{bmatrix} = \color{green}{1} \cdot \color{green}{3} + \color{red}{2} \cdot \color{red}{4}
   $$
-  
-- 特殊的点积
-  两个单位向量的点积 = 这个两个向量夹角 $\theta​$ 的 $cos\theta​$
+
+- **点积的实际作用**：
+  两个单位向量的点积 = 这个两个向量夹角 $\theta$ 的 $cos\theta$
   $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1$
   $$
   \vec v \cdot \vec k = ||\vec v|| \cdot ||\vec k|| \cdot cos\theta
   $$
-  
+
 - 几何解释
+  **W 点积 V = W 到 V 的投影的长度 * V 的长度**
   V * W > 0 方向相同
   V * W < 0 方向反相
   V * W = 0 互相垂直
-  **W** 到 V 的投影的长度 * V 的长度
+
   ![](images/dot1.png)
 
 
-##2. 通过线性变换理解点积
+##2. 点积可以是一种线性变换
 1. 二维向量 线性变换到 一维向量
-
-  `基向量 X: (0, 1) -> 1`
-  `基向量 Y: (1, 0) -> -2`
-
+  例：设，二维向量（4，3）【基向量为（1，1）】
+  经过基向量变化（1，-2）到一维向量上为 -2【基向量为（1，-2）】
+  则，点积的过程可以看作 维度由高到底的 线形变换
+  $$
+  \begin{align}
+  M_{1\times 2 矩阵} \cdot v_{前} &= N_{点积结果} \\
+  V_{点积用向量} \cdot v_{前} &= N_{点积结果} \\
+  M_{1\times 2 矩阵} &= V_{点积用向量}
+  \end{align}
+  $$
   ![](images/dot2.png)
 
-2. 利用对称性，二维平面上一个向量 u，变换到 一维的一条线上
+2. 进一步说明
+  有时，为求由高维到低维的 1 X 2 变换矩阵 M $\begin{bmatrix}u_x & u_y\end{bmatrix}$
+  一维上的一个向量 u，到基坐标 j 的正交投影值 $u_y$ ，利用对称性可知：
+   $u_y$ 等价于 基坐标 j 到 向量 u 上的正交投影值，即
+   $u_y$ 等价于 就是变换矩阵M 的 y 值
   ![](images/dot4.png)
 
-3. 上述 1- 2 情况下，矩阵A * 向量B == 向量C * 向量B
-  向量B 和 向量C 的**点积的值**可以用 向量B 到 C 的投影值 和 向量 C 的值的积求出
-  ![](images/dot3.png)
+3. 结论
 
-4. 综上，矩阵A 这样的由二维到一维的线性变换过程 可以用 向量C 表示，并且 **矩阵A 和 向量C** 一一对应
+  1 X 2 矩阵M 这样的由二维到一维的线性变换过程 可以用 向量 m 表示，并且 **矩阵M 和 向量m** 一一对应
   ![](images/dot5.png)
+
+
 
 
 
@@ -260,20 +284,28 @@
 
 ## 1. 概念
 
-- 叉乘计算：求两个向量组合成的矩阵的行列式值（矩阵的转置矩阵不改变行列式的值）
+- 叉乘的计算方法：
+  两个向量组合成的矩阵的**行列式值 det**（矩阵的转置矩阵不改变行列式的值）
+
   ![](images/cross1.png)
 
-- 几何意义：叉乘的两个向量的面积（叉乘和方向有关， **不遵循交换律**）
-  正方向：右边向量 X **左边向量**
-  反方向：**左边向量** X 右边向量
+- 叉乘的几何意义：
+  叉乘的两个向量组合成的平行四边形面积（面积也有负，取决于叉乘的顺序）
+
+  > 叉乘和方向有关， **不遵循交换律**
+  > 正方向：右边向量 X **左边向量**
+  > 反方向：**左边向量** X 右边向量
+
   ![](images/cross.png)
 
-- 实际作用：通过 2 个三维向量生成 1 个**新的三维向量**
-  **叉乘的结果是一个向量**
+- **叉乘的实际作用**：
+  二维空间：通过 2 个向量叉乘得到这 2 个向量构成的面积
+  三维空间：通过 2 个向量叉乘得到 1 个**垂直于这两个向量平面的向量**
+
   ![](images/cross2.png)
 
-- 公式
-  ​
+- 三维空间叉乘公式（特殊的行列式求法）
+  其中 $({\hat x},{\hat y},{\hat z})$ 为基向量
   $$
   \begin{bmatrix} 
   \color{green}{v_1} \\  \color{red}{v_2} \\ \color{blue}{v_3}\\ 
@@ -302,19 +334,24 @@
   \end{bmatrix} 
   \end{pmatrix}
   \\ \Downarrow \\
+  \begin{align}
   \color{#F80}{\overrightarrow V} \times \color{#F0F}{\overrightarrow W}
-  = 
+  &= 
   \color{green}{\hat x}(\color{#F80}{v_2} \cdot  \color{#F0F}{w_3} - \color{#F80}{v_3}\cdot \color{#F0F}{w_2}) + 
   \color{red}{\hat y}(\color{#F80}{v_3} \cdot  \color{#F0F}{w_1} - \color{#F80}{v_1}\cdot \color{#F0F}{w_3}) + 
-  \color{blue}{\hat z}(\color{#F80}{v_1} \cdot  \color{#F0F}{w_2} - \color{#F80}{v_2}\cdot \color{#F0F}{w_1})
+  \color{blue}{\hat z}(\color{#F80}{v_1} \cdot  \color{#F0F}{w_2} - \color{#F80}{v_2}\cdot \color{#F0F}{w_1})\\
+  &= \overrightarrow S_{垂直于V 和 W 构成的平面}
+  \end{align}
   $$
 
 
 
 
-## 2. 通过线性变换理解叉乘
+## 2. 三维空间中叉乘的线性变换解释
 
-1. 通过第一列的向量的**三个坐标得到一个行列式的值**，构造 三维空间 到 一维空间的**线性变换**（由于，所以是线性变换）关系
+1. 构造 三维 到 一维的**线性变换**
+   函数：由第一列的向量的三个坐标做变量，v 和 w 向量值固定，得到一个行列式的值（三个向量构成的六面体的体积）
+
    ![](images/cross5.png)
 
 2. 由于函数线性，就会存在一个 1 X 3 矩阵来代表这个变换
@@ -353,16 +390,29 @@ z & \color{green}{v_3} & \color{#F80}{w_3} \\
 \color{red}{p_1} = \color{green}{v_2} \cdot  \color{#F80}{w_3} - \color{green}{v_3}\cdot \color{#F80}{w_2} \\
 \color{red}{p_2} = \color{green}{v_3} \cdot  \color{#F80}{w_1} - \color{green}{v_1}\cdot \color{#F80}{w_3} \\
 \color{red}{p_3} = \color{green}{v_1} \cdot  \color{#F80}{w_2} - \color{green}{v_2}\cdot \color{#F80}{w_1}
+\\ \Downarrow \\
+\overrightarrow P = \overrightarrow V \times \overrightarrow W
 $$
 
-4. P * 未知向量  == 未知向量、V、W 确定的平行六面体的体积
-   ![](images/cross3.png)
-5. P * 未知向量 == Z 的长度（P 在 z 轴投影）* P 的长度（见 六.1）
-6. 联立 4、5 结果可得：
-   P 的长度 == V、W 确定的平行四边形面积 == V、W 的叉乘
-   ![](images/cross4.png)
+4. 假设 空间内有一向量 P 垂直于 v 和 w 构成的平行四边形 F，且 P 的长度为 F 的面积
+  $$
+  \begin{align} \\
+    P \cdot x  &= x 在 P 的投影 \times P 的长度（见 六.1）\\
+    &= X 在 P 的投影 \times F_{v 和 m 构成的平行四边形面积} \\
+    &= x, w, v 构成的六面体的体积
+    \end{align}
+  $$
+  ![](images/cross4.png)
 
-#八、基变换
+5. 由 3 得 P 为 向量 V 和 W 的叉乘结果
+   由 4 得 存在 P‘ 垂直于 向量 V 和 W 构成的平面
+   由 2 得 P 和 P’ 一一对应（见 六、2.3）
+
+   
+
+
+
+#八、基变换（坐标系转换）
 
 ##1. 概念
 
@@ -370,59 +420,42 @@ $$
 - 变换前提：同一原点
 - 几何意义：实现 **同一个向量** 在不同 **基向量（坐标系）**下的转换
 
+  > 例，一个模型上的点都是基于模型上原点的偏移量 A（此时模型原点值是 M（ 0，0，0））
+  > 当把模型放到世界中，移动模型时，模型上的原点是基于世界原点的偏移量（此时模型原点值是 N（ x，y，z），基坐标已经变化）
+  > 此时求得：模型的点在世界坐标的值 = 偏移量 A + 模型原点在世界坐标的值 N
+
 ##2. 不同坐标系的互相转换
 
-- 本质：变换后的向量原来由基向量构成的线性组合不变，但使用新的基向量
-- 目标 1：A 坐标系的向量 v 转 B 坐标系的向量 w
-- 公式 1：矩阵左乘法（三、2）
-  向量 v：A 坐标系中的向量（输入）
-  向量 w：**B 坐标系中**对应 A 坐标系的向量（输出）
-  矩阵 M：A 坐标系的基向量在 B 坐标系的表示
-  $$
-    \begin{align}
-    \overrightarrow M \cdot \overrightarrow v &= \overrightarrow w \\
-    \overrightarrow v &= {\overrightarrow M}^{-1} \cdot \overrightarrow w \\ \\
-    \begin{bmatrix} 
-    \color{green}{a_x} & \color{red}{b_x}\\ 
-    \color{green}{a_y} & \color{red}{b_y}\\
-    \end{bmatrix} \cdot 
-    \begin{bmatrix} 
-    v_1 \\ v_2\\ 
-    \end{bmatrix} 
-    &= 
-    \begin{bmatrix} 
-    w_1 \\ w_2\\ 
-    \end{bmatrix} \\ 
-    \begin{bmatrix} 
-    v_1 \\ v_2\\ 
-    \end{bmatrix} 
-    &= 
-    { \begin{bmatrix} 
-    \color{green}{a_x} & \color{red}{b_x}\\ 
-    \color{green}{a_y} & \color{red}{b_y}\\
-    \end{bmatrix} 
-    }^{-1}\cdot 
-    \begin{bmatrix} 
-    w_1 \\ w_2\\ 
-    \end{bmatrix} \\
-    \end{align}
-  $$
-  
-- 目标 2： B 坐标系的线性变换（矩阵 P）转 A 坐标系的线性变换（矩阵 Q）
+本质：变换后的向量原来由基向量构成的线性组合不变，但使用新的基向量
 
-- 公式 2：矩阵与矩阵相乘（三、3）
-  向量 v： A 坐标系中的向量（输入）
-  向量 w：A 坐标系中对应 B 坐标系中的线性变换（矩阵 P）后的结果（输出）
+目标 1：A 坐标系的向量 v 转 B 坐标系的向量 w
+
+- 公式 1：矩阵左乘法（三、2）
+  向量 v：A 坐标系中的向量
+  向量 w：向量 v 在**B 坐标系中**对应的向量
   矩阵 M：A 坐标系的基向量在 B 坐标系的表示
-  矩阵 P：向量 v 在 B 坐标系的线性变换（这种线性变换矩阵直接转成对应的坐标系矩阵没有意义）
   $$
   \begin{align}
-  \overrightarrow M^{-1} \cdot 
-  \color{red}{\overrightarrow P} \cdot 
-  \color{red}{\overrightarrow M} \cdot 
-  \overrightarrow v &= \overrightarrow w \\
-  \overrightarrow Q \cdot 
-  \overrightarrow v &= \overrightarrow w \\
+  \overrightarrow M_{ab} \cdot \overrightarrow v_a &= \overrightarrow w_b \\
+  \overrightarrow v_a &= {\overrightarrow M_{ab}}^{-1} \cdot \overrightarrow w_b
+  \end{align}
+  $$
+  
+目标 2： B 坐标系的线性变换（矩阵 P）转 A 坐标系的线性变换（矩阵 Q）
+
+- 公式 2：矩阵与矩阵相乘（三、3）
+  向量 v： A 坐标系中的向量
+  向量 w：向量 v 的在 B 坐标系线性变换后的在 A 坐标系的结果
+  矩阵 M：A 坐标系的基向量在 B 坐标系的表示
+  矩阵 P：向量 v 在 B 坐标系的线性变换
+  $$
+  \begin{align}
+  \overrightarrow M^{-1}_{ba} \cdot 
+  \color{red}{\overrightarrow P_b} \cdot 
+  \color{red}{\overrightarrow M_{ab}} \cdot 
+  \overrightarrow v_a &= \overrightarrow w_a \\
+  \overrightarrow Q_a \cdot 
+  \overrightarrow v_a &= \overrightarrow w_a \\
   \end{align}
   $$
 
@@ -435,7 +468,7 @@ $$
 
 - 几何意义：
   特征向量：向量在 **线性变换前后** 向量的 **张成空间（二、1）不变**（与所选坐标系无关）
-  特征值：特征向量 线性变换**后 **的长度 / 线性变换**前** 的长度，向量翻转时特征值为负
+  特征值：$特征值 = {特征向量线性变换后的长度 \over 特征向量线性变换前的长度}$，向量翻转时特征值为负
 - 特殊情况：
   部分旋转的线性变换 **没有特征值和特征向量**
   属于单个特征值的特征向量可能不止在一条线上
@@ -508,6 +541,14 @@ $$
     0 & \color{red}{2}\\
     \end{bmatrix}
   $$
+
+
+
+
+
+
+
+
 
 
 
