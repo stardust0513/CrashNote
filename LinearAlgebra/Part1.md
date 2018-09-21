@@ -4,7 +4,7 @@
 
 ##1. 基础知识
 
-###1.1 GPU 里矩阵间的计算方式
+###1.1 GPU 中矩阵间的计算方式
 
 > 注意：
 >
@@ -13,20 +13,17 @@
 >    否则它们会（消极地）互相影响，比如：比如向某方向移动2米，2米也许会被缩放成1米
 
 - 阵列操作：图像的矩阵中每个对应元素之间的操作（矩阵间的 加、减，矩阵和数字的加、减、乘）
-  例，**阵列**相乘
+  例，**矩阵**和数字相减
   $$
   \begin{bmatrix}
   \color{red}{a_{11}} & \color{red}{a_{21}} \\
   a_{12} & a_{22} \\
   \end{bmatrix}
-  \begin{bmatrix}
-  \color{green}{b_{11}} & b_{21} \\
-  \color{green}{b_{12}} & b_{22} \\
-  \end{bmatrix}
+  - 2
   =
   \begin{bmatrix}
-  \color{red}{a_{11}}\color{green}{b_{11}} & \color{red}{a_{21}}b_{21} \\
-  a_{12}\color{green}{b_{12}} & a_{22}b_{22} \\
+  \color{red}{a_{11}} - 2 & \color{red}{a_{21}} - 2 \\
+  a_{12} - 2 & a_{22} - 2 \\
   \end{bmatrix}
   $$
 
@@ -48,18 +45,36 @@
   a_{12}\color{green}{b_{11}}+a_{22}\color{green}{b_{12}} & a_{12}b_{21}+a_{22}b_{22} \\
   \end{bmatrix}
   $$
-
+  如果使用 **glsl** 的内置函数 `matrixcompmult`，矩阵之间也可以实现**阵列相乘**
+  $$
+  \begin{align}
+  M_1 &= \begin{bmatrix}
+  \color{red}{a_{11}} & \color{red}{a_{21}} \\
+  a_{12} & a_{22} \\
+  \end{bmatrix} \\
+  M_2 &= \begin{bmatrix}
+  \color{green}{b_{11}} & b_{21} \\
+  \color{green}{b_{12}} & b_{22} \\
+  \end{bmatrix}\\
+  matrixcompmult(M_1, M_2) &=
+  \begin{bmatrix}
+  \color{red}{a_{11}}\color{green}{b_{11}} & \color{red}{a_{21}}b_{21} \\
+  a_{12}\color{green}{b_{12}} & a_{22}b_{22} \\
+  \end{bmatrix}
+  \end{align}
+  $$
 
 
 
 ### 1.2 矩阵变换组合
 
-这里按照 OpenGL 里的向量默认为**列向量，矩阵默认由列向量构成**
+OpenGL 默认为**列向量优先存储：矩阵由列向量构成**
 $$
 \begin{align}
-P_{世界} &= P_{物体} \cdot M_{物体 \to世界}\\
-P_{相机} &= P_{世界} \cdot M_{世界 \to 相机}\\
-&= P_{物体} \cdot M_{世界 \to 相机} \cdot M_{物体 \to世界}
+v_{世界} &= M_{模型 \to世界} \cdot v_{模型} \\
+v_{视点} &= V_{世界 \to 视点} \cdot v_{世界}\\
+v_{屏幕} &= P_{视点 \to 透视} \cdot v_{视点}\\
+&= P_{视点 \to 透视} \cdot V_{世界 \to 视点} \cdot M_{模型 \to 世界} \cdot v_{模型}
 \end{align}
 $$
 
@@ -84,8 +99,6 @@ $$
 - 在左手坐标系下，使用 **左手定则** 判断叉乘的方向
 
 ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/cross3.png)
-
-
 
 ### 1.5 惯性坐标系
 
@@ -128,6 +141,7 @@ $$
     沿坐标轴缩放 & 沿任意向量N_{(x,y,z)}缩放K
     \end{array}
     $$
+
 
 
 
@@ -259,6 +273,7 @@ $$
 - 包括：平移、旋转、均匀缩放（镜像不是）
 
 **正交变换**
+
 - 变换矩阵 列/行 互相保持垂直，切为单位向量
 - 包括：平移、旋转、镜像
 - 变换矩阵行列式为 $\pm1$
@@ -270,7 +285,6 @@ $$
 - 只改变位置和方向
 - 包括：平移、旋转（镜像不是）
   
-
 
 ###3.2 线性变换（可逆）
 
@@ -318,12 +332,19 @@ $$
 > 投影是降维操作
 
 ####3.4.1 正交投影
+
+OpenGL 中的正交投影
+
+> OpenGL 将世界坐标标准化为 X, Y, Z 范围均为 [-1,1] 的视角坐标内，然后在乘以透视矩阵得到二维图像
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/orthogonal2.png)
+
 几何意义：
 - 图像远近大小相同
 - 点到投影后对应点的连线(投影线)与其他**投影线互相平行**
 - 在线形缩放的基础上，沿投影方向的缩放比例为 0，其他缩放比例不变
 
-正交投影矩阵：
+简单的正交投影矩阵：
 $$
 \begin{array}{cccc}
 \begin{bmatrix}
@@ -350,9 +371,33 @@ $$
 \end{array}
 $$
 
+OpenGL 中的正交投影矩阵 [推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/orthogonal.png)
+
+$$
+\begin{bmatrix}
+2 \over {right - left} & 0 & 0 & -{{right + left}\over{right - left}}\\
+0 & 2 \over {top - bottom} & 0 & -{{top + bottom}\over{top - bottom}}\\
+0 & 0 & -2 \over {far - near} & -{{far + near}\over{far - near}}\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+
 
 ####3.4.2 透视投影
+
+OpenGL 中的透视投影
+
+> OpenGL 将世界坐标标准化为 X, Y, Z 范围均为 [-1,1] 的视角坐标内，然后在乘以透视矩阵得到二维图像
+
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/projection2.png)
+
+
 几何意义：
+
 - 图像近大远小
 - 点到投影后对应点的连线(投影线)与其他**投影线相交于一点**（投影中心）
 - 小孔成像：投影中心 在 投影平面 前
@@ -362,7 +407,6 @@ $$
 - 投影中心 在 投影平面 前, d < 0
   投影中心 在 投影平面 后, d > 0
   ![](images/projection.png)
-
   $$
   G_{投影后} (x^, , y^,, z^,) = (d \cdot x/z, d \cdot y/z, d), A_{投影前}(x,y,z)
   $$
@@ -370,19 +414,35 @@ $$
 
 
 
+OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
+
+> FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/perspective.png)
+
+$$
+\begin{bmatrix}
+2 near \over {right - left} & 0 & {right + left}\over{right - left} & 0\\
+0 & 2 near \over {top - bottom} & {top + bottom}\over{top - bottom} & 0\\
+0 & 0 & -({far + near}) \over {far - near} & -2 \cdot far \cdot near\over{far - near}\\
+0 & 0 & -1 & 0
+\end{bmatrix}
+$$
+
 
 
 ## 4. 3D 中的方位与角位移
 ### 4.1 基本概念
 
-**方位**：相对于上一方位的旋转（单一状态），用欧拉角表示
-**角位移**：相对于上一方位旋转的 量（两个状态间的差别），用矩阵、四元数表示
+**方位**：相对于上一方位的旋转（单一状态），用**欧拉角**表示
+**角位移**：相对于上一方位旋转的 量（两个状态间的差别），用**矩阵、四元数**表示
 
-### 4.2 欧拉角
+### 4.2 欧拉角 (Euler angles)
 
 定义：欧拉角可以用来描述任意旋转，将一个角位移分解为三个互相垂直轴的**顺序旋转步骤**（旋转后，原来互相垂直的轴可能不再垂直，当前步骤只能影响下一个旋转步骤，不能影响之前的旋转步骤）
 > 这里**默认右手坐标系，顺时针为正**，任意三个轴可以作为旋转轴，下图仅为举例
 > heading 和 yaw 有区别：
+>
 > - heading：绕**惯性坐标系**的 Y 轴旋转
 > - yaw：绕**模型坐标系**的 Y 轴旋转
 > ![](images/rollPichYaw.svg)
@@ -407,7 +467,7 @@ $$
 
 
 
-### 4.3 四元数
+### 4.3 四元数 (Quaternion)
 
 定义：通过四个数表示方位，从而避免了万向锁这样的问题
 优点：
@@ -466,7 +526,7 @@ $$
 
 **旋转角度球面线性插值**（slerp：**S**pherical **L**inear Int**erp**olation）
 
-- 方法：插值 = 开始 + 插值比例 * （结束 - 开始）
+- 方法：插值 = 开始 + 插值比例 *（结束 - 开始）
 - 公式：$V_{插值} = V_{开始}(V_{开始}^{-1}V_{结束})^x$, $x$ 为插值比例
   注意：$V$ 和 $-V$ 代表相同的方位，但在插值时会有不同的结果
 
@@ -502,7 +562,6 @@ $$
     Pich & Heading/Yaw & Bank/Roll
     \end{array}
   $$
-
 
 
 
