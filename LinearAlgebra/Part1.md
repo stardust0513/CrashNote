@@ -65,13 +65,6 @@
   $$
 
 
-
-
-
-
-
-
-
 ### 1.2 矩阵变换组合
 
 OpenGL 默认为**列向量优先存储：矩阵由列向量构成**
@@ -158,11 +151,6 @@ $$
 
 
 
-
-
-
-
-
 ### 2.3 Reflect
 
 缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 N 必过原点**
@@ -202,13 +190,6 @@ $$
 
 
 
-
-
-
-
-
-
-
 ### 2.4 Rotate
 
 设 旋转角 $\theta$ 顺时针为正方向
@@ -244,11 +225,6 @@ $$
     沿 X 轴旋转 & 沿 Y 轴旋转 & 沿 Z 轴旋转 & 沿任意向量N_{(x,y,z)}旋转 \theta
     \end{array}
     $$
-
-
-
-
-
 
 
 
@@ -454,15 +430,6 @@ OpenGL 中的透视投影
   $$
 
 
-
-
-
-
-
-
-
-
-
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 
 > FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
@@ -600,7 +567,6 @@ $$
 
 
 
-
 ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/axisAngleSplit.png)
 
 
@@ -608,10 +574,12 @@ $$
 ### 4.3 四元数 (Quaternion)
 
 > 相对于复数的二维空间，为了解决三维空间的旋转变化问题，爱尔兰数学家 William Rowan Hamilton 把复数进行了推广，也就是四元数
+>
+> **四元数包含旋转方向**： 3D 中的一个旋转对应正向和反向旋转的两个四元数，不是一一对应的
 
 优点：
 
-- **平滑差值**：slerp 和 squad 提供了方位间的平滑差值**（只有四元数有这个功能）**
+- **平滑差值**：slerp 和 squad 提供了方位间的平滑差值**（矩阵和欧拉角都没有这个功能）**
 - 快速连接和角位移求逆：
   多个角位移 ${四元数叉乘 \over \to}$ 单个角位移（比矩阵快）
   反角位移 = 四元数的共轭（比矩阵快）
@@ -647,7 +615,7 @@ $$
 $$
 
 
-#### 4.3.1 四元数运算
+#### 4.3.1 四元数的运算
 
 - **乘法，合并两个四元数的偏移量，得到总的角位移**
   四元数的乘法有很多种，其中最常用的一种是格拉丝曼积，与数学多项式乘法相同（与复数乘法概念相同）
@@ -668,7 +636,7 @@ $$
   \end{align}
   $$
 
-- 求模：代表一个四维的长度
+- 求模：代表一个四维的长度，与向量的求模方法一致
   $$
   ||\vec Q|| = \sqrt{w^2 + \vec u \cdot \vec u} = \sqrt{w^2 + x^2 + y^2 + z^2}
   $$
@@ -690,17 +658,19 @@ $$
   $$
 
 
-
-- 单位四元数：任意四元数乘以单位四元数后保持不变
-  $(\vec 0, \pm 1)$，模为 1
-  几何上存在两个单位四元数 -u​ 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
+- 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
+  **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
+  几何上存在两个单位四元数 -u 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
   $$
-  ((w_1 \vec u + w \vec u_1 +  \vec u_1 \times \vec u), (w_1w - \vec u_1 \cdot \vec u)) = (\vec u, w)
+  Q_{单位} = {Q \over ||Q||}\\
+  Q_{单位}Q_1 = Q_1Q_{单位} = Q_1\\
+  ((w_1 \vec u + w \vec u_1 +  \vec u_1 \times \vec u), (w_1w - \vec u_1 \cdot \vec u)) = (\vec u_1, w_1)
   $$
 
 
 
-#### 4.3.2 极坐标下的四元数
+
+#### 4.3.2 四元数默认在极坐标下
 
 **极坐标下的优势：使四元数的运算和向量的运算方法一致**
 
@@ -708,49 +678,149 @@ $$
 
 - 笛卡尔坐标下为
   $\vec Q = (x, y, z, w) = (\vec u, w)$
-- 极坐标下为，其中 $\theta$ 为绕 $\vec u$ 旋转后的角位移（旋转方式见 4.2.3）
+- 极坐标下为，其中 $\theta$ 为绕 $\vec u$ 旋转后的角位移（旋转方式见 4.2.3，[推导到极坐标](https://krasjet.github.io/quaternion/quaternion.pdf)）
   $\vec Q  = (x sin{\theta \over 2}, y sin{\theta \over 2},z sin{\theta \over 2}, cos{\theta \over 2}) = (\vec u sin{\theta \over 2}, cos{\theta \over 2})$
 
 
 
-**极坐标下的四元数运算**
+**只有旋转轴 u 为单位向量时，下面公式才成立**
 
-- 对数：根据四元数，求出旋转轴 u 和旋转角位移 $\theta$
-  $$
-  log_e([\vec u sin{\theta \over 2}, cos{\theta \over 2}]) = (\vec u {\theta \over 2}, 0)
-  $$
 
-- 指数：根据旋转轴 u 和旋转角位移 $\theta$，求出四元数
+- 用指数代替四元数：根据旋转角位移 $\theta$ 和旋转轴 u 求出四元数
   $$
   e^{(\vec u {\theta \over 2}, 0)} = (\vec usin{\theta \over 2}, cos{\theta \over 2})
   $$
 
+- 对数：根据四元数和旋转轴 u 求出旋转角位移 $\theta$
+  $$
+  log_e(（\vec u sin{\theta \over 2}, cos{\theta \over 2}）) = (\vec u {\theta \over 2}, 0)
+  $$
 
-极坐标下的旋转操作
+
 
 - 将点 P 绕 $\vec u$ 旋转 $\theta$ 度
   $P_{旋转后} = aPa^{-1}, a = (\vec u sin{\theta \over 2}, cos{\theta \over 2})$
 
 - 将点 P 绕 $\vec u$ 旋转 $\theta$ 度后再旋转 $\alpha$ 度（方位的叠加是点乘）
-  $P_{旋转后} = baPa^{-1}b^{-1} = (ba)P(ba)^{-1},a = (\vec n  sin{\theta \over 2},cos{\theta \over 2}),b = (\vec n sin{\alpha \over 2},cos{\alpha \over 2})$
+  $P_{旋转后} = baPa^{-1}b^{-1} = (ba)P(ba)^{-1},a = (\vec u  sin{\theta \over 2},cos{\theta \over 2}),b = (\vec u sin{\alpha \over 2},cos{\alpha \over 2})$
 
-- 连续**多次相同**的旋转操作：**四元数求幂**（多次方位的叠加）
+- **四元数求幂**：四元数的 x 次幂等同于将它的旋转角缩放 x 倍
   $$
-  (\vec u sin{\theta \over 2}, cos{\theta \over 2})^x = (\vec u {sin({\theta \over 2}x)\over sin{\theta \over 2}}, cos({\theta \over 2}x))
+  (\vec u sin{\theta \over 2}, cos{\theta \over 2})^x
+  = (\vec u {sin({\theta \over 2}x)\over sin{\theta \over 2}}, cos({\theta \over 2}x))
   $$
 
+
+
+
+
+#### 4.3.3 四元数的常用插值方法
+
+所有插值用的旋转四元数**都是单位四元数**
+插值要采用弧面最短路径
+
+- $Q$ 和 $-Q$ 代表不同的旋转角度得到的相同方位，在插值时会有不同的结果，如下图：可以将 q0 和 q1（蓝色的弧）插值，这会导致 3D 空间的向量旋转接近 360 度，而实际上这两个旋转相差并没有那么多，所以 q0 和 -q1（红色的弧）的插值才是插值的最短路径
+- 每次插值前要通过 $cos\theta = q_0 \cdot q_1$ 判断 q0 和 q1 的夹角是否为钝角，若为钝角将 q1 改为 -q1 来计算插值
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Interpolation.png)
+
+
+
+**线形插值**（Lerp：**L**inear Int**erp**olation）
+
+- 对四元数插值后，得到的结果不是单位四元数，插值的弧度越大缺点越明显
+- 公式：$Q_t = (1- t)Q_0 + t Q_1, t$ 为插值比例
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Lerp.png)
+
+
+
+**正规化线性插值**（Nlerp：**N**ormalized **L**inear Int**erp**olation）
+
+- 对四元数插值后，虽然把弦等分了，但是弦上对应的弧却不是等分的，插值的弧度越大缺点越明显
+- 公式：$Q_t = {{ (1- t)Q_0 + tQ_1}\over{||(1- t)Q_0 + tQ_1||}}, t$ 为插值比例
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/NLerp.png)
 
 
 
 **旋转角度球面线性插值**（slerp：**S**pherical **L**inear Int**erp**olation）
 
-- 方法：插值 = 开始 + 插值比例 *（结束 - 开始）
-- 公式：$V_{插值} = V_{开始}(V_{开始}^{-1}V_{结束})^x$, $x$ 为插值比例
-  注意：$V$ 和 $-V$ 代表相同的方位，但在插值时会有不同的结果
+- 对单个角度做线形插值，做到固定角速度，无法平滑过渡连接不同方向的角度
+- 公式 1：这里用的四元数都是单位四元数，所以有 $Q^{-1} = Q^*,  t$ 为插值比例
+  $$
+  Q_t = Q_0(Q_0^{-1}Q_1)^t = Q_0(Q_0^* Q_1)^t​
+  $$
 
-**平滑过渡连接不同方向的旋转角**（squad：**S**pherical and **Quad**rangle）：四元数样条
+- 公式 2：效率比公式 1 高，其中 $\theta = cos^{-1}(Q_0\cdot Q_1)$
+  $$
+  Q_t = {sin((1 - t)\theta) \over sin\theta} Q_0 + {sin(t\theta) \over sin\theta}Q_1
+  $$
 
 
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Slerp.png)
+
+
+
+**Slerp 和 Nlerp 的比较**
+
+- 效率上 Nlerp 比 Slerp 高
+  效果上 Nlerp 和 Slerp 在单位四元数之间的夹⻆ θ 非常小时差别不大，夹角越大 Nlerp 的效果越差
+- 单位四元数之间的夹⻆ θ 非常小，那么 sinθ 可能会由于浮点数的误差被近似为 0.0，从而导致除以 0 的错误。我们在实施 Slerp 之前，需要检查两个四元数的夹⻆是否过小一旦发现这种问题，我们就必须改用 Nlerp 对两个四元数进行插值，这时候 Nlerp 的误差非常小所以基本不会与真正的 Slerp 有什么区别 
+
+
+
+#### 4.3.4 贝塞尔曲线和 Squad 插值
+
+**样条（Spline）**：在一个向量序列 $v_0,v_1,...,v_n$ 中分别对每对向量 $v_i,v_{i+1}$ 进行插值后互相连接得到的曲线
+
+**贝塞尔曲线（Bézier）**：通过不断在现有点的基础上添加控制点，使最终得到的曲线更加平滑
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/bezier.png)
+
+三次贝塞尔曲线：
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Bezier_3.gif)
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Bezier3.png)
+
+插值方式可以用 lerp、Slerp 等方式，上图采用 de Casteljau 算法构造贝塞尔曲线
+上图采用 lerp 方式插值，插值方程为：
+$$
+v_t = (1 − t)^3v_0 + 3(1 − t)^2tv_1 + 3(1 − t)t^2v_2 + t^3v_3
+$$
+de Casteljau 算法构造贝塞尔曲线的过程为：
+
+- 第一次贝塞尔曲线，由相邻的基础点得到插值点 $v_{01}、v_{12}、v_{23}$
+- 第二次贝塞尔曲线，由上次贝塞尔的插值点得到本次的插值点 $v_{012}、v_{123}$
+- 第三次贝塞尔曲线，由上次贝塞尔的插值点得到本次的插值点 $v_{0123}$
+
+
+
+**球面四边形插值**（Squad：**S**pherical and **Quad**rangle）
+
+- 平滑过渡连接不同方向的旋转角，效率最低，效果最好
+- Squad 的插值方法类似贝塞尔曲线的构造过程，**由于取基础点的方式不同，效率比构造贝塞尔曲线要高**
+  Squad 的插值过程中可以用 lerp、Slerp 等方式插值
+
+如果使用 lerp 插值，**插值参数为 2t(1-t)，而非 t**
+插值方程为：
+$$
+v_t = (2t^2 − 2t + 1)(1 − t)v_0 + 2(1 − t)^2tv_1 + 2(1 − t)t^2v_2 + t(2t^2 − 2t + 1)v_3
+$$
+
+插值步骤为：
+1. 由基础点得到插值点 $v_{12}，v_{03}$
+2. 根据上次的插值点得出本次的插值点 $v_{0312}$
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Squad.png)
+
+
+
+三次贝塞尔曲线和 Squad 插值构造的曲线对比：
+
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/comparedBS.png)
 
 
 
@@ -782,6 +852,7 @@ $$
     Pich & Heading/Yaw & Bank/Roll
     \end{array}
   $$
+
 
 
 
