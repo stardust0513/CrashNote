@@ -77,8 +77,6 @@ v_{屏幕} &= P_{视点 \to 透视} \cdot v_{视点}\\
 \end{align}
 $$
 
-
-
 ### 1.3 4D 齐次空间
 
 齐次坐标：4D 向量有 4 个分量，前 3 个是标准的 x、y、z，第 4 个是 **w，称为齐次坐标**
@@ -90,8 +88,6 @@ $$
 - 当 w = 0 时，B$(x,y,z, 0)$ 描述的**是无限远的方向**而不是位置
   
 
-
-
 ### 1.4 左右手坐标系
 
 ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/LRHandCoordinate.jpeg)
@@ -102,8 +98,6 @@ $$
 - 在左手坐标系下，使用 **左手定则** 判断叉乘的方向
 
 ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/cross3.png)
-
-
 
 ### 1.5 惯性坐标系
 
@@ -125,9 +119,9 @@ $$
 
 缩放比例为 K 在不同的坐标轴上的缩放比例不同，**这里假设 缩放方向 N 必过原点**
 
-- 核心公式（推导见《3D 数学基础 图形与游戏开发》8.3.2），将三个基向量分别沿 N 向量方向缩放后的向量构成的列矩阵为 沿向量 N 的缩放矩阵
+- 核心公式（推导见《3D 数学基础 图形与游戏开发》8.3.2），将三个基向量 v 分别沿 n 向量方向缩放后的向量构成的列矩阵为沿向量 n 的缩放矩阵
   $$
-  V_{缩放后} = V + (K_{比例} - 1)(V \cdot N_{缩放方向})N_{缩放方向}
+  v_{缩放后} = v + (K_{比例} - 1)(v \cdot n_{缩放方向})n_{缩放方向}
   $$
 
 - 由 **基坐标** 构成的 **列向量** 变化矩阵
@@ -153,19 +147,19 @@ $$
 
 ### 2.3 Reflect
 
-缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 N 必过原点**
+缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 n 必过原点**
 
-- 核心公式
+- 核心公式，将三个基向量 v 分别沿 n 向量方向缩放 -1 （缩放核心公式的比例 K = -1）后的向量构成的列矩阵为沿向量 n 的镜像矩阵
   $$
-  V_{镜像后} = V - 2(V \cdot N_{镜像方向})N_{镜像方向}
+  v_{镜像后} = v - 2(v \cdot n_{镜像方向})n_{镜像方向}
   $$
 
 - 由 **基坐标** 构成的 **列向量** 变化矩阵
   $$
   \begin{array}{cccc}
   \begin{bmatrix}
-  1 & 0 & 0\\
-  0 & -1 & 0\\
+  -1 & 0 & 0\\
+  0 & 1 & 0\\
   0 & 0 & 1
   \end{bmatrix} &
   \begin{bmatrix}
@@ -192,11 +186,11 @@ $$
 
 ### 2.4 Rotate
 
-设 旋转角 $\theta$ 顺时针为正方向
+设 在**右手坐标系**，旋转角**顺时针**为正方向
 
-- 核心公式（推导见 《3D 数学基础 图形与游戏开发》8.2.3），将三个基向量分别绕 N 旋转后的向量构成的列矩阵为 绕向量 N 的旋转矩阵
+- 核心公式（推导见 《3D 数学基础 图形与游戏开发》8.2.3），将三个基向量 v 分别绕 n 旋转后的向量构成的列矩阵为 绕向量 n 的旋转矩阵
   $$
-  V_{旋转后} =( V- (V \cdot N_{旋转轴})N_{旋转轴})cos\theta + (V \times N_{旋转轴})sin\theta + (V \cdot N_{旋转轴})N_{旋转轴}
+  v_{旋转后} =( v- (v \cdot n_{旋转轴})n_{旋转轴})cos\theta + (v \times n_{旋转轴})sin\theta + (v \cdot n_{旋转轴})n_{旋转轴}
   $$
 
 - 由 **基坐标** 构成的 **列向量** 变化矩阵
@@ -216,13 +210,13 @@ $$
      cos\theta & sin\theta & 0\\
     -sin\theta & cos\theta & 0\\
     0 & 0 & 1
-    \end{bmatrix} &
+    \end{bmatrix} & = &
     \begin{bmatrix}
     (1-cos\theta)x^2 + cos\theta & (1-cos\theta)yx+sin\theta z & (1-cos\theta)zx - sin\theta y\\
     (1-cos\theta)xy - sin\theta z & (1-cos\theta)y^2 + cos\theta & -(1-cos\theta)zy + sin\theta x\\
     (1-cos\theta)xz + sin\theta y & (1-cos\theta)yz - sin\theta x & (1-cos\theta)z^2 + cos\theta
     \end{bmatrix}\\
-    沿 X 轴旋转 & 沿 Y 轴旋转 & 沿 Z 轴旋转 & 沿任意向量N_{(x,y,z)}旋转 \theta
+    沿 X 轴旋转 & 沿 Y 轴旋转 & 沿 Z 轴旋转 & &沿任意向量N_{(x,y,z)}旋转 \theta
     \end{array}
     $$
 
@@ -233,9 +227,12 @@ $$
 ### 2.5 Shear
 变化后体积和面积保持不变
 
-- 核心公式：
+- 方法：将三个基向量 v 分别取出 x，y，z 中的任意一个值，乘以变换因子，在把它加到 x，y，z 中的其他轴的值上，例：取 x 乘以变换因子 K
   $$
-  V_{切变后} = V + N * k_{变换因子}
+  v_{切变后} =
+  \begin{bmatrix}
+  x \\ y + x * K_y \\ z + x * K_z
+  \end{bmatrix}
   $$
 
 - 由 **基坐标** 构成的 **列向量** 变化矩阵
@@ -265,7 +262,7 @@ $$
 
 ## 3. 几何变换
 
-### 3.1 基本变换
+### 3.1 基础变换
 
 **可逆变换**
 
@@ -430,6 +427,8 @@ OpenGL 中的透视投影
   $$
 
 
+
+
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 
 > FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
@@ -463,6 +462,16 @@ $$
 **角位移**：相对于上一方位旋转后的 偏移量（用四元数、矩阵表示）
 
 ### 4.1 欧拉角 (Euler angles)
+定义：
+
+- 欧拉角可以用来描述任意旋转，将一个角位移分解为三个互相垂直轴的**顺序旋转步骤**
+- 旋转后，原来互相垂直的轴可能不再垂直，**当前步骤只能影响下一个旋转步骤，不能影响之前的旋转步骤**，通过这个特性我们可以选择**适合的旋转方式 (如：YXZ）**来避免万像锁的发生
+- 这里**默认右手坐标系，逆时针为正**，任意三个轴可以作为旋转轴，下图仅为举例
+heading：绕**惯性坐标系**的 Y 轴旋转
+yaw：绕**模型坐标系**的 Y 轴旋转 
+
+![](images/rollPichYaw.png)
+
 优点：
 
 - 仅需要三个角度值，节省内存
@@ -472,26 +481,24 @@ $$
 缺点：
 
 - 欧拉角之间求差值（角位移）困难
-- 欧拉角的方位表达方式不唯一（通过限制角的范围解决，heading 和 bank 限制在 -180 ～ 180，pitch 限制在 -90 ～90）
-  不同欧拉角表述之间的转换要先转为矩阵在转为目标的欧拉角
+- 欧拉角的方位表达方式不唯一（n = n + 360）
+- 由于三个角度不互相独立，pich 135 = heading 180 + pich 45 + bank 180
+  （通过限制角的范围解决，heading 和 bank 限制在 -180 ～ 180，pitch 限制在 -90 ～90）
+- 万向锁问题（避免方法：**重新排列角度的旋转顺序**，但万向锁仍可能产生）
 
-- [万向锁](http://v.youku.com/v_show/id_XNzkyOTIyMTI=.html)：当沿着任意角位移 90 度时，导致两个方向的旋转轴同线，导致三次旋转中有两次旋转的效果是一样的，使当前的旋转组合不能达到某些角度（避免万像锁要重新排列角度的旋转顺序，但万向锁仍可能产生）
+[万向锁](http://v.youku.com/v_show/id_XNzkyOTIyMTI=.html)：
 
-![](images/gimbalLock.png)
+- 当沿着任意角位移 90 度时，导致两个方向的旋转轴同线，导致三次旋转中有两次旋转的效果是一样的
+- 在万向锁的情况下仍可以旋转到想要的位置，但必须同时旋转三个轴向，这时物体没有按照期望的方式旋转，下图的箭头如果是相机，则相机会发生抖动
 
-定义：
+|![](images/gimbalLock.png)| ![](images/gimbalLock.gif) | ![](images/gimbalLockRight.png) |
+| :----: | :----: | :----: |
+| 万向锁 |**发生万向锁后**的旋转|期望的旋转|
 
-- 欧拉角可以用来描述任意旋转，将一个角位移分解为三个互相垂直轴的**顺序旋转步骤**（旋转后，原来互相垂直的轴可能不再垂直，当前步骤只能影响下一个旋转步骤，不能影响之前的旋转步骤）
-
-> 这里**默认右手坐标系，顺时针为正**，任意三个轴可以作为旋转轴，下图仅为举例
-> heading 和 yaw 有区别：
->
-> - heading：绕**惯性坐标系**的 Y 轴旋转
-> - yaw：绕**模型坐标系**的 Y 轴旋转
-> ![](images/rollPichYaw.svg)
 
 
 ### 4.2 四元数的相关知识
+
 #### 4.2.1 复数
 
 [复数](https://en.wikipedia.org/wiki/Complex_number)是一种复合的数字，$C_{复数} = a + b \cdot i$ ，其中 a、b 为实数，$i$ 为虚数，$i^2 = -1$
@@ -577,20 +584,6 @@ $$
 >
 > **四元数包含旋转方向**： 3D 中的一个旋转对应正向和反向旋转的两个四元数，不是一一对应的
 
-优点：
-
-- **平滑差值**：slerp 和 squad 提供了方位间的平滑差值**（矩阵和欧拉角都没有这个功能）**
-- 快速连接和角位移求逆：
-  多个角位移 ${四元数叉乘 \over \to}$ 单个角位移（比矩阵快）
-  反角位移 = 四元数的共轭（比矩阵快）
-
-缺点：
-
-- 四元数比欧拉角多存储一个数（当保存大量角位移时尤为明显，如存储动画数据）
-- 浮点数舍入误差和随意输入，会导致四元数不合法（可以通过四元数标准化解决，确保四元数为单位大小）
-- 难以直接使用
-  
-
 定义：**四元数表示角位移的大小**
 
 - 与复数类似，四元数由 1 个实部 和 3 个虚部构成。其中，a、b、c 、d 为实数，$i$ 为虚数
@@ -613,6 +606,19 @@ $$
 &= (\vec u, w)
 \end{align}
 $$
+
+优点：
+
+- **平滑差值**：slerp 和 squad 提供了方位间的平滑差值**（矩阵和欧拉角都没有这个功能）**
+- 快速连接和角位移求逆：
+  多个角位移 ${四元数叉乘 \over \to}$ 单个角位移（比矩阵快）
+  反角位移 = 四元数的共轭（比矩阵快）
+
+缺点：
+
+- 四元数比欧拉角多存储一个数（当保存大量角位移时尤为明显，如存储动画数据）
+- 浮点数舍入误差和随意输入，会导致四元数不合法（可以通过四元数标准化解决，确保四元数为单位大小）
+- 难以直接使用
 
 
 #### 4.3.1 四元数的运算
@@ -658,6 +664,8 @@ $$
   $$
 
 
+
+
 - 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
   **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
   几何上存在两个单位四元数 -u 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
@@ -666,6 +674,8 @@ $$
   Q_{单位}Q_1 = Q_1Q_{单位} = Q_1\\
   ((w_1 \vec u + w \vec u_1 +  \vec u_1 \times \vec u), (w_1w - \vec u_1 \cdot \vec u)) = (\vec u_1, w_1)
   $$
+
+
 
 
 
@@ -698,10 +708,10 @@ $$
 
 
 
-- 将点 P 绕 $\vec u$ 旋转 $\theta$ 度
+- 将点 P 绕 $ \vec u $ 旋转 $ \theta $ 度
   $P_{旋转后} = aPa^{-1}, a = (\vec u sin{\theta \over 2}, cos{\theta \over 2})$
 
-- 将点 P 绕 $\vec u$ 旋转 $\theta$ 度后再旋转 $\alpha$ 度（方位的叠加是点乘）
+- 将点 P 绕 $ \vec u $ 旋转 $ \theta $ 度后再旋转 $\alpha$ 度（方位的叠加是点乘）
   $P_{旋转后} = baPa^{-1}b^{-1} = (ba)P(ba)^{-1},a = (\vec u  sin{\theta \over 2},cos{\theta \over 2}),b = (\vec u sin{\alpha \over 2},cos{\alpha \over 2})$
 
 - **四元数求幂**：四元数的 x 次幂等同于将它的旋转角缩放 x 倍
@@ -790,7 +800,7 @@ $$
 $$
 v_t = (1 − t)^3v_0 + 3(1 − t)^2tv_1 + 3(1 − t)t^2v_2 + t^3v_3
 $$
-de Casteljau 算法构造贝塞尔曲线的过程为：
+$de Casteljau$ 算法构造贝塞尔曲线的过程为：
 
 - 第一次贝塞尔曲线，由相邻的基础点得到插值点 $v_{01}、v_{12}、v_{23}$
 - 第二次贝塞尔曲线，由上次贝塞尔的插值点得到本次的插值点 $v_{012}、v_{123}$
@@ -803,14 +813,14 @@ de Casteljau 算法构造贝塞尔曲线的过程为：
 - 平滑过渡连接不同方向的旋转角，效率最低，效果最好
 - Squad 的插值方法类似贝塞尔曲线的构造过程，**由于取基础点的方式不同，效率比构造贝塞尔曲线要高**
   Squad 的插值过程中可以用 lerp、Slerp 等方式插值
+  如果使用 lerp 插值，**插值参数为 2t(1-t)，而非 t**
+  插值方程为：
 
-如果使用 lerp 插值，**插值参数为 2t(1-t)，而非 t**
-插值方程为：
 $$
 v_t = (2t^2 − 2t + 1)(1 − t)v_0 + 2(1 − t)^2tv_1 + 2(1 − t)t^2v_2 + t(2t^2 − 2t + 1)v_3
 $$
 
-插值步骤为：
+  插值步骤为：
 1. 由基础点得到插值点 $v_{12}，v_{03}$
 2. 根据上次的插值点得出本次的插值点 $v_{0312}$
 
@@ -824,46 +834,255 @@ $$
 
 
 
-### 4.4 欧拉角、矩阵、四元数的相互转化
+### 4.4 欧拉角、旋转矩阵、四元数的互相转换
 
-欧拉角 -> 矩阵
+#### 4.4.1 欧拉角和旋转矩阵
 
-- 欧拉角相对于模型坐标，要改变的是模型在世界坐标的角度，所以改变的角度要取反：$\theta \to -\theta$
-  因此这里的旋转矩阵和 2.2.4 Rotate  类似
+[欧拉角](#4.1 欧拉角 (Euler angles)) $ \to $ 旋转矩阵
 
-- 设 在右手坐标系，旋转角 $\theta$ 顺时针为正方向，则
+- 这里的旋转矩阵和 [2.4 Rotate](#2.4 Rotate)  类似，这里的欧拉角操作的模型的坐标系
+
+- 设在**右手坐标系**，矩阵**列向量**存储，旋转角**逆时针**为正方向（改变的角度方向取反），则
+  最后的转换矩阵为 Heading/Pich/Roll 按需要的顺序相乘的结果（HPR 为相机避免万向死锁的最佳顺序）
   $$
-  \begin{array}{cccc}
-    \begin{bmatrix}
-    1 & 0 & 0\\
-    0 & cosP & -sinP\\
-    0 & sinP & cosP
-    \end{bmatrix} &
-    \begin{bmatrix}
-    cosH & 0 & sinH\\
-    0 & 1 & 0\\
-    -sinH & 0 & cosH
-    \end{bmatrix} &
-    \begin{bmatrix}
-     cosB & -sinB & 0\\
-    sinB & cosB & 0\\
-    0 & 0 & 1
-    \end{bmatrix} \\
-    Pich & Heading/Yaw & Bank/Roll
-    \end{array}
+  \begin{align}
+  Heading &= 
+  \begin{bmatrix}
+  cosH & 0 & sinH\\
+  0 & 1 & 0\\
+  -sinH & 0 & cosH
+  \end{bmatrix} \\
+  Pich &=
+  \begin{bmatrix}
+  1 & 0 & 0\\
+  0 & cosP & -sinP\\
+  0 & sinP & cosP
+  \end{bmatrix} 
+  \\
+  Roll &=
+  \begin{bmatrix}
+  cosR & -sinR & 0\\
+  sinR & cosR & 0\\
+  0 & 0 & 1
+  \end{bmatrix} \\
+  M_{HPR} &= 
+  \begin{bmatrix}
+  cosHcosR+sinHsinPsinR & -cosHsinR+sinHsinPcosR & sinHcosP \\
+  sinRcosP & cosRcosP & -sinP\\
+  -sinHcosR+cosHsinPsinR & sinRsinH+cosHsinPcosR & cosHcosP
+  \end{bmatrix}
+  \end{align}\\
   $$
 
 
+![](images/rollPichYaw.png)
+
+旋转矩阵 $ \to$ [欧拉角](#4.1 欧拉角 (Euler angles))
+
+> 转换后的欧拉角是限制欧拉角，即 Heading 和 Roll 范围为 $\pm$180 度，Pich 的范围为 90 度 
+
+当矩阵每列都是单位向量时，矩阵为正交矩阵，则
+$$
+M \cdot M^{-1} = M \cdot M^T = I\\
+M^{-1} = M^T\\
+$$
+
+1. 若 $Pich \neq \pm 90$，由欧拉角转矩阵的公式可得：
+
+$$
+\begin{align}
+\begin{bmatrix}
+m11 & m12 & m13\\
+m21 & m22 & m23\\
+m31 & m32 & m33
+\end{bmatrix}
+&= 
+\begin{bmatrix}
+cosHcosR+sinHsinPsinR & -cosHsinR+sinHsinPcosR & sinHcosP \\
+sinRcosP & cosRcosP & -sinP\\
+-sinHcosR+cosHsinPsinR & sinRsinH+cosHsinPcosR & cosHcosP
+\end{bmatrix}\\
+\\
+m23 &= -sinP\\
+arcsin(-m23) &= P\\
+\\
+m13 &= sinHcosP\\
+m33 &= cosHcosP\\
+{m13 \over m33} &= tanH\\
+arctan({m13 \over m33}) &= H\\
+\\
+m21 &= sinRcosP\\
+m22 &= cosRcosP\\
+arctan({m21 \over m22}) &= R\\
+\end{align}
+$$
+
+2. 若 $Pich = \pm 90$，是万向锁情况，此时 Heading 和 Roll 绕同样的轴竖直旋转，默认旋转的最后一步 Roll 不转，即 Roll = 0 ，由欧拉角转矩阵的公式可得：
+
+$$
+\begin{align}
+\begin{bmatrix}
+m11 & m12 & m13\\
+m21 & m22 & m23\\
+m31 & m32 & m33
+\end{bmatrix}
+&= 
+\begin{bmatrix}
+cosH & sinHsinP & 0 \\
+0 & 0 & -sinP\\
+-sinH & cosHsinP & 0
+\end{bmatrix}\\
+\\
+m11 &= cosH\\
+m13 &= -sinH\\
+-arctan({m13\over m11}) &= H
+\end{align}
+$$
 
 
 
-欧拉角 -> 四元数
+#### 4.4.2 四元数和旋转矩阵
+
+[四元数](#4.3 四元数 (Quaternion)) $ \to$ 旋转矩阵 
+
+设四元数为 $\vec Q = (\vec n, cos{ \theta \over 2 }) = (x,y,z,w)$，绕 n 旋转 $\theta$ ，由 [2.4 Rotate 沿任意方向旋转的矩阵](#2.4 Rotate) 得旋转矩阵 M：
 $$
 \begin{bmatrix}
-sinB cosP cosH - cosB sinP sinH\\
-cosB sinP cosH + sinB cosP sinH\\
-cosB  cosP sinH - sinB sinP cosH\\
-cosB  cosP cosH + sinB sinP sinH\\
+(1-cos\theta)x^2 + cos\theta & (1-cos\theta)yx+sin\theta z & (1-cos\theta)zx - sin\theta y\\
+(1-cos\theta)xy - sin\theta z & (1-cos\theta)y^2 + cos\theta & -(1-cos\theta)zy + sin\theta x\\
+(1-cos\theta)xz + sin\theta y & (1-cos\theta)yz - sin\theta x & (1-cos\theta)z^2 + cos\theta
+\end{bmatrix}
+\to M = 
+\begin{bmatrix}
+1-2y^2-2z^2 & 2xy+2wz & 2xz-2wy\\
+2xy-2wz & 1-2x^2-2z^2 & 2yz+2wx\\
+2xz+2wy & 2yz-2wx & 1-2x^2-2y^2
 \end{bmatrix}
 $$
-其他见 《3D 数学基础 图形与游戏开发》11 章 C++ 实现[more](http://www.wy182000.com/2012/07/17/quaternion%E5%9B%9B%E5%85%83%E6%95%B0%E5%92%8C%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8Ayaw-pitch-roll-%E7%9A%84%E5%90%AB%E4%B9%89/)
+
+
+
+旋转矩阵 $\to $ [四元数](#4.3 四元数 (Quaternion))
+
+1. 由四元数转旋转矩阵可知：
+
+$$
+\begin{align}
+\begin{bmatrix}
+m11 & m12 & m13\\
+m21 & m22 & m23\\
+m31 & m32 & m33
+\end{bmatrix}
+&= 
+\begin{bmatrix}
+1-2y^2-2z^2 & 2xy+2wz & 2xz-2wy\\
+2xy-2wz & 1-2x^2-2z^2 & 2yz+2wx\\
+2xz+2wy & 2yz-2wx & 1-2x^2-2y^2
+\end{bmatrix}\\\\
+m11+m22+m33
+&= (1-2y^2-2z^2)+(1-2x^2-2z^2)+(1-2x^2-2y^2)\\
+&= 3-4(x^2+y^2+z^2)\\
+&= 3-4(1-w^2)\\
+&= 4w^2-1\\
+\\
+w&={\sqrt{m11+m22+m33+1} \over 2}
+
+
+\end{align}
+$$
+
+2. 使 m11、m22、m33 其中两个为负，一个为正可得：
+
+$$
+\begin{align}
+x &={\sqrt{m11-m22-m33+1} \over 2}\\
+y &={\sqrt{-m11+m22-m33+1} \over 2}\\
+z &={\sqrt{-m11-m22+m33+1} \over 2}
+\end{align}
+$$
+
+以上方法得到的**四元数总是正的**，没有判断四元数符号的依据
+
+3. 在由：
+
+$$
+\begin{align}
+m12 + m21 &= 4xy\\
+m12 - m21 &= 4wz\\
+m31 + m13 &= 4xz\\
+m31 - m13 &= 4wy\\
+m23 + m32 &= 4yz\\
+m23 - m32 &= 4wx\\
+\end{align}
+$$
+
+4. 综上可得：
+$$
+\begin{align}
+x &= {m23-m32 \over 4w}\\
+情况一、w ={\sqrt{m11+m22+m33+1} \over 2} \to  y &= {m31-m13 \over 4w}\\
+z &= {m12-m21 \over 4w}\\
+\\
+w &= {m23-m32 \over 4x}\\
+情况二、x ={\sqrt{m11-m22-m33+1} \over 2} \to  y &= {m12+m21 \over 4x}\\
+z &= {m31+m13 \over 4x}\\
+\\
+w &= {m31-m13 \over 4y}\\
+情况三、y ={\sqrt{-m11+m22-m33+1} \over 2} \to  x &= {m12+m21 \over 4y}\\
+z &= {m23+m32 \over 4y}\\
+\\
+w &= {m12-m21 \over 4z}\\
+情况四、z ={\sqrt{-m11-m22+m33+1} \over 2} \to  x &= {m31+m13 \over 4z}\\
+y &= {m23+m32 \over 4z}
+\end{align}
+$$
+
+5. 取 1、2 中得到的 w、x、y、z 的最大值是哪个来判断，选择哪种情况
+
+
+
+#### 4.4.3 欧拉角和四元数
+
+[四元数](#4.3 四元数 (Quaternion)) $ \to $ [欧拉角](#4.1 欧拉角 (Euler angles))
+
+由 旋转矩阵 转 四元数 和 旋转矩阵 转 欧拉角的条件可得：
+$$
+\begin{align}
+P &= \arcsin(-2(yz+wx)) \\
+H &=
+\begin{cases}
+\arctan{2(xz-wy)\over0.5 - x^2 - y^2},& \cos P \neq 0 \\
+\arctan{2(-xz-wy)\over0.5 - y^2 - z^2},& \cos P = 0
+\end{cases}\\
+R &=
+\begin{cases}
+\arctan{2(xy-wz)\over0.5 - x^2 - z^2},& \cos P \neq 0\\
+0,& \cos P = 0
+\end{cases}
+\end{align}
+$$
+
+
+[欧拉角](#4.1 欧拉角 (Euler angles)) $\rightarrow$ [四元数](#4.3 四元数 (Quaternion))
+
+由四元数的公式得，在**右手坐标系**下的欧拉角列向量 H、P、R 为：
+$$
+HPR=
+\begin{bmatrix}
+cos{H \over 2}\\\\ 0 \\-sin{H \over 2}\\ 0
+\end{bmatrix}
+\begin{bmatrix}
+cos{P \over 2}\\\\ -sin{H \over 2} \\0 \\0
+\end{bmatrix}
+\begin{bmatrix}
+cos{R \over 2}\\\\ 0\\ 0\\-sin{H \over 2}
+\end{bmatrix}
+= 
+\begin{bmatrix}
+cos{H \over 2}cos{P \over 2}cos{R \over 2}+sin{H \over 2}sin{P \over 2}sin{R \over 2}\\\\ 
+-cos{H \over 2}sin{P \over 2}cos{R \over 2}-sin{H \over 2}cos{P \over 2}sin{R \over 2} \\
+cos{H \over 2}sin{P \over 2}sin{R \over 2}-sin{H \over 2}cos{P \over 2}cos{R \over 2} \\
+sin{H \over 2}sin{P \over 2}cos{R \over 2}-cos{H \over 2}cos{P \over 2}sin{R \over 2} 
+\end{bmatrix}
+$$
+![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/rollPichYaw.png)
