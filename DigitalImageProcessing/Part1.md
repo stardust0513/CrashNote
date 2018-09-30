@@ -19,7 +19,7 @@
 
 加色混色模型：颜色混在一起亮度增大，**R**ed、**G**reen、**B**lue 三种颜色的取值范围是 [0, 255]
 
-![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/modelRGB.png)
+![](images/modelRGB.png)
 
 ### 2.2 CMY 和 CMYK 色彩模型 	 
 
@@ -27,7 +27,7 @@
 
 减色混色模型：颜色混在一起亮度降低，**C**yan (青)、**M**agenta (品红)、**Y**ellow(黄)、Blac**K**(黑)，加入黑色是因为打印时由品红、黄、青构成的黑色不够纯粹
 
-![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/modelCMYK.png)
+![](images/modelCMYK.png)
 
 #### 2.2.1 RGB 与 CMY 的转换
 
@@ -52,6 +52,7 @@
   B
   \end{bmatrix}
   $$
+
 
 
 
@@ -86,7 +87,7 @@ HSL、HSV、HSI缺点：
 - 在高色度上的亮度相对于 YUV 偏离过多
 - 在选择颜色和配色方案上存在问题
 
-![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/modelHSLV.png)
+![](images/modelHSLV.png)
 
 #### 2.3.3 转换公式推导
 
@@ -94,10 +95,10 @@ HSL、HSV、HSI缺点：
 
 - M：max(R, G, B) 、m：min(R, G, B)、C：色度 = M - m
 
-![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/RGBToChroma.png)
+![](images/RGBToChroma.png)
 
 - I: HSI 里的 I，Y'：YUV 里的灰度值
-  ![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/Luma.png)
+  ![](images/Luma.png)
 
 #### 2.3.4 RGB 与 HSL 的互相转换
 
@@ -496,7 +497,7 @@ vec3 HSIToRGB(vec3 color) {
 - B：在两行采样像素矩形中，每列竖直方向色彩样本不同个数之和
 - YUV444：色度全采样，没有对子色度采样
 - YUV420：大多数数字视频的采样方式
-  ![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/JAB.png)
+  ![](images/JAB.png)
 
 **存储格式**
 - 打包格式（packed）：YUV 存储在一个数组中
@@ -507,13 +508,13 @@ vec3 HSIToRGB(vec3 color) {
 **采样方式 + 存储方式，实例**
 
 - 采样方式 4:4:4 每像素 32 位（打包格式）
-  ![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/YUV444.png)
+  ![](images/YUV444.png)
 
 - 采样方式 4:2:2 每像素 16 位（打包格式）
-  ![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/YUV422.png)
+  ![](images/YUV422.png)
 
 - 采样方式 4:2:0 每像素 16 位（平面格式）
-  ![](/Users/sun/Documents/CrushNote/DigitalImageProcessing/images/YUV420.png)
+  ![](images/YUV420.png)
 
 #### 2.3.2 RGB 与 YUV 的互相转换
 

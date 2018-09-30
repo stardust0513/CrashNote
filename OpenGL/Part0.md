@@ -80,7 +80,7 @@ OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，�
 
   > OpenGL 的**显示列表**，将一组绘制指令放到 GPU 上，CPU 只要发一条 "执行这个显示列表" 这些指令就执行，而不必每次渲染都发送大量指令到 GPU，从而节约 PCI 带宽 
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/computerHardWareStructure.png)
+![](images/computerHardWareStructure.png)
 
 ### 1.1 GPU 硬件模型
 
@@ -88,7 +88,7 @@ GPU 的并行运算：与 CPU 上十几个线程的并行计算不同，GPU 的�
 
 GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiprocessors)** 组成
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/GPUDeviceModel.png)
+![](images/GPUDeviceModel.png)
 
 
 
@@ -97,7 +97,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 - 将线程按 Grid、Block 两个层次分组，如下图
   Host：CPU 编程视图
   Device：GPU 编程视图
-  ![](/Users/sun/Documents/CrushNote/OpenGL/images/cuda.png)
+  ![](images/cuda.png)
 
 
 
@@ -105,7 +105,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
   Block 总在一个 GPU 的流多处理器上执行
   Block 间，线程通过全局存储（显存）通信
   Block 内，线程通过共享存储（由流多处理器的共享存储器提供）通信
-  ![](/Users/sun/Documents/CrushNote/OpenGL/images/cudaGride.jpg)
+  ![](images/cudaGride.jpg)
 
 
 
@@ -113,7 +113,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 - 将线程按 Dispath、Work Group、Invocation 三个层次分组，如下图
 其中，Dispath 类似于 CUDA 的 Grid，Work Group 类似于 CUDA 的 Block
-  ![](/Users/sun/Documents/CrushNote/OpenGL/images/OpenGLProcessModel.png)
+  ![](images/OpenGLProcessModel.png)
 
 
 
@@ -122,9 +122,9 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 可编程：可以在需要时由 shader 实现
 不可编程：具体方法由 OpenGL API 的驱动实现
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/pipeline.png)
+![](images/pipeline.png)
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/pipeline1.png)
+![](images/pipeline1.png)
 
 
 
@@ -148,7 +148,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 > - Tessellation Primitive Generation（细分图元生成）
 > - Tessellation Evaluation Shader（TES，细分求值着色器）
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/vertexToFragmentAPI.png)
+![](images/vertexToFragmentAPI.png)
 
 
 
@@ -204,7 +204,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //放大
 
 方法：选择最接近中心点纹理坐标的 **1 个纹理单元**采样
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/texture_nearest.png)
+![](images/texture_nearest.png)
 
 ### 2.2 双线性过滤 GL_LINEAR
 
@@ -213,7 +213,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //放大
 
 方法：选择最接近中心点纹理坐标的 2 X 2 纹理单元矩阵进行采样，取 **4 个纹理单元**采样的平均值
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/texture_linear.png)
+![](images/texture_linear.png)
 
 ### 2.3 三线性过滤 GL_LINEAR_MIPMAP_LINEAR
 
@@ -223,7 +223,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //放大
 >
 > 一张方形地板的多级渐远纹理如下图
 >
-> ![](/Users/sun/Documents/CrushNote/OpenGL/images/mipmaps.png)
+> ![](images/mipmaps.png)
 
 优点：效果最好，适用于动态物体或景深很大的场景
 缺点：效率低，只能用于纹理被缩小的情况
@@ -271,4 +271,4 @@ glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 异向程度);
 
 各向异性对比三线性
 
-![](/Users/sun/Documents/CrushNote/OpenGL/images/texture_anisotropic.jpg)
+![](images/texture_anisotropic.jpg)

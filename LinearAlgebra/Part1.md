@@ -90,14 +90,14 @@ $$
 
 ### 1.4 左右手坐标系
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/LRHandCoordinate.jpeg)
+![](images/LRHandCoordinate.jpeg)
 
 判断叉乘后的方向
 
 - 在右手坐标系下，使用 **右手定则** 判断叉乘的方向
 - 在左手坐标系下，使用 **左手定则** 判断叉乘的方向
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/cross3.png)
+![](images/cross3.png)
 
 ### 1.5 惯性坐标系
 
@@ -111,7 +111,7 @@ $$
 ## 2. 线形变换矩阵
 
 ### 2.1 2D 变换矩阵
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/2D_affine_transformation_matrix.svg)
+![](images/2D_affine_transformation_matrix.svg)
 
 
 
@@ -328,7 +328,7 @@ $$
 $$
 
 同过 **高维度的线性变换** 代替 **低维度的仿射变换**
- ![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/affine.gif)
+ ![](images/affine.gif)
 
 ###3.4 投影变换（不可逆）
 
@@ -340,7 +340,7 @@ OpenGL 中的正交投影
 
 > OpenGL 将世界坐标标准化为 X, Y, Z 范围均为 [-1,1] 的视角坐标内，然后在乘以透视矩阵得到二维图像
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/orthogonal2.png)
+![](images/orthogonal2.png)
 
 几何意义：
 - 图像远近大小相同
@@ -396,7 +396,7 @@ $$
 \end{bmatrix}
 $$
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/orthogonal.png)
+![](images/orthogonal.png)
 
 
 
@@ -407,7 +407,7 @@ OpenGL 中的透视投影
 > OpenGL 将世界坐标标准化为 X, Y, Z 范围均为 [-1,1] 的视角坐标内，然后在乘以透视矩阵得到二维图像
 
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/projection2.png)
+![](images/projection2.png)
 
 
 几何意义：
@@ -425,8 +425,6 @@ OpenGL 中的透视投影
   $$
   G_{投影后} (x^, , y^,, z^,) = (d \cdot x/z, d \cdot y/z, d), A_{投影前}(x,y,z)
   $$
-
-
 
 
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
@@ -453,7 +451,7 @@ near \over right & 0 & 0 & 0\\
 \end{bmatrix}
 $$
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/perspective.png)
+![](images/perspective.png)
 
 
 
@@ -510,12 +508,12 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 - 复数乘以 $i$ 的几何意义，在二维平面上逆时针旋转 90 度
   $(a + b \cdot i) * i = a*i + b*i^2 = -b + a \cdot i$ 
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/complex_number.png)
+![](images/complex_number.png)
 
 
 #### 4.2.2 欧拉旋转定理
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/EularRotate.png)
+![](images/EularRotate.png)
 
 这里 $a = cos \phi, b = sin \phi, \phi$ 是从上一方位到当前方位的角位移，复数值表示当前方位 则 $c_{方位} =  a + b \cdot i$ 在极坐标下表示为 $e_{方位} = cos \phi + sin \phi \cdot i$
 在极坐标下，复数能够更方便的表示旋转角的变化：
@@ -540,7 +538,7 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 四元数在表示三维空间旋转的方式时采用**轴角式（Axis-angle）**的旋转
 轴角式旋转方法如下图，v 绕过原点的方向向量 u 逆时针旋转 $\theta$ 得到 v ’ （图中采用右手坐标系，逆时针旋转方向为正方向）
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/axisAngle.png)
+![](images/axisAngle.png)
 
 拆分轴角式旋转：
 
@@ -574,7 +572,9 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 
 
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/axisAngleSplit.png)
+
+
+![](images/axisAngleSplit.png)
 
 
 
@@ -664,8 +664,6 @@ $$
   $$
 
 
-
-
 - 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
   **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
   几何上存在两个单位四元数 -u 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
@@ -674,8 +672,6 @@ $$
   Q_{单位}Q_1 = Q_1Q_{单位} = Q_1\\
   ((w_1 \vec u + w \vec u_1 +  \vec u_1 \times \vec u), (w_1w - \vec u_1 \cdot \vec u)) = (\vec u_1, w_1)
   $$
-
-
 
 
 
@@ -732,7 +728,7 @@ $$
 - $Q$ 和 $-Q$ 代表不同的旋转角度得到的相同方位，在插值时会有不同的结果，如下图：可以将 q0 和 q1（蓝色的弧）插值，这会导致 3D 空间的向量旋转接近 360 度，而实际上这两个旋转相差并没有那么多，所以 q0 和 -q1（红色的弧）的插值才是插值的最短路径
 - 每次插值前要通过 $cos\theta = q_0 \cdot q_1$ 判断 q0 和 q1 的夹角是否为钝角，若为钝角将 q1 改为 -q1 来计算插值
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Interpolation.png)
+![](images/Interpolation.png)
 
 
 
@@ -741,7 +737,7 @@ $$
 - 对四元数插值后，得到的结果不是单位四元数，插值的弧度越大缺点越明显
 - 公式：$Q_t = (1- t)Q_0 + t Q_1, t$ 为插值比例
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Lerp.png)
+![](images/Lerp.png)
 
 
 
@@ -750,7 +746,7 @@ $$
 - 对四元数插值后，虽然把弦等分了，但是弦上对应的弧却不是等分的，插值的弧度越大缺点越明显
 - 公式：$Q_t = {{ (1- t)Q_0 + tQ_1}\over{||(1- t)Q_0 + tQ_1||}}, t$ 为插值比例
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/NLerp.png)
+![](images/NLerp.png)
 
 
 
@@ -769,7 +765,9 @@ $$
 
 
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Slerp.png)
+
+
+![](images/Slerp.png)
 
 
 
@@ -787,13 +785,13 @@ $$
 
 **贝塞尔曲线（Bézier）**：通过不断在现有点的基础上添加控制点，使最终得到的曲线更加平滑
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/bezier.png)
+![](images/bezier.png)
 
 三次贝塞尔曲线：
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Bezier_3.gif)
+![](images/Bezier_3.gif)
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Bezier3.png)
+![](images/Bezier3.png)
 
 插值方式可以用 lerp、Slerp 等方式，上图采用 de Casteljau 算法构造贝塞尔曲线
 上图采用 lerp 方式插值，插值方程为：
@@ -824,13 +822,13 @@ $$
 1. 由基础点得到插值点 $v_{12}，v_{03}$
 2. 根据上次的插值点得出本次的插值点 $v_{0312}$
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/Squad.png)
+![](images/Squad.png)
 
 
 
 三次贝塞尔曲线和 Squad 插值构造的曲线对比：
 
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/comparedBS.png)
+![](images/comparedBS.png)
 
 
 
@@ -873,6 +871,8 @@ $$
   \end{bmatrix}
   \end{align}\\
   $$
+
+
 
 
 ![](images/rollPichYaw.png)
@@ -1085,4 +1085,4 @@ cos{H \over 2}sin{P \over 2}sin{R \over 2}-sin{H \over 2}cos{P \over 2}cos{R \ov
 sin{H \over 2}sin{P \over 2}cos{R \over 2}-cos{H \over 2}cos{P \over 2}sin{R \over 2} 
 \end{bmatrix}
 $$
-![](/Users/sun/Documents/CrushNote/LinearAlgebra/images/rollPichYaw.png)
+![](images/rollPichYaw.png)
