@@ -97,10 +97,6 @@
 - 矩阵相乘公式
   ![](images/matrix1.png)
 
-
-
-
-
 # 四、行列式（面积/体积）
 
 ## 1. 概念
@@ -125,7 +121,6 @@
 
 - 当线性变化后 比例为 **负数**  时，平面翻转
   ![](images/determinant2.png)
-  
 ## 3. 公式
 
 - ![](images/determinant5.png)
@@ -195,6 +190,7 @@
   $$
 
 
+
 ##7. 正交矩阵（转置 = 逆）
 
 - 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
@@ -223,9 +219,9 @@
 
 - **点积的实际作用**：
   两个单位向量的点积 = 这个两个向量夹角 $\theta$ 的 $cos\theta$
-  $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1$
+  $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1​$
   $$
-  \vec v \cdot \vec k = ||\vec v|| \cdot ||\vec k|| \cdot cos\theta
+  \vec v \cdot \vec w = ||\vec v|| \cdot ||\vec w|| \cdot cos\theta
   $$
 
 - 几何解释
@@ -328,6 +324,7 @@
   &= \overrightarrow S_{垂直于V 和 W 构成的平面}
   \end{align}
   $$
+
 
 
 
@@ -450,6 +447,7 @@ $$
 
 
 
+
 #九、特征向量与特征值
 
 ## 1. 概念
@@ -529,6 +527,7 @@ $$
     0 & \color{red}{2}\\
     \end{bmatrix}
   $$
+
 
 
 

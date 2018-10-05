@@ -117,9 +117,23 @@ $$
 
 ### 2.2 Scale
 
-缩放比例为 K 在不同的坐标轴上的缩放比例不同，**这里假设 缩放方向 N 必过原点**
+![](images/scale.png)
 
-- 核心公式（推导见《3D 数学基础 图形与游戏开发》8.3.2），将三个基向量 v 分别沿 n 向量方向缩放后的向量构成的列矩阵为沿向量 n 的缩放矩阵
+缩放比例为 K 在不同的坐标轴上的缩放比例不同，**这里假设 缩放方向 N 必过原点，且 N 为单位向量**
+
+推导：
+$$
+\begin{align}
+v_{||} &= {n \cdot v \over ||n||} \cdot {n \over ||n||} = (v \cdot n)n\\
+v'_{||} &= kv_{||}\\
+v'_{\bot} &= v_{\bot} (与缩放方向垂直的方向不受缩放的影响) \\
+v' &= v'_{||} + v'_{\bot}\\
+&= k(v \cdot n)n + (v - (v \cdot n)n)\\
+&= v+(k -1)(v \cdot n)n
+\end{align}
+$$
+
+- 核心公式：将三个基向量 v 分别沿 n 向量方向缩放后的向量构成的列矩阵为沿向量 n 的缩放矩阵
   $$
   v_{缩放后} = v + (K_{比例} - 1)(v \cdot n_{缩放方向})n_{缩放方向}
   $$
@@ -147,9 +161,9 @@ $$
 
 ### 2.3 Reflect
 
-缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 n 必过原点**
+缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 n 必过原点，且 N 为单位向量**
 
-- 核心公式，将三个基向量 v 分别沿 n 向量方向缩放 -1 （缩放核心公式的比例 K = -1）后的向量构成的列矩阵为沿向量 n 的镜像矩阵
+- 核心公式：将三个基向量 v 分别沿 n 向量方向缩放 -1 （缩放核心公式的比例 K = -1）后的向量构成的列矩阵为沿向量 n 的镜像矩阵
   $$
   v_{镜像后} = v - 2(v \cdot n_{镜像方向})n_{镜像方向}
   $$
@@ -177,7 +191,7 @@ $$
   -2xy & 1-2y^2 & -2zy\\
   -2xz & -2yz & 1-2z^2
   \end{bmatrix}
-  \\沿 X 轴镜像 & 沿 Y 轴镜像 & 沿 y=-x 轴镜像 & 沿任意向量N_{(x,y,z)}镜像 
+  \\沿 X 轴镜像 & 沿 Y 轴镜像 & 沿 y=-x 轴镜像 & 沿任意单位向量N_{(x,y,z)}镜像 
   \end{array}
   $$
 
@@ -186,11 +200,11 @@ $$
 
 ### 2.4 Rotate
 
-设 在**右手坐标系**，旋转角**顺时针**为正方向
+设 在**右手坐标系**，旋转角**逆时针**为正方向，**缩放方向 n 必过原点，且 N 为单位向量**
 
-- 核心公式（推导见 《3D 数学基础 图形与游戏开发》8.2.3），将三个基向量 v 分别绕 n 旋转后的向量构成的列矩阵为 绕向量 n 的旋转矩阵
+- 核心公式：将三个基向量 v 分别绕向量 n 旋转后（代入核心公式后）的向量构成的列矩阵为 绕向量 n 的旋转矩阵，[公式推导](#4.2.3 三维空间旋转的拆分)
   $$
-  v_{旋转后} =( v- (v \cdot n_{旋转轴})n_{旋转轴})cos\theta + (v \times n_{旋转轴})sin\theta + (v \cdot n_{旋转轴})n_{旋转轴}
+  v_{旋转后} = v \cdot cos\theta  + (v \cdot n_{旋转轴})n_{旋转轴}(1 - cos\theta) + (v \times n_{旋转轴})sin\theta
   $$
 
 - 由 **基坐标** 构成的 **列向量** 变化矩阵
@@ -225,7 +239,11 @@ $$
 
 
 ### 2.5 Shear
+![](images/shear.png)
+
 变化后体积和面积保持不变
+
+- 核心公式：x' = x + sy
 
 - 方法：将三个基向量 v 分别取出 x，y，z 中的任意一个值，乘以变换因子，在把它加到 x，y，z 中的其他轴的值上，例：取 x 乘以变换因子 K
   $$
@@ -256,7 +274,7 @@ $$
   \\沿 X 轴切变 & 沿 Y 轴切变  & 沿 Z 轴切变 
   \end{array}
   $$
-  
+
 
 
 
@@ -427,6 +445,8 @@ OpenGL 中的透视投影
   $$
 
 
+
+
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 
 > FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
@@ -480,7 +500,7 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 
 - 欧拉角之间求差值（角位移）困难
 - 欧拉角的方位表达方式不唯一（n = n + 360）
-- 由于三个角度不互相独立，pich 135 = heading 180 + pich 45 + bank 180
+- 由于三个角度不互相独立，可能产生：pich 135 = heading 180 + pich 45 + bank 180 的情况
   （通过限制角的范围解决，heading 和 bank 限制在 -180 ～ 180，pitch 限制在 -90 ～90）
 - 万向锁问题（避免方法：**重新排列角度的旋转顺序**，但万向锁仍可能产生）
 
@@ -542,12 +562,12 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 
 拆分轴角式旋转：
 
-1. 如下图 A，假设 u 是单位向量
+1. 如下图 A，假设 u 是单位向量（[求 v 到 u 的投影向量 v||](https://www.cnblogs.com/graphics/archive/2010/08/03/1791626.html)）
    $$
    \begin{align}
    v &= v_{||} + v_{\bot}\\
    v_{||} &= v_{||}'\\
-   v_{||} &= proj_u(v) = {u \cdot v \over u \cdot u}u = {u \cdot v \over ||u||^2}u = (u \cdot v)u\\
+   v_{||} &= proj_u(v) = {u \cdot v \over ||u||} \cdot {u \over ||u||} = {(u \cdot v)u \over ||u||^2} = (u \cdot v)u\\
    v_{\bot} &= v - v_{||} = v - (u \cdot v)u
    \end{align}
    $$
@@ -569,8 +589,6 @@ yaw：绕**模型坐标系**的 Y 轴旋转
    $$
    v' = v \cdot cos\theta + (u\cdot v)u(1 - cos\theta)+(u \times v)sin\theta
    $$
-
-
 
 
 
@@ -692,7 +710,7 @@ $$
 **只有旋转轴 u 为单位向量时，下面公式才成立**
 
 
-- 用指数代替四元数：根据旋转角位移 $\theta$ 和旋转轴 u 求出四元数
+- 用指数代替四元数：根据旋转角位移 $ \theta $ 和旋转轴 u 求出四元数
   $$
   e^{(\vec u {\theta \over 2}, 0)} = (\vec usin{\theta \over 2}, cos{\theta \over 2})
   $$
@@ -762,8 +780,6 @@ $$
   $$
   Q_t = {sin((1 - t)\theta) \over sin\theta} Q_0 + {sin(t\theta) \over sin\theta}Q_1
   $$
-
-
 
 
 
@@ -873,8 +889,6 @@ $$
   $$
 
 
-
-
 ![](images/rollPichYaw.png)
 
 旋转矩阵 $ \to$ [欧拉角](#4.1 欧拉角 (Euler angles))
@@ -945,7 +959,7 @@ $$
 
 [四元数](#4.3 四元数 (Quaternion)) $ \to$ 旋转矩阵 
 
-设四元数为 $\vec Q = (\vec n, cos{ \theta \over 2 }) = (x,y,z,w)$，绕 n 旋转 $\theta$ ，由 [2.4 Rotate 沿任意方向旋转的矩阵](#2.4 Rotate) 得旋转矩阵 M：
+设四元数为 $\vec Q = (\vec n, cos{ \theta \over 2 }) = (x,y,z,w)$，绕 n 旋转 $\theta$ ，由 [2.4 Rotate](#2.4 Rotate) 沿任意方向旋转的矩阵 得旋转矩阵 M：
 $$
 \begin{bmatrix}
 (1-cos\theta)x^2 + cos\theta & (1-cos\theta)yx+sin\theta z & (1-cos\theta)zx - sin\theta y\\
@@ -1061,7 +1075,6 @@ R &=
 \end{cases}
 \end{align}
 $$
-
 
 [欧拉角](#4.1 欧拉角 (Euler angles)) $\rightarrow$ [四元数](#4.3 四元数 (Quaternion))
 
