@@ -65,6 +65,7 @@
   $$
 
 
+
 ### 1.2 矩阵变换组合
 
 OpenGL 默认为**列向量优先存储：矩阵由列向量构成**
@@ -158,7 +159,6 @@ $$
 
 
 
-
 ### 2.3 Reflect
 
 缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 n 必过原点，且 N 为单位向量**
@@ -194,6 +194,7 @@ $$
   \\沿 X 轴镜像 & 沿 Y 轴镜像 & 沿 y=-x 轴镜像 & 沿任意单位向量N_{(x,y,z)}镜像 
   \end{array}
   $$
+
 
 
 
@@ -237,7 +238,6 @@ $$
 
 
 
-
 ### 2.5 Shear
 ![](images/shear.png)
 
@@ -274,6 +274,7 @@ $$
   \\沿 X 轴切变 & 沿 Y 轴切变  & 沿 Z 轴切变 
   \end{array}
   $$
+
 
 
 
@@ -447,6 +448,7 @@ OpenGL 中的透视投影
 
 
 
+
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 
 > FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
@@ -592,6 +594,7 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 
 
 
+
 ![](images/axisAngleSplit.png)
 
 
@@ -682,6 +685,7 @@ $$
   $$
 
 
+
 - 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
   **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
   几何上存在两个单位四元数 -u 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
@@ -690,6 +694,7 @@ $$
   Q_{单位}Q_1 = Q_1Q_{单位} = Q_1\\
   ((w_1 \vec u + w \vec u_1 +  \vec u_1 \times \vec u), (w_1w - \vec u_1 \cdot \vec u)) = (\vec u_1, w_1)
   $$
+
 
 
 
@@ -720,10 +725,8 @@ $$
   log_e(（\vec u sin{\theta \over 2}, cos{\theta \over 2}）) = (\vec u {\theta \over 2}, 0)
   $$
 
-
-
 - 将点 P 绕 $ \vec u $ 旋转 $ \theta $ 度
-  $P_{旋转后} = aPa^{-1}, a = (\vec u sin{\theta \over 2}, cos{\theta \over 2})$
+  $P_{旋转后} = aPa^{-1} = aPa^*, a = (\vec u sin{\theta \over 2}, cos{\theta \over 2})$
 
 - 将点 P 绕 $ \vec u $ 旋转 $ \theta $ 度后再旋转 $\alpha$ 度（方位的叠加是点乘）
   $P_{旋转后} = baPa^{-1}b^{-1} = (ba)P(ba)^{-1},a = (\vec u  sin{\theta \over 2},cos{\theta \over 2}),b = (\vec u sin{\alpha \over 2},cos{\alpha \over 2})$
@@ -735,6 +738,16 @@ $$
   $$
 
 
+四元数 * 向量 = 旋转后的向量，例：
+设 用四元数 q = (u, w)，u 为单位向量，旋转三维向量 v，则
+$$
+\begin{align}
+p &= (v, 0)\\
+p'&= qpq^{-1} = qpq^* = (u,w)(v,0)(-u,w)\\
+&= (2(u\cdot v)u + (w^2 -u\cdot v)v + 2w(u \times v),...)\\
+&= (v',...)
+\end{align}
+$$
 
 
 
@@ -768,7 +781,7 @@ $$
 
 
 
-**旋转角度球面线性插值**（slerp：**S**pherical **L**inear Int**erp**olation）
+**旋转角度球面线性插值**（Slerp：**S**pherical **L**inear Int**erp**olation）
 
 - 对单个角度做线形插值，做到固定角速度，无法平滑过渡连接不同方向的角度
 - 公式 1：这里用的四元数都是单位四元数，所以有 $Q^{-1} = Q^*,  t$ 为插值比例
@@ -780,7 +793,6 @@ $$
   $$
   Q_t = {sin((1 - t)\theta) \over sin\theta} Q_0 + {sin(t\theta) \over sin\theta}Q_1
   $$
-
 
 
 ![](images/Slerp.png)
@@ -887,6 +899,7 @@ $$
   \end{bmatrix}
   \end{align}\\
   $$
+
 
 
 ![](images/rollPichYaw.png)
@@ -1062,15 +1075,15 @@ $$
 由 旋转矩阵 转 四元数 和 旋转矩阵 转 欧拉角的条件可得：
 $$
 \begin{align}
-P &= \arcsin(-2(yz+wx)) \\
+P &= asin(-2(yz+wx)) \\
 H &=
 \begin{cases}
-\arctan{2(xz-wy)\over0.5 - x^2 - y^2},& \cos P \neq 0 \\
-\arctan{2(-xz-wy)\over0.5 - y^2 - z^2},& \cos P = 0
+atan2(xz-wy, 0.5 - x^2 - y^2),& \cos P \neq 0 \\
+atan2(-xz-wy, 0.5 - y^2 - z^2),& \cos P = 0
 \end{cases}\\
 R &=
 \begin{cases}
-\arctan{2(xy-wz)\over0.5 - x^2 - z^2},& \cos P \neq 0\\
+atan2(xy-wz,0.5 - x^2 - z^2),& \cos P \neq 0\\
 0,& \cos P = 0
 \end{cases}
 \end{align}

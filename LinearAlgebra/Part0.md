@@ -64,24 +64,40 @@
 - 直线在变换后保持直线
 
 - 网格保持 **平行** 且 **等距分布**
-
   ![](images/linearTransform.png)
-  ​
 
-## 2. 矩阵左乘（列向量矩阵）
 
-- 实质：求出右边的向量 **对应基坐标变化后的值**
+
+## 2. 矩阵 * 向量（点的状态变化）
+
+- 实质：求该向量**基坐标变化后（矩阵）的值**
 
 - 线性变换后的基坐标 == 矩阵
   ![](images/LinearTransform1.png)
 
 - 矩阵 * 向量 == 该向量对应 **基坐标的线性变换** 后的值
-
   ![](images/LinearTransform2.png)
 
+- 向量 * 矩阵
+$$
+\begin{bmatrix}
+x & y
+\end{bmatrix}
+\begin{bmatrix}
+\color{green}{a} & \color{red}{b}\\
+\color{green}{c} & \color{red}{d}
+\end{bmatrix}
+=
+\begin{bmatrix}
+x \color{green}{a}+y \color{red}{c} 
+& 
+x \color{green}{b}+ y\color{red}{d}
+\end{bmatrix}
+$$
 
 
-## 3. 矩阵相乘（状态变化）
+
+## 3. 矩阵相乘（基坐标的状态变化）
 
 - 实质：先后切换**基坐标**的状态
   例子：矩阵B * 矩阵A * 向量C == 将向量C **先按照 矩阵A 变换**，再按照矩阵B 变换
@@ -108,8 +124,8 @@
 
 - 三维 表示：三维行列式中三个三维向量构成的 **体积**
   **符号取决于** 构成矩阵的这三个向量**是否满足右手定则**（不满足为 负）
-
   ![](images/determinant3.png)
+
 ## 2. 特殊情况
 
 - 当线性变化后 区域 **面积** 为 0 时（点，线）
@@ -121,8 +137,8 @@
 
 - 当线性变化后 比例为 **负数**  时，平面翻转
   ![](images/determinant2.png)
-## 3. 公式
 
+## 3. 公式
 - ![](images/determinant5.png)
 
 
@@ -190,7 +206,6 @@
   $$
 
 
-
 ##7. 正交矩阵（转置 = 逆）
 
 - 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
@@ -217,9 +232,9 @@
   \end{bmatrix} = \color{green}{1} \cdot \color{green}{3} + \color{red}{2} \cdot \color{red}{4}
   $$
 
-- **点积的实际作用**：
+- **应用**：
   两个单位向量的点积 = 这个两个向量夹角 $\theta$ 的 $cos\theta$
-  $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1​$
+  $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1$
   $$
   \vec v \cdot \vec w = ||\vec v|| \cdot ||\vec w|| \cdot cos\theta
   $$
@@ -262,7 +277,7 @@
 
 
 
-# 七、向量的叉乘（面积）
+# 七、向量的叉乘（基向量，向量组合的行列式）
 
 ## 1. 概念
 
@@ -271,16 +286,13 @@
 
   ![](images/cross1.png)
 
-- 叉乘的几何意义：
-  叉乘的两个向量组合成的平行四边形面积（面积也有负，取决于叉乘的顺序）
 - 叉乘的方向（具体见 Part1 十、1.1.4）：
   在右手坐标系下，使用 [**右手定则**](https://en.wikipedia.org/wiki/Right-hand_rule) 判断叉乘的方向
   在左手坐标系下，使用 **左手定则** 判断叉乘的方向
 
   ![](images/cross.png)
-
-- **叉乘的实际作用**：
-  二维空间：通过 2 个向量叉乘得到这 2 个向量构成的面积
+- **叉乘的几何意义**：
+  二维空间：通过 2 个向量叉乘得到这 2 个向量构成的面积（面积也有负，取决于叉乘的顺序）
   三维空间：通过 2 个向量叉乘得到 1 个**垂直于这两个向量平面的向量**
 
   ![](images/cross2.png)
@@ -324,6 +336,7 @@
   &= \overrightarrow S_{垂直于V 和 W 构成的平面}
   \end{align}
   $$
+
 
 
 
@@ -447,7 +460,6 @@ $$
 
 
 
-
 #九、特征向量与特征值
 
 ## 1. 概念
@@ -527,6 +539,11 @@ $$
     0 & \color{red}{2}\\
     \end{bmatrix}
   $$
+
+
+
+
+
 
 
 
