@@ -3,6 +3,8 @@
 # 一、OpenGL 简介
 
 >  OpenGL 作为图形硬件标准，是最通用的图形管线版本
+>
+>  使用 OpenGL 自带的数据类型可以确保各平台中每一种类型的大小都是统一的
 
 ##1. OpenGL 版本
 
@@ -21,7 +23,7 @@ OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，�
 2. **OpenGL 标准并不定义如何创建 OpenGL Context，这个任务由其他标准定义**
    如GLX（linux）、WGL（windows）、EGL（一般在移动设备上用）
 
-3. 上下文的描述类型有 **core profile (不包含任何弃用功能)** 或 **compatibility profile (不包含任何弃用功能)** 两种
+3. 上下文的描述类型有 **core profile (不包含任何弃用功能)** 或 **compatibility profile (包含任何弃用功能)** 两种
    如果创建的是 core profile OpenGL context，调用如 glBegin() 等兼容 API 将产生GL_INVALID_OPERATION 错误（用 glGetError() 查询）
 
 4. Default Frame Buffer：由 外界创建 Context 的一部分，通过 Frame Buffer 将渲染内容显示在屏幕上
@@ -34,8 +36,8 @@ OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，�
 
    一般每个窗口都有一个上下文，可以保证上下文间的不互相影响
    通过**创建上下文时传入要共享的上下文**，多个窗口的上下文之间图形资源可以共享
-   可以共享的：纹理、shader、**Buffer**（Vertex Buffer 等）
-   不可共享：Frame Buffer Object、Vertex Array Object 等 OpenGL 内置容器**对象**
+   可以共享的：纹理、shader、Vertex Buffer 等，外部传入对象
+   不可共享的：Frame Buffer Object、Vertex Array Object 等 OpenGL 内置容器**对象**
 
 
 
@@ -99,8 +101,6 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
   Device：GPU 编程视图
   ![](images/cuda.png)
 
-
-
 - Grid 存储模型，如下图
   Block 总在一个 GPU 的流多处理器上执行
   Block 间，线程通过全局存储（显存）通信
@@ -132,7 +132,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 - Vertex Shader 的 输入 和 应用程序的顶点属性数据接口 一致
 
-- Vertex Shader 的 输入 和 Fragment Shader 对应的 输入 一致
+- Vertex Shader 的 输出 和 Fragment Shader 对应的 输入 一致
 
 - Fragment Shader 的 输出 和 帧缓存的颜色缓存接口 一致
 
