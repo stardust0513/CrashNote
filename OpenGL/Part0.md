@@ -8,6 +8,8 @@
 
 ##1. OpenGL 版本
 
+**OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡来实现**
+
 从 OpenGL 3.0 开始，OpenGL 已经弃用经典管线功能（glBegin，变换矩阵，光照，雾，纹理坐标自动生成，等），这些功能可以在需要时由着色器实现
 
 从  OpenGL 4.0 开始，OpenGL 明确删除了固定管线功能，但显卡厂商还在提供固定管线的驱动程序支持，因为还有很多人在用这些固定管线功能
@@ -272,3 +274,29 @@ glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 异向程度);
 各向异性对比三线性
 
 ![](images/texture_anisotropic.jpg)
+
+
+
+# 四、OpenGL 的加载（环境配置顺序）
+
+## 1. 动态获取 OpenGL 函数地址
+
+OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡来实现，而且 OpenGL 驱动版本众多，它大多数函数的位置都**无法在编译时确定下来，需要在运行时查询**
+
+因此，在编写与 OpenGL 相关的程序时需要开发者自己来获取 OpenGL 函数地址
+
+相关库可以提供 OpenGL 函数获取地址后的头文件：[GLAD](https://github.com/Dav1dde/glad)
+
+
+
+## 2. 创建上下文
+
+OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以需要开发者自己处理：**窗口的创建、定义上下文、处理用户输入**
+
+相关库可以提供一个窗口和上下文用来渲染：GLUT、SDL、SFML、[GLFW](http://www.glfw.org/download.html)
+
+
+
+# 参考
+
+1. OpenGL 加载库 https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library
