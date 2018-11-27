@@ -121,6 +121,20 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 ## 2. 渲染管线概览
 
+### 2.1 基本的渲染管线流程
+
+流程总览：
+
+模型变换 $\to$ 视野变换 $\to$ 顶点处理（可能含有光照） $\to$ 
+透视区域裁剪（得到裁剪后的坐标空间） $\to$ 齐次变换（得到标准化的坐标空间） $\to$ 视角变换（得到屏幕坐标）  $\to$ 
+光栅化 $\to$ 片源处理，纹理，光照处理 $\to$ 光栅化（可选） $\to$ 缓冲帧
+
+顶点变换过程：
+
+![](images/coordinate.png)
+
+### 2.2 渲染管线流程图
+
 可编程：可以在需要时由 shader 实现
 不可编程：具体方法由 OpenGL API 的驱动实现
 
@@ -130,7 +144,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 
 
-接口一致：
+### 2.3 Shader 中的接口一致性
 
 - Vertex Shader 的 输入 和 应用程序的顶点属性数据接口 一致
 
@@ -293,7 +307,7 @@ OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特
 
 OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以需要开发者自己处理：**窗口的创建、定义上下文、处理用户输入**
 
-相关库可以提供一个窗口和上下文用来渲染：GLUT、SDL、SFML、[GLFW](http://www.glfw.org/download.html)
+相关库可以提供一个窗口和上下文用来渲染：[GLUT](http://freeglut.sourceforge.net/)、SDL、SFML、[GLFW](http://www.glfw.org/download.html)
 
 
 

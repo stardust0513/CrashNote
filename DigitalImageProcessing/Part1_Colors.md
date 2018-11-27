@@ -65,6 +65,8 @@
 
 
 
+
+
 ### 2.3 HSI、HSL 和 HSV 色彩模型 
 
 特点：适合色彩描述、电脑绘画、图像算法的处理，人能观察的色彩并不是由 RGB 三种颜色混合而成，而是取决于颜色的亮度、色调、饱和度。**HSI、HSL、HSV 方便和RGB 进行互相转换**
@@ -484,7 +486,7 @@ vec3 HSIToRGB(vec3 color) {
     }
 }
 ```
-## 3. YUV 和 YCbCr 编码
+## 3. 色彩编码 YUV 和 YCbCr 
 
 > YUV 和 YCbCr 更多的是一种色彩模型，并不是一个绝对不变的色彩空间，它的取值范围，取决于来自于 RGB 输入的取值范围
 
@@ -615,7 +617,7 @@ $RGB \in [0,1]、Y \in [0,1]、U \in [-0.436,0.436]、V \in [-0.615,0.615]$，[m
 
 
 
-## 4. 参考
+# 参考
 
 - Luminance 和 Luma 的区别 https://cs.stackexchange.com/questions/92569/what-is-the-difference-between-luma-and-luminance
 - YUV 维基百科 https://en.wikipedia.org/wiki/YUV
