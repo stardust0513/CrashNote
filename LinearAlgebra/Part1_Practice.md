@@ -65,9 +65,6 @@
   $$
 
 
-
-
-
 ### 1.2 矩阵变换组合
 
 OpenGL 默认为**列向量优先存储：矩阵由列向量构成**
@@ -118,6 +115,7 @@ $$
 
 
 
+
 - 在投影空间中，对于以下方程
   如果 C $\neq$ D，由 (C - D)w = 0 得 w = 0，**即当 w = 0 时并非无意义，而是表示一个无穷远**，所以两条平行线相交于'点' (x, y, 0)
   如果 C $=$ D，方程表示的两条线是同一条线
@@ -132,6 +130,7 @@ $$
   Ax+By+Dw=0
   \end{cases}
   $$
+
 
 
 齐次坐标区分点和向量：
@@ -225,6 +224,7 @@ $$
 
 
 
+
 ### 2.3 Reflect
 
 缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 n 必过原点，且 N 为单位向量**
@@ -260,7 +260,6 @@ $$
   \\沿 X 轴镜像 & 沿 Y 轴镜像 & 沿 y=-x 轴镜像 & 沿任意单位向量N_{(x,y,z)}镜像 
   \end{array}
   $$
-
 
 
 
@@ -304,6 +303,7 @@ $$
 
 
 
+
 ### 2.5 Shear
 ![](images/shear.png)
 
@@ -340,6 +340,7 @@ $$
   \\沿 X 轴切变 & 沿 Y 轴切变  & 沿 Z 轴切变 
   \end{array}
   $$
+
 
 
 
@@ -513,6 +514,7 @@ OpenGL 中的透视投影
 
 
 
+
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 
 > FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
@@ -573,6 +575,7 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 [万向锁](http://v.youku.com/v_show/id_XNzkyOTIyMTI=.html)：
 
 - 当沿着任意角位移 90 度时，导致两个方向的旋转轴同线，导致三次旋转中有两次旋转的效果是一样的
+  即：少了一个维度的旋转变化
 - 在万向锁的情况下仍可以旋转到想要的位置，但必须同时旋转三个轴向，这时物体没有按照期望的方式旋转，下图的箭头如果是相机，则相机会发生抖动
 
 |![](images/gimbalLock.png)| ![](images/gimbalLock.gif) | ![](images/gimbalLockRight.png) |
@@ -655,6 +658,7 @@ yaw：绕**模型坐标系**的 Y 轴旋转
    $$
    v' = v \cdot cos\theta + (u\cdot v)u(1 - cos\theta)+(u \times v)sin\theta
    $$
+
 
 
 
@@ -752,6 +756,7 @@ $$
 
 
 
+
 - 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
   **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
   几何上存在两个单位四元数 -u 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
@@ -760,7 +765,6 @@ $$
   Q_{单位}Q_1 = Q_1Q_{单位} = Q_1\\
   ((w_1 \vec u + w \vec u_1 +  \vec u_1 \times \vec u), (w_1w - \vec u_1 \cdot \vec u)) = (\vec u_1, w_1)
   $$
-
 
 
 
@@ -802,6 +806,7 @@ $$
   (\vec u sin{\theta \over 2}, cos{\theta \over 2})^x
   = (\vec u {sin({\theta \over 2}x)\over sin{\theta \over 2}}, cos({\theta \over 2}x))
   $$
+
 
 
 
@@ -858,6 +863,7 @@ $$
   $$
   Q_t = {sin((1 - t)\theta) \over sin\theta} Q_0 + {sin(t\theta) \over sin\theta}Q_1
   $$
+
 
 
 
@@ -964,6 +970,7 @@ $$
   \end{bmatrix}
   \end{align}\\
   $$
+
 
 
 

@@ -314,3 +314,4 @@ OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以�
 # 参考
 
 1. OpenGL 加载库 https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library
+2. 更多 OpenGL 的 lib 库文件 http://www.opengl-tutorial.org/miscellaneous/useful-tools-links/

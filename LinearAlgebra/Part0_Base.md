@@ -219,6 +219,8 @@ $$
 
 
 
+
+
 ##7. 正交矩阵（转置 = 逆）
 
 - 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
@@ -321,11 +323,12 @@ $W \cdot V = 长度_{W 到 V 的投影} \times 长度_V$
   ![](images/cross2.png)
 
 - 叉乘的计算
-  二维空间：两个向量组合成的矩阵的**行列式值 det**（矩阵的转置矩阵不改变行列式的值）
+  仅限于二维空间：$\vec v \times \vec w = |\vec v||\vec w| sin \theta$，其中 $\theta$ 是 v 和 w 的夹角
+  适用于二维和三维空间：两个向量组合成的矩阵的**行列式值 det**（矩阵的转置矩阵不改变行列式的值）
 
   ![](images/cross1.png)
 
-  三维空间：特殊的行列式求法，其中 $({\hat x},{\hat y},{\hat z})$ 为基向量
+  扩展：特殊的行列式求法，其中 $({\hat x},{\hat y},{\hat z})$ 为基向量
   $$
   \begin{bmatrix} 
   \color{green}{v_1} \\  \color{red}{v_2} \\ \color{blue}{v_3}\\ 
@@ -366,16 +369,20 @@ $W \cdot V = 长度_{W 到 V 的投影} \times 长度_V$
 
 
 
-- 叉乘向量的方向（具体见 Part1 十、1.1.4）：
+
+
+- 叉乘向量的方向（具体见 Part1 十、1.1.4）
+  **二维空间**
+  逆时针为正，由 $\vec v \times \vec w = |\vec v||\vec w| sin \theta$，可知 $ \vec v \times \vec w = 0 $ 表示 v 平行于 w
+  ![](images/cross.png)
+  **三维空间**
   在右手坐标系下，使用 [**右手定则**](https://en.wikipedia.org/wiki/Right-hand_rule) 判断叉乘的方向
   在左手坐标系下，使用 **左手定则** 判断叉乘的方向
-
-![](images/cross.png)
-
 - 叉乘向量的长度
-  几何意义：叉乘得到的向量长度 = 两个向量构成的平行四边行的面积
-  公式：$||a \times b|| = ||a||\space||b|| sin\theta$
-  $ a \times b = 0 $ 表示 a 平行于 b
+  几何意义
+  **二维空间**：叉乘的两个向量构成的平行四边行的面积
+  **三维空间**：叉乘后得到的新向量的长度
+  叉乘后得到新的向量长度大小计算：$|a \times b| = ||a|\space|b| sin\theta|$
 
 ![](images/vectorCross.png)
 
@@ -576,6 +583,8 @@ $$
     0 & \color{red}{2}\\
     \end{bmatrix}
   $$
+
+
 
 
 
