@@ -1,82 +1,10 @@
 [TOC]
 
-# 一、OpenGL 简介
+# 零、 图形硬件系统
 
->  OpenGL 作为图形硬件标准，是最通用的图形管线版本
->
->  使用 OpenGL 自带的数据类型可以确保各平台中每一种类型的大小都是统一的
+## 1. GPU 的硬件结构
 
-##1. OpenGL 版本
-
-**OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡来实现**
-
-从 OpenGL 3.0 开始，OpenGL 已经弃用经典管线功能（glBegin，变换矩阵，光照，雾，纹理坐标自动生成，等），这些功能可以在需要时由着色器实现
-
-从  OpenGL 4.0 开始，OpenGL 明确删除了固定管线功能，但显卡厂商还在提供固定管线的驱动程序支持，因为还有很多人在用这些固定管线功能
-
-
-
-## 2. OpenGL Context
-
-OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，包括OpenGL 数据缓存）或 影响帧缓存
-
-1. 使用 OpenGL 之前必须先创建 OpenGL Context，并 make current 将创建的 上下文作为当前线程的上下文
-
-2. **OpenGL 标准并不定义如何创建 OpenGL Context，这个任务由其他标准定义**
-   如GLX（linux）、WGL（windows）、EGL（一般在移动设备上用）
-
-3. 上下文的描述类型有 **core profile (不包含任何弃用功能)** 或 **compatibility profile (包含任何弃用功能)** 两种
-   如果创建的是 core profile OpenGL context，调用如 glBegin() 等兼容 API 将产生GL_INVALID_OPERATION 错误（用 glGetError() 查询）
-
-4. Default Frame Buffer：由 外界创建 Context 的一部分，通过 Frame Buffer 将渲染内容显示在屏幕上
-   Frame Buffer Objects：可以由 OpenGL 创建多个
-
-5. 共享上下文
-
-   Context 可以有多个，在某个线程创建后，所有 OpenGL 的操作都会转到这个线程来操作
-   两个线程同时 make current 到同一个绘制上下文，会导致程序崩溃
-
-   一般每个窗口都有一个上下文，可以保证上下文间的不互相影响
-   通过**创建上下文时传入要共享的上下文**，多个窗口的上下文之间图形资源可以共享
-   可以共享的：纹理、shader、Vertex Buffer 等，外部传入对象
-   不可共享的：Frame Buffer Object、Vertex Array Object 等 OpenGL 内置容器**对象**
-
-
-
-##3. OpenGL 的执行模型（Client - Server 模型）
-
-> 主函数在 CPU 上执行，图形渲染在 GPU 上执行
-> 虽然 GPU 可以编程，但这样的程序也需要在 CPU 上执行来操作 GPU
-
-基本执行模型：CPU 上 push command 命令，GPU 上执行命令的渲染操作
-
-- **应用程序 和 GPU 的执行通常是异步的**
-  OpenGL API 调用返回 != OpenGL 在 GPU 上执行完了相应命令，但保证按调用顺序执行
-  同步方式：**glFlush()** 强制发出所有 OpenGL 命令并在此函数返回后的有限时间内执行完这些 OpenGL 命令
-  异步方式：**glFinish()** 等待直到**此函数之前**的 OpenGL 命令执行完毕才返回
-
-- **应用程序 和 OpenGL 可以在也可以不在同一台计算机上执行**
-  一个网络渲染的例子是通过 Windows 远程桌面在远程计算机上启动 OpenGL 程序，应用程序在远程计算机执行，而 OpenGL 命令在本地计算机执行（**将几何数据**而不是将渲染结果图像通过网络传输）
-
-  > 当 Client 和 Server 位于**同一台计算机**上时，也称 GPU 为 Device，CPU 为 Host
-  > Device、Host 这两个术语通常在用 GPU 进行通用计算时使用
-
-- **内存管理**
-  CPU 上由程序准备的缓存数据（buffer、texture 等）存储在显存（video memory）中，这些数据从程序到缓存中拷贝，也可以再次拷贝到程序的缓存中
-- **数据绑定发生在 OpenGL 命令调用时**
-  应用程序传送给 GPU 的数据在 OpenGL API 调用时解释，在调用返回时完成
-  例，指针指向的数据给 OpenGL 传送数据，如 glBufferData()  在此 API 调用返回后修改指针指向的数据将不再对 OpenGL 状态产生影响
-
-
-
-
-# 二、渲染管线
-
-> 所谓 OpenGL 管线（OpenGL pipeline），就是指 OpenGL 的渲染过程，即从输入数据到最终产生渲染结果数据所经过的通路及所经受的处理
-
-## 1. 图形硬件系统
-
-一般来说，计算机的硬件结构如下图：
+GPU 所处的环境：计算机的硬件结构如下
 
 - 显存的带宽比内存的大很多（显存的位宽大）
 
@@ -85,6 +13,22 @@ OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，�
   > OpenGL 的**显示列表**，将一组绘制指令放到 GPU 上，CPU 只要发一条 "执行这个显示列表" 这些指令就执行，而不必每次渲染都发送大量指令到 GPU，从而节约 PCI 带宽 
 
 ![](images/computerHardWareStructure.png)
+
+相对于全面功能考虑的 CPU，GPU 有更多的 ALU（Arithmetic Logic Unit，逻辑运算单元），更少的逻辑控制单元和寄存器
+
+![](images/GPU_VS_CPU.png)
+
+GPU 在 shader 中进行的向量运算采用 SIMD 或 MIMD 计算方式
+
+> SISD（Single Instruction Single Data Stream，单指令单数据流）：传统顺序执行计算机使用
+>
+> MIMD（Multiple Instruction Stream Multiple Data Stream，多指令多数据流）：现代大多数计算机使用，使用多个控制器来异步地控制多个处理器，从而实现空间上的并行性。从硬件角度看，MIMD 需要消耗大量的晶体管数
+>
+> SIMD（Single Instruction Stream Multiple Data Stream，单指令多数据流）：GPU 内置计算方式，CPU 里也有相应的实现方法
+>
+> MISD（Multiple Instruction Stream Single Data Stream，多指令单数据流）
+
+
 
 ### 1.1 GPU 硬件模型
 
@@ -119,21 +63,166 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 
 
-## 2. 渲染管线概览
+## 2. GPU 硬件渲染模式
 
-### 2.1 基本的渲染管线流程
+> 对功耗影响最大的是带宽
 
-流程总览：
+**IMR（Immediate Mode Rendering）立即渲染模式**
+
+- PC 上常见的渲染模式，功耗大，速度快
+- 每个渲染命令都会立即开始
+- 遮蔽处理的部分**会**被渲染处理器
+- 流程
+  ![](images/imr.jpg)
+
+
+
+**TBR（Tile Based Rendering）贴图渲染**
+
+- **移动端 GPU 常用的渲染模式，功耗低，速度慢**
+- 将渲染的一帧缓存分成一个个的区块（tile）
+  当提交渲染命令的时候，GPU 不会立刻进行渲染，而是一帧内所有的渲染命令积攒起来，最后统一渲染。
+  每次 GPU 通过中间缓冲器 [SRAM](https://baike.baidu.com/item/SRAM/7705927?fr=aladdin) 访问 [DRAM](https://baike.baidu.com/item/DRAM) 显存上的一小块区块执行渲染命令以降低带宽
+- 遮蔽处理的部分**会**被渲染器处理
+- 流程
+  ![](images/tbr.jpg)
+
+
+
+**TBDR（Tile Based Deferred Rendering）贴图延迟渲染**
+
+- 基于 TBR 贴图渲染的低功耗优势
+- 遮蔽处理的部分**不会**被渲染器处理
+- 流程
+  ![](images/tbdr.jpg)
+
+
+
+## 3. 性能优化
+
+### 3.1 基于 TBDR 渲染架构的移动端优化
+
+1. 尽量使用少的透明纹理
+   TBDR 的优化 Hidden Surface Removal，会优化遮蔽的不透明纹理，透明纹理无法遮蔽，不会优化
+2. 每次重新绘制前执行 clear
+   IMR 立即渲染模式下，每一帧**不去**清屏可以提高效率（clear 操作需要将值写入 FramBuffer 中的每一个像素中）
+   TBDR 贴图延迟渲染模式下清屏，表示丢弃上一帧的内容，如果上一帧的渲染命令还没有积攒完，这个时候可以立刻放弃上一帧数据
+
+
+
+## 4. 功耗优化
+
+
+
+
+
+# 一、OpenGL 简介
+
+>  OpenGL 作为图形硬件标准，是最通用的图形管线版本
+>
+>  使用 OpenGL 自带的数据类型可以确保各平台中每一种类型的大小都是统一的
+
+##1. OpenGL 版本
+
+**OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡来实现**
+
+从 OpenGL 3.0 开始，OpenGL 已经弃用经典管线功能（glBegin，变换矩阵，光照，雾，纹理坐标自动生成，等），这些功能可以在需要时由着色器实现
+
+从  OpenGL 4.0 开始，OpenGL 明确删除了固定管线功能，但显卡厂商还在提供固定管线的驱动程序支持，因为还有很多人在用这些固定管线功能
+
+
+
+## 2. OpenGL 的加载（环境配置顺序）
+
+### 2.1 动态获取 OpenGL 函数地址
+
+OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡来实现，而且 OpenGL 驱动版本众多，它大多数函数的位置都**无法在编译时确定下来，需要在运行时查询**
+
+因此，在编写与 OpenGL 相关的程序时需要开发者自己来获取 OpenGL 函数地址
+
+相关库可以提供 OpenGL 函数获取地址后的头文件：[GLAD](https://github.com/Dav1dde/glad)
+
+
+
+### 2.2 创建上下文
+
+OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以需要开发者自己处理：**窗口的创建、定义上下文、处理用户输入**
+
+相关库可以提供一个窗口和上下文用来渲染：[GLUT](http://freeglut.sourceforge.net/)、SDL、SFML、[GLFW](http://www.glfw.org/download.html)
+
+
+
+## 3. OpenGL Context
+
+OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，包括OpenGL 数据缓存）或 影响帧缓存
+
+1. 使用 OpenGL 之前必须先创建 OpenGL Context，并 make current 将创建的 上下文作为当前线程的上下文
+
+2. **OpenGL 标准并不定义如何创建 OpenGL Context，这个任务由其他标准定义**
+   如GLX（linux）、WGL（windows）、EGL（一般在移动设备上用）
+
+3. 上下文的描述类型有 **core profile (不包含任何弃用功能)** 或 **compatibility profile (包含任何弃用功能)** 两种
+   如果创建的是 core profile OpenGL context，调用如 glBegin() 等兼容 API 将产生GL_INVALID_OPERATION 错误（用 glGetError() 查询）
+
+4. Default Frame Buffer：由 外界创建 Context 的一部分，通过 Frame Buffer 将渲染内容显示在屏幕上
+   Frame Buffer Objects：可以由 OpenGL 创建多个
+
+5. 共享上下文
+
+   Context 可以有多个，在某个线程创建后，所有 OpenGL 的操作都会转到这个线程来操作
+   两个线程同时 make current 到同一个绘制上下文，会导致程序崩溃
+
+   一般每个窗口都有一个上下文，可以保证上下文间的不互相影响
+   通过**创建上下文时传入要共享的上下文**，多个窗口的上下文之间图形资源可以共享
+   可以共享的：纹理、shader、Vertex Buffer 等，外部传入对象
+   不可共享的：Frame Buffer Object、Vertex Array Object 等 OpenGL 内置容器**对象**
+
+
+
+## 4. OpenGL 的执行模型（Client - Server 模型）
+
+> 主函数在 CPU 上执行，图形渲染在 GPU 上执行
+> 虽然 GPU 可以编程，但这样的程序也需要在 CPU 上执行来操作 GPU
+
+基本执行模型：CPU 上 push command 命令，GPU 上执行命令的渲染操作
+
+- **应用程序 和 GPU 的执行通常是异步的**
+  OpenGL API 调用返回 != OpenGL 在 GPU 上执行完了相应命令，但保证按调用顺序执行
+  同步方式：**glFlush()** 强制发出所有 OpenGL 命令并在此函数返回后的有限时间内执行完这些 OpenGL 命令
+  异步方式：**glFinish()** 等待直到**此函数之前**的 OpenGL 命令执行完毕才返回
+
+- **应用程序 和 OpenGL 可以在也可以不在同一台计算机上执行**
+  一个网络渲染的例子是通过 Windows 远程桌面在远程计算机上启动 OpenGL 程序，应用程序在远程计算机执行，而 OpenGL 命令在本地计算机执行（**将几何数据**而不是将渲染结果图像通过网络传输）
+
+  > 当 Client 和 Server 位于**同一台计算机**上时，也称 GPU 为 Device，CPU 为 Host
+  > Device、Host 这两个术语通常在用 GPU 进行通用计算时使用
+
+- **内存管理**
+  CPU 上由程序准备的缓存数据（buffer、texture 等）存储在显存（video memory）中，这些数据从程序到缓存中拷贝，也可以再次拷贝到程序的缓存中
+- **数据绑定发生在 OpenGL 命令调用时**
+  应用程序传送给 GPU 的数据在 OpenGL API 调用时解释，在调用返回时完成
+  例，指针指向的数据给 OpenGL 传送数据，如 glBufferData()  在此 API 调用返回后修改指针指向的数据将不再对 OpenGL 状态产生影响
+
+
+
+
+# 二、渲染管线
+
+> 所谓 OpenGL 管线（OpenGL pipeline），就是指 OpenGL 的渲染过程，即从输入数据到最终产生渲染结果数据所经过的通路及所经受的处理
+
+## 1. 基本的渲染管线流程
+
+### 1.1 流程总览
 
 模型变换 $\to$ 视野变换 $\to$ 顶点处理（可能含有光照） $\to$ 
 透视区域裁剪（得到裁剪后的坐标空间） $\to$ 齐次变换（得到标准化的坐标空间） $\to$ 视角变换（得到屏幕坐标）  $\to$ 
 光栅化 $\to$ 片源处理，纹理，光照处理 $\to$ 光栅化（可选） $\to$ 缓冲帧
 
-顶点变换过程：
+### 1.2 顶点变换过程
 
 ![](images/coordinate.png)
 
-### 2.2 渲染管线流程图
+## 2. 渲染管线流程图
 
 可编程：可以在需要时由 shader 实现
 不可编程：具体方法由 OpenGL API 的驱动实现
@@ -144,12 +233,10 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 
 
-### 2.3 Shader 中的接口一致性
+## 3. Shader 中的接口一致性
 
 - Vertex Shader 的 输入 和 应用程序的顶点属性数据接口 一致
-
 - Vertex Shader 的 输出 和 Fragment Shader 对应的 输入 一致
-
 - Fragment Shader 的 输出 和 帧缓存的颜色缓存接口 一致
 
 
@@ -210,8 +297,6 @@ OpenGL 中针对放大和缩小的情况的设置
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //缩小
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //放大
 ```
-
-
 
 ### 2.1 最近点采样 GL_NEAREST
 
@@ -291,27 +376,10 @@ glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 异向程度);
 
 
 
-# 四、OpenGL 的加载（环境配置顺序）
-
-## 1. 动态获取 OpenGL 函数地址
-
-OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡来实现，而且 OpenGL 驱动版本众多，它大多数函数的位置都**无法在编译时确定下来，需要在运行时查询**
-
-因此，在编写与 OpenGL 相关的程序时需要开发者自己来获取 OpenGL 函数地址
-
-相关库可以提供 OpenGL 函数获取地址后的头文件：[GLAD](https://github.com/Dav1dde/glad)
-
-
-
-## 2. 创建上下文
-
-OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以需要开发者自己处理：**窗口的创建、定义上下文、处理用户输入**
-
-相关库可以提供一个窗口和上下文用来渲染：[GLUT](http://freeglut.sourceforge.net/)、SDL、SFML、[GLFW](http://www.glfw.org/download.html)
-
-
-
 # 参考
 
-1. OpenGL 加载库 https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library
-2. 更多 OpenGL 的 lib 库文件 http://www.opengl-tutorial.org/miscellaneous/useful-tools-links/
+1. [OpenGL 加载库](https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library)
+2. [更多 OpenGL 的 lib 库文件](http://www.opengl-tutorial.org/miscellaneous/useful-tools-links/)
+3. [移动 GPU 渲染模式](https://blog.csdn.net/u013467442/article/details/40684479)
+4. [针对移动端 TBDR 架构 GPU 特性的渲染优化](https://blog.csdn.net/leonwei/article/details/79298381)
+5. [GPU架构图](https://blog.csdn.net/pizi0475/article/details/7573996)

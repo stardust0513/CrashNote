@@ -218,9 +218,6 @@ $$
 
 
 
-
-
-
 ##7. 正交矩阵（转置 = 逆）
 
 - 定义：若 M 正交矩阵，则 $MM^T = I_{单位矩阵} \Rightarrow M^T = M^{-1}$
@@ -248,10 +245,10 @@ $$
   $$
 
 - **应用：求向量的夹角**
-  $||\vec v|| 是 \vec v 的长度，如果 \vec v是单位向量，||\vec v|| = 1$
+  $|\vec v| 是 \vec v 的长度，如果 \vec v是单位向量，|\vec v| = 1$
   $$
-  \vec v \cdot \vec n = ||\vec v|| \cdot ||\vec n|| \cdot cos\theta \\
-  \theta = arccos({\vec v \cdot \vec n \over ||\vec v|| \space ||\vec n||})
+  \vec v \cdot \vec n = |\vec v| \cdot |\vec n| \cdot cos\theta \\
+  \theta = arccos({\vec v \cdot \vec n \over |\vec v| \space |\vec n|})
   $$
 
 - 几何解释
@@ -267,11 +264,11 @@ $$
 
 给定两个向量 v 和 n，能将 v 分解成两个分量： $v_{||}$ 平行于 n 和 $v_{\bot}$ 垂直于 n 
 $$
-{v_{||} \over ||v_{||}||} = {n \over ||n||}, \space 
-cos \theta = {||v_{||}|| \over ||v||}\\
+{v_{||} \over |v_{||}|} = {n \over |n|}, \space 
+cos \theta = {|v_{||}| \over |v|}\\
 \begin{align}
-v \space 到 \space n \space 的投影：v_{||} &= ||v_{||}|| {n \over ||n||} = {n \over ||n||}||v||cos \theta = n{||n||||v||cos \theta \over ||n||^2} = n{v \cdot v \over ||n||^2}\\
-v_{\bot} &= v - v_{||} = v - n{v \cdot v \over ||n||^2}
+v \space 到 \space n \space 的投影：v_{||} &= |v_{||}| {n \over |n|} = {n \over |n|}|v|cos \theta = n{|n||v|cos \theta \over |n|^2} = n{v \cdot v \over |n|^2}\\
+v_{\bot} &= v - v_{||} = v - n{v \cdot v \over |n|^2}
 \end{align}
 $$
 ![](images/vectorProject.png)
@@ -366,7 +363,6 @@ $W \cdot V = 长度_{W 到 V 的投影} \times 长度_V$
   &= \overrightarrow S_{垂直于V 和 W 构成的平面}
   \end{align}
   $$
-
 
 
 
@@ -504,6 +500,7 @@ $$
 
 
 
+
 #九、特征向量与特征值
 
 ## 1. 概念
@@ -583,6 +580,7 @@ $$
     0 & \color{red}{2}\\
     \end{bmatrix}
   $$
+
 
 
 
