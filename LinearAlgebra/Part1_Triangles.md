@@ -2,9 +2,23 @@
 
 # 十、三角形
 
-## 1. 求面积
+## 1. 内心
 
-已知三点坐标，求证三角形面积 $S_{\Delta ABC} = {1 \over 2}[(x_2-x_1)(y_3-y_1) - (y_2-y_1)(x_3-x_1)]$
+三角形内心（三角形内切圆的圆心）：三角形内角平分线的交点
+
+已知三点坐标，求三角形内心坐标，[证明过程](https://www.zybang.com/question/272657890b84080ca669265cd181789c.html)
+
+![](images/incenter.png)
+
+设 $a = |BC|, \space b = |AC|,\space c = |AB|​$ 则
+$$
+(x_I,y_I) = {a(x_A,y_A)+b(x_B,y_B)+c(x_C,y_C) \over a+b+c}
+$$
+
+
+## 2. 求面积
+
+已知三点坐标，求证三角形面积 $S_{\Delta ABC} = {1 \over 2}[(x_2-x_1)(y_3-y_1) - (y_2-y_1)(x_3-x_1)]​$
 
 ![](images/triangleSquare.png)
 $$

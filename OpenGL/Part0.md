@@ -100,7 +100,47 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 ## 3. 性能优化
 
-### 3.1 基于 TBDR 渲染架构的移动端优化
+### 3.1 基本优化
+
+1. 渲染更少的像素
+   要注重渲染的像素的质量而非数量，1280 X 720 是针对中低端手机比较理想的分辨率
+   后处理的场景可以用原图尺寸的一半或更低的分辨率 FBO 来渲染
+   UI 界面可以用低分辨率的小部件拼接起来，渲染在高分辨率的 FBO 
+
+2. 减少 draw call 的次数
+   使用共享的 shader 和共享的绘制状态（例：多个纹理文件合并为一个地图纹理集）
+
+3. 减少带宽的使用
+   设置最大纹理限制
+   在渲染少量像素时用更小的纹理（采用 mipmap）
+   采用纹理压缩技术压缩纹理
+
+   | 绘图 API      | 推荐纹理压缩格式 |
+   | ------------- | ---------------- |
+   | OpenGL ES 2.0 | ATC or ETC1      |
+   | OpenGL ES 3.0 | ETC2             |
+   | OpenGL ES 3.1 | ETC2 or ASTC     |
+   | Vulkan        | ETC2 or ASTC     |
+
+4. 尽量将多个 VBO 一次更新完后再绘制
+
+5. shader 代码性能的优化
+   shader 16 bit 精度（mediump）比 32 bit 精度（highp）快很多，建议默认设为 mediump 精度
+   减少对不必要的通道的使用，通过对通道的排序，减少对通道不必要的占用
+
+6. Tessellaion（曲面细分的优化）
+
+   - 过高的曲面细分会产生亚像素的三角形，可以通过距离、屏幕空间等方法改变传递细分因子的值来避免
+   - 对于要剔除的背面可以不进行曲面细分
+   - 通常可以 disable 掉 TCS 和 TES 阶段的曲面细分，减少 GPU 不必要的阶段
+
+7. GLES 3.1 的 Compute shader
+   ![](images/compute.png)
+
+
+
+### 3.1 基于 Frame buffer object 的优化
+基于 TBDR 的**移动端** FBO 优化
 
 1. 尽量使用少的透明纹理
    TBDR 的优化 Hidden Surface Removal，会优化遮蔽的不透明纹理，透明纹理无法遮蔽，不会优化
@@ -110,9 +150,30 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 
 
-## 4. 功耗优化
+### 3.2 对渲染排序
+
+为了减少 GPU 状态的改变和过度绘制的现象，需要对渲染排序
+
+1. 排序材质的渲染次序（减少 shader 和 纹理状态的变化）
+2. 对于不透明的 draw call 进行从前到后的排序（减少先渲染的结果被后渲染的覆盖，造成不必要的浪费）
+3. 将天空盒这种被大部物体遮挡的情况放在最后渲染，可以减少不必要的渲染
 
 
+
+### 3.3 丢弃深度和模版缓存
+
+- 渲染完成后，GPU 通常会将图形缓存（GMEM）拷贝到 CPU 的系统缓存中。
+
+- 这种拷贝十分耗时，大多数情况下只有色彩缓存只需要被拷贝回去。（深度缓存和模版缓存不需要再次拷贝）
+
+- 在 OpenGL ES 中可以使用 `glInvalidateFramebuffer` 
+
+  ```c++
+  Glenum invalidList[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+  Glsizei invalidListCount = 2;
+   
+  glInvalidateFramebuffer(GL_FRAMEBUFFER, invalidListCount, invalidList)
+  ```
 
 
 
@@ -146,7 +207,7 @@ OpenGL 只是一个标准/规范，具体的实现是由驱动开发商针对特
 
 ### 2.2 创建上下文
 
-OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以需要开发者自己处理：**窗口的创建、定义上下文、处理用户输入**
+ OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以需要开发者自己处理：**窗口的创建、定义上下文、处理用户输入**
 
 相关库可以提供一个窗口和上下文用来渲染：[GLUT](http://freeglut.sourceforge.net/)、SDL、SFML、[GLFW](http://www.glfw.org/download.html)
 
