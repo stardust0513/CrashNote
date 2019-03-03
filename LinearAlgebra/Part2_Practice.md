@@ -106,7 +106,7 @@ $$
 
 - 在笛卡尔坐标系中，对于以下方程
   如果 C $\neq$ D，方程无解
-  如果 C $=$ D，方程表示的两条线是同一条线
+  如果 C $=​$ D，方程表示的两条线是同一条线
   $$
   \begin{cases}
   Ax+By+C=0\\
@@ -114,13 +114,9 @@ $$
   \end{cases}
   $$
 
-
-
-
-
 - 在投影空间中，对于以下方程
   如果 C $\neq$ D，由 (C - D)w = 0 得 w = 0，**即当 w = 0 时并非无意义，而是表示一个无穷远**，所以两条平行线相交于'点' (x, y, 0)
-  如果 C $=$ D，方程表示的两条线是同一条线
+  如果 C $=​$ D，方程表示的两条线是同一条线
   $$
   \begin{cases}
   A{x\over w}+B{y\over w}+C=0\\
@@ -227,8 +223,6 @@ $$
 
 
 
-
-
 ### 2.3 Reflect
 
 缩放比例为 -1 时，就是镜像，**这里假设 缩放方向 n 必过原点，且 N 为单位向量**
@@ -264,8 +258,6 @@ $$
   \\沿 X 轴镜像 & 沿 Y 轴镜像 & 沿 y=-x 轴镜像 & 沿任意单位向量N_{(x,y,z)}镜像 
   \end{array}
   $$
-
-
 
 
 
@@ -308,8 +300,6 @@ $$
 
 
 
-
-
 ### 2.5 Shear
 ![](images/shear.png)
 
@@ -346,10 +336,6 @@ $$
   \\沿 X 轴切变 & 沿 Y 轴切变  & 沿 Z 轴切变 
   \end{array}
   $$
-
-
-
-
 
 
 
@@ -670,10 +656,6 @@ yaw：绕**模型坐标系**的 Y 轴旋转
 
 
 
-
-
-
-
 ![](images/axisAngleSplit.png)
 
 
@@ -765,8 +747,6 @@ $$
 
 
 
-
-
 - 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
   **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
   几何上存在两个单位四元数 -u 和 u，因为他们几何意义相同都表示没有位移，但数学上只有 u
@@ -778,8 +758,6 @@ $$
 
 
 
-
-
 #### 4.3.2 四元数默认在极坐标下
 
 **极坐标下的优势：使四元数的运算和向量的运算方法一致**
@@ -787,7 +765,7 @@ $$
 由 4.2.1 复数在笛卡尔坐标和极坐标的转换方式可得，四元数在
 
 - 笛卡尔坐标下为
-  $\vec Q = (x, y, z, w) = (\vec u, w)$
+  $\vec Q = (x, y, z, w) = (\vec u, w)​$
 - 极坐标下为，其中 $\theta$ 为绕 $\vec u$ 旋转后的角位移（旋转方式见 4.2.3，[推导到极坐标](https://krasjet.github.io/quaternion/quaternion.pdf)）
   $\vec Q  = (x sin{\theta \over 2}, y sin{\theta \over 2},z sin{\theta \over 2}, cos{\theta \over 2}) = (\vec u sin{\theta \over 2}, cos{\theta \over 2})$
 
@@ -817,8 +795,6 @@ $$
   (\vec u sin{\theta \over 2}, cos{\theta \over 2})^x
   = (\vec u {sin({\theta \over 2}x)\over sin{\theta \over 2}}, cos({\theta \over 2}x))
   $$
-
-
 
 
 
@@ -875,10 +851,6 @@ $$
   $$
   Q_t = {sin((1 - t)\theta) \over sin\theta} Q_0 + {sin(t\theta) \over sin\theta}Q_1
   $$
-
-
-
-
 
 
 ![](images/Slerp.png)
@@ -984,11 +956,9 @@ $$
   \end{align}\\
   $$
 
-
-
-
-
 ![](images/rollPichYaw.png)
+
+
 
 旋转矩阵 $ \to$ [欧拉角](#4.1 欧拉角 (Euler angles))
 
