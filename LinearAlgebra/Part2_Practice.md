@@ -507,8 +507,6 @@ OpenGL 中的透视投影
 
 
 
-
-
 OpenGL 中透视投影矩阵，[推导过程](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 
 > FOV：Field Of View (视场角) 决定视野范围，视场角越大，焦距越小
@@ -744,8 +742,6 @@ $$
   \vec Q^{-1} &= {\vec Q^* \over ||\vec Q||^2}\\
   \end{align}
   $$
-
-
 
 - 单位四元数：任意四元数乘以单位四元数后保持不变，$(\vec 0, \pm 1)$，模为 1
   **单位四元数的 逆 = 共轭**，由于共轭比逆好求出，一般用四元数的共轭代替逆使用
