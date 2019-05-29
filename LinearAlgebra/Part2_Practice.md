@@ -396,14 +396,15 @@ $$
 
 变换矩阵：例子，平移变换
 $$
-\begin{pmatrix}x & y & z & \color{red}1\end{pmatrix} \cdot 
+\begin{bmatrix}x & y & z & \color{red}1\end{bmatrix}
+\cdot
 \begin{bmatrix}
-1 & 0 & 0 & \color{red}{\Delta x}\\
-0 & 1 & 0 & \color{red}{\Delta y}\\
-0 & 0 & 1 & \color{red}{\Delta z}\\
-0 & 0 & 0 & \color{red}{1}\\
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+\color{red}{\Delta x} & \color{red}{\Delta y} & \color{red}{\Delta z} & \color{red}{1}\\
 \end{bmatrix}
-= \begin{pmatrix}x + \color{red}{\Delta x} & y + \color{red}{\Delta y} & z + \color{red}{\Delta z} & \color{red}1\end{pmatrix}
+= \begin{bmatrix}x + \color{red}{\Delta x} & y + \color{red}{\Delta y} & z + \color{red}{\Delta z} & \color{red}1\end{bmatrix}
 $$
 
 同过 **高维度的线性变换** 代替 **低维度的仿射变换**
