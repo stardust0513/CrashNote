@@ -11,6 +11,8 @@ GPU 所处的环境：计算机的硬件结构如下
 - **内存** 和 **显存** 之间的 PCI 总线带宽过小是 CPU 和 GPU 交互的瓶颈
 
   > OpenGL 的**显示列表**，将一组绘制指令放到 GPU 上，CPU 只要发一条 "执行这个显示列表" 这些指令就执行，而不必每次渲染都发送大量指令到 GPU，从而节约 PCI 带宽 
+  >
+  > 在移动端，带宽是一种多设备（CPU、GPU、AUDIO 等）共享的资源，而且**处理器通过带宽对存储的访问很耗电**
 
 ![](images/computerHardWareStructure.png)
 
@@ -91,7 +93,7 @@ GPU 主要由 **显存(Device Memory)** 和 **流多处理器(Stream Multiproces
 
 **TBDR（Tile Based Deferred Rendering）贴图延迟渲染**
 
-- 基于 TBR 贴图渲染的低功耗优势
+- 基于 TBR 贴图渲染的低功耗优势 [具体说明](https://en.wikipedia.org/wiki/Tiled_rendering)
 - 遮蔽处理的部分**不会**被渲染器处理
 - 流程
   ![](images/tbdr.jpg)
@@ -276,8 +278,7 @@ OpenGL 命令执行的结果影响 OpenGL 状态（由 OpenGL context 保存，�
 ### 1.1 流程总览
 
 模型变换 $\to$ 视野变换 $\to$ 顶点处理（可能含有光照） $\to$ 
-透视区域裁剪（得到裁剪后的坐标空间） $\to$ 齐次变换（得到标准化的坐标空间） $\to$ 视角变换（得到屏幕坐标）  $\to$ 
-光栅化 $\to$ 片源处理，纹理，光照处理 $\to$ 光栅化（可选） $\to$ 缓冲帧
+透视区域裁剪（得到裁剪后的坐标空间） $\to$ 齐次变换（得到标准化的坐标空间） $\to$ 视角变换（得到屏幕坐标）  $\to$ 光栅化 $\to$ 片源处理，纹理，光照处理 $\to$ 光栅化（可选） $\to$ 缓冲帧
 
 ### 1.2 顶点变换过程
 
