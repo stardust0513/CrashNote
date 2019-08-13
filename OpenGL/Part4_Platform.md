@@ -132,14 +132,16 @@ SurfaceTexture 使用流程
 本地环境和客户端环境
 
 - 本地窗口环境：Windows、X
-- 客户端环境：3D 渲染器 OpenGL、2D 矢量图形渲染器 OpenVG
+- 客户端环境：3D 渲染器 OpenGL、2D 矢量图形渲染器 [OpenVG](https://baike.baidu.com/item/OpenVG/7922699?fr=aladdin)
 
 
 
 同一个 surface 上可能 **同时异步** 执行了 <u>本地窗口环境</u> 和 <u>客户端环境</u> 的命令
 
-- eglWaitClient
-- eglWaitNative
+- 本地环境等待客户端环境渲染完成，效果同 glFinish 或 vgFinish 一致
+  [EGLBoolean eglWaitClient(void);](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglWaitClient.xhtml)
+- 客户端环境等待本地环境渲染完成
+  [EGLBoolean eglWaitNative(EGLint engine);](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglWaitNative.xhtml)
 
 
 
@@ -154,18 +156,20 @@ SurfaceTexture 使用流程
 
 ### 3.3 EGL 的 Context 和 Surface
 
-EGL 可以销毁本地资源（各种 surface 类型）只有一个方法，[eglDestroySurface]()
+EGL 可以销毁本地资源（各种 surface 类型）
+只有一个方法，[EGLBoolean eglDestroySurface(EGLDisplay display, EGLSurface surface);](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglDestroySurface.xhtml)
 
 EGL 可以创建本地环境的资源（各种 surface 类型）格式有
 
 1. pixel buffer（存储在显存上）
-   OpenGL API 方面，[eglCreatePbufferSurface]()
-   OpenVG API 方面，[eglCreatePbufferFromClientBuffer]()
-2. frame buffer（存储在本地内存）
-   本地环境 API 创建的 window 内的 surface，[eglCreateWindowSurface]()
-3. 本地环境 API 创建的 [pixmap（常用做本地图像的内部存储）](https://franz.com/support/documentation/current/doc/cg/cg-pixmaps.htm)，[eglCreatePixmapSurface]()
-   Pixmap：将图像以像素颜色数组的结构来存储的对象
-   Bitmap：用 1 bit 来存储 1 个像素颜色的 Pixmap
+   OpenGL API 方面，[EGLSurface eglCreatePbufferSurface(...)](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglCreatePbufferSurface.xhtml)
+   OpenVG API 方面，[EGLSurface eglCreatePbufferFromClientBuffer(...)](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglCreatePbufferFromClientBuffer.xhtml)
+2. frame buffer（存储在显存上）
+   本地环境 API 创建的 window 内的 surface，[EGLSurface eglCreateWindowSurface(...)](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglCreateWindowSurface.xhtml)
+   
+3. 本地环境 API 创建的 [pixmap（常用做本地图像的内部存储）](https://franz.com/support/documentation/current/doc/cg/cg-pixmaps.htm)，[EGLSurface eglCreatePixmapSurface(...);](https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglCreatePixmapSurface.xhtml)
+	Pixmap：将图像以像素颜色数组的结构来存储的对象
+	Bitmap：用 1 bit 来存储 1 个像素颜色的 Pixmap
 
 
 
@@ -221,6 +225,7 @@ int main(int argc, char ** argv)
         glClear(GL_COLOR_BUFFER_BIT);
         glFlush();
 
+  			// 所有的绘制步骤在后台绘制，当绘制完成时切换前后台缓冲，确保显示的一直是绘制完成的画面
         eglSwapBuffers(display, surface);
 
         sleep(10);
@@ -230,13 +235,11 @@ int main(int argc, char ** argv)
 
 
 
-
-
 ## 4. 平台问题
 
 ###4.1 TEXTURE_EXTERNAL_OES
 
-TEXTURE_EXTERNAL_OES 是 OpenGL ES 在 Android 上的扩展
+TEXTURE_EXTERNAL_OES 是 OpenGL ES 在 Android 上的扩展，在获取相机纹理时只有 TEXTURE_EXTERNAL_OES 类型的纹理
 
 使用扩展纹理 TEXTURE_EXTERNAL_OES 步骤
 
@@ -356,7 +359,6 @@ TEXTURE_EXTERNAL_OES 是 OpenGL ES 在 Android 上的扩展
   obj->instantiate(env,instance);
   ```
 
-  
 
 
 
@@ -389,4 +391,5 @@ TEXTURE_EXTERNAL_OES 是 OpenGL ES 在 Android 上的扩展
 - [SurfaceView、TextureView、SurfaceTexture 等的区别](https://www.cnblogs.com/wytiger/p/5693569.html)
 - [OpenGL ES：EGL 接口解析与理解](https://blog.csdn.net/xuwei072/article/details/70049004)
 - [OpenGL ES：EGL简介](https://blog.csdn.net/iEearth/article/details/71180457)
-
+- [Android中 的 GraphicBuffer 同步机制 Fence](https://blog.csdn.net/jinzhuojun/article/details/39698317)
+- [深入 Android 渲染机制](https://www.cnblogs.com/ldq2016/p/6668148.html)
