@@ -257,37 +257,200 @@ OpenGL 创建上下文的操作在不同的操作系统上是不同的，所以�
 **OpenGL 3.1**
 
 - [GL_ARB_draw_instanced](http://www.opengl.org/registry/specs/ARB/draw_instanced.txt)
+  减轻了同类物体绘制所占有的带宽压力
 - [GL_ARB_copy_buffer](http://www.opengl.org/registry/specs/ARB/copy_buffer.txt)
+  Copy buffer的出现，是让数据在 client 端进行拷贝，也是一种性能的优化
 - [GL_ARB_texture_buffer_object](http://www.opengl.org/registry/specs/ARB/texture_buffer_object.txt)
+  让 buffer object 像 texture 那样被访问
 - [GL_ARB_texture_rectangle](http://www.opengl.org/registry/specs/ARB/texture_rectangle.txt)
 - [GL_ARB_uniform_buffer_object](http://www.opengl.org/registry/specs/ARB/uniform_buffer_object.txt)
+  OpenGL 每个函数的调用所消耗的 CPU 循环都非常的大，频繁地调用 `glUniform*` 会带来很大的性能问题，开放了 uniform buffer object，通过 map/unmap 更新数据，函数调用开销明显地减少
 - [GL_NV_primitive_restart](http://www.opengl.org/registry/specs/NV/primitive_restart.txt)
 
 
 
 **OpenGL 3.2**
 
-- 
+- [GL_ARB_geometry_shader4](http://www.opengl.org/registry/specs/ARB/geometry_shader4.txt)
+  支持几何着色器（geometry shader）用来生成新的图元类型（点、线和三角形）
+- [GL_ARB_sync](http://www.opengl.org/registry/specs/ARB/sync.txt)
+ Fence sync objects  
+- [GL_ARB_vertex_array_bgra](http://www.opengl.org/registry/specs/ARB/vertex_array_bgra.txt)
+- [GL_ARB_draw_elements_base_vertex](http://www.opengl.org/registry/specs/ARB/draw_elements_base_vertex.txt)
+- [GL_ARB_seamless_cube_map](http://www.opengl.org/registry/specs/ARB/seamless_cube_map.txt)
+- [GL_ARB_texture_multisample](http://www.opengl.org/registry/specs/ARB/texture_multisample.txt)
+  Texture 正式支持 multisample，可以作为 render target 来进行 framebuffer object上 的抗锯齿
+  而不是经过的 WGL_ARB_multisample 和 GLX_ARB_multisample 进行窗口的抗锯齿
+- [GL_ARB_fragment_coord_conventions](http://www.opengl.org/registry/specs/ARB/fragment_coord_conventions.txt)
+- [GL_ARB_provoking_vertex](http://www.opengl.org/registry/specs/ARB/provoking_vertex.txt)
+- [GL_ARB_depth_clamp](http://www.opengl.org/registry/specs/ARB/depth_clamp.txt)
+  Fragment depth clamping
 
 
 
 **OpenGL 3.3**
 
--
-
--
+- [GL_ARB_blend_func_extended](http://www.opengl.org/registry/specs/ARB/blend_func_extended.txt)
+- [GL_ARB_explicit_attrib_location](http://www.opengl.org/registry/specs/ARB/explicit_attrib_location.txt)
+  改变了程序需要查询输入变量（attribute）的 location 的方式，可以像 HLSL 指定 semantic 一样在 shader 里指定 layout，减少了相应 API 的调用
+- [GL_ARB_occlusion_query2](http://www.opengl.org/registry/specs/ARB/occlusion_query2.txt)
+- [GL_ARB_sampler_objects](http://www.opengl.org/registry/specs/ARB/sampler_objects.txt)
+  将 texture object 和 sampler state 解耦，增加了 sampler object
+  sampler object 也可以绑定到 ACTIVE_TEXTURE 上了
+- [GL_ARB_texture_swizzle](http://www.opengl.org/registry/specs/ARB/texture_swizzle.txt)
+- [GL_ARB_timer_query](http://www.opengl.org/registry/specs/ARB/timer_query.txt)
+- [GL_ARB_instanced_arrays](http://www.opengl.org/registry/specs/ARB/instanced_arrays.txt)
+- [GL_ARB_texture_rgb10_a2ui](http://www.opengl.org/registry/specs/ARB/texture_rgb10_a2ui.txt)
+  [GL_ARB_vertex_type_2_10_10_10_rev](http://www.opengl.org/registry/specs/ARB/vertex_type_2_10_10_10_rev.txt)
+  new texture format for unsigned_10_10_10_2 and new vertex attributes for 2_10_10_10
 
 
 
 ## 4. OpenGL 4.X
 
 **OpenGL 4.0**
+
+- [GL_ARB_tessellation_shader](http://www.opengl.org/registry/specs/ARB/tessellation_shader.txt)
+- [GL_ARB_texture_query_lod](http://www.opengl.org/registry/specs/ARB/texture_query_lod.txt)
+  [GL_ARB_gpu_shader5](http://www.opengl.org/registry/specs/ARB/gpu_shader5.txt)
+  [GL_ARB_gpu_shader_fp64](http://www.opengl.org/registry/specs/ARB/gpu_shader_fp64.txt)
+  [GL_ARB_texture_gather](http://www.opengl.org/registry/specs/ARB/texture_gather.txt)
+  [GL_ARB_shader_subroutine](http://www.opengl.org/registry/specs/ARB/shader_subroutine.txt)
+  支持 Shader Language 4.0 
+  subroutine 提供了在运行时刻不需要切换着色器或者是重新编译或者使用 if 判断选择不同功能的方法，降低了切换着色器程序所带来的巨大开销（切换着色器的 CPU 循环消耗真的非常的惊人）
+- [GL_ARB_sample_shading](http://www.opengl.org/registry/specs/ARB/sample_shading.txt)
+- [GL_ARB_draw_buffers_blend](http://www.opengl.org/registry/specs/ARB/draw_buffers_blend.txt)
+  让 fragment shader 输出的每条 buffer 都可以完成各自的 pre-fragment operaion，而不是像过去那样每条都完成相同的 pre-fragment operation
+- [GL_ARB_draw_indirect](http://www.opengl.org/registry/specs/ARB/draw_indirect.txt)
+- [GL_ARB_transform_feedback2](http://www.opengl.org/registry/specs/ARB/transform_feedback2.txt)
+  [GL_ARB_transform_feedback3](http://www.opengl.org/registry/specs/ARB/transform_feedback3.txt)
+  提供了 transform feedback object，以及 transform feedback 相关的控制（比如pause之类）
+
+
+
 **OpenGL 4.1**
+
+- [GL_ARB_ES2_compatibility](http://www.opengl.org/registry/specs/ARB/ES2_compatibility.txt)
+  把 OpenGL ES 的一些功能划入 core profile 的范围
+- [GL_ARB_get_program_binary](http://www.opengl.org/registry/specs/ARB/get_program_binary.txt)
+  可以将 shader 事先编译好序列化进入二进制文件
+- [GL_ARB_separate_shader_objects](http://www.opengl.org/registry/specs/ARB/separate_shader_objects.txt)
+  Ability to bind programs individually to programmable stages
+- [GL_ARB_viewport_array](http://www.opengl.org/registry/specs/ARB/viewport_array.txt)
+  Multiple viewports for the same rendering surface, or one per surface
+- [GL_ARB_shader_precision](http://www.opengl.org/registry/specs/ARB/shader_precision.txt)
+  Documents precision requirements for several FP operaions
+- [GL_ARB_vertex_attrib_64bit](http://www.opengl.org/registry/specs/ARB/vertex_attrib_64bit.txt)
+  提供了 64 位的浮点型输入变量，提升了数据精度
+
+
+
 **OpenGL 4.2**
+
+- [GL_ARB_base_instance](http://www.opengl.org/registry/specs/ARB/base_instance.txt)
+- [GL_ARB_compressed_texture_pixel_storage](http://www.opengl.org/registry/specs/ARB/compressed_texture_pixel_storage.txt)
+  Allows for sub-rectangle selections when transferring compressed texture data
+- [GL_ARB_conservative_depth](http://www.opengl.org/registry/specs/ARB/conservative_depth.txt)
+- [GL_ARB_internalformat_query](http://www.opengl.org/registry/specs/ARB/internalformat_query.txt)
+- [GL_ARB_map_buffer_alignment](http://www.opengl.org/registry/specs/ARB/map_buffer_alignment.txt)
+- [GL_ARB_shading_language_420pack](http://www.opengl.org/registry/specs/ARB/shading_language_420pack.txt)
+- [GL__ARB_texture_storage](http://www.opengl.org/registry/specs/ARB/texture_storage.txt)
+  Allows texture objects to have immutable storage, and allocating all mipmap levels and images in one call. The storage becomes immutable, but the contents of the storage are not
+- [GL_ARB_transform_feedback_instanced](http://www.opengl.org/registry/specs/ARB/transform_feedback_instanced.txt)
+- [GL_ARB_shader_atomic_counters](http://www.opengl.org/registry/specs/ARB/shader_atomic_counters.txt)
+- [GL_ARB_shader_image_load_store](http://www.opengl.org/registry/specs/ARB/shader_image_load_store.txt)
+- [GL_ARB_texture_compression_bptc](http://www.opengl.org/registry/specs/ARB/texture_compression_bptc.txt)
+  Allows the use of certain advanced compression formats（至此 OpenGL 开始支持所有的 Block Compression 格式）
+
+
+
 **OpenGL 4.3**
+
+- [GL_ARB_arrays_of_arrays](http://www.opengl.org/registry/specs/ARB/arrays_of_arrays.txt)
+
+- [GL_ARB_clear_buffer_object](http://www.opengl.org/registry/specs/ARB/clear_buffer_object.txt)
+
+- [GL_ARB_compute_shader](http://www.opengl.org/registry/specs/ARB/compute_shader.txt)
+  可以用于并行计算
+
+- [GL_ARB_copy_image](http://www.opengl.org/registry/specs/ARB/copy_image.txt)
+
+- [GL_KHR_debug](http://www.opengl.org/registry/specs/KHR/debug.txt)/[GL_ARB_debug_output](http://www.opengl.org/registry/specs/ARB/debug_output.txt)
+  可以获取更多调试信息
+
+- [GL_ARB_ES3_compatibility](http://www.opengl.org/registry/specs/ARB/ES3_compatibility.txt)
+
+- [GL_ARB_explicit_uniform_location](http://www.opengl.org/registry/specs/ARB/explicit_uniform_location.txt)
+  像 HLSL 指定 semantic 一样指定 layout 的方法
+
+- [GL_ARB_framebuffer_no_attachments](http://www.opengl.org/registry/specs/ARB/framebuffer_no_attachments.txt)
+
+- [GL_ARB_internalformat_query2](http://www.opengl.org/registry/specs/ARB/internalformat_query2.txt)
+
+- [GL_ARB_invalidate_subdata](http://www.opengl.org/registry/specs/ARB/invalidate_subdata.txt)
+
+- [GL_ARB_multi_draw_indirect](http://www.opengl.org/registry/specs/ARB/multi_draw_indirect.txt)
+
+- [GL_ARB_program_interface_query](http://www.opengl.org/registry/specs/ARB/program_interface_query.txt)
+
+- [GL_ARB_shader_storage_buffer_object](http://www.opengl.org/registry/specs/ARB/shader_storage_buffer_object.txt)
+
+- [GL_ARB_shader_image_size](http://www.opengl.org/registry/specs/ARB/shader_image_size.txt)
+
+- [GL_ARB_stencil_texturing](http://www.opengl.org/registry/specs/ARB/stencil_texturing.txt)
+
+- [GL_ARB_fragment_layer_viewport](http://www.opengl.org/registry/specs/ARB/fragment_layer_viewport.txt)
+
+- [GL_ARB_texture_query_levels](http://www.opengl.org/registry/specs/ARB/texture_query_levels.txt)
+
+- [GL_ARB_texture_storage_multisample](http://www.opengl.org/registry/specs/ARB/texture_storage_multisample.txt)
+
+- [GL_ARB_texture_view](http://www.opengl.org/registry/specs/ARB/texture_view.txt)
+  用来共享已经创建纹理的内容
+
+- [GL_ARB_vertex_attrib_binding](http://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt)
+
+- [GL_ARB_robust_buffer_access_behavior](http://www.opengl.org/registry/specs/ARB/robust_buffer_access_behavior.txt)
+
+  [GL_ARB_robustness_isolation](http://www.opengl.org/registry/specs/ARB/robustness_isolation.txt)
+
+  [WGL_ARB_robustness_isolation](http://www.opengl.org/registry/specs/ARB/wgl_robustness_isolation.txt)
+
+  [GLX_ARB_robustness_isolation](http://www.opengl.org/registry/specs/ARB/glx_robustness_isolation.txt)
+
+
+
 **OpenGL 4.4**
 
+- [GL_ARB_buffer_storage](http://www.opengl.org/registry/specs/ARB/buffer_storage.txt)
 
+- [GL_ARB_clear_texture](http://www.opengl.org/registry/specs/ARB/clear_texture.txt)
+
+- [GL_ARB_enhanced_layouts](http://www.opengl.org/registry/specs/ARB/enhanced_layouts.txt)
+  uniform block 内部指定 layout，相当于 Direct3D 的 registry
+
+- [GL_ARB_multi_bind](http://www.opengl.org/registry/specs/ARB/multi_bind.txt)
+  允许通过一次调用来绑定多个资源，将绑定资源的开销分摊到一个调用上，并且和 Direct3D11 的接口相互兼容
+
+- [GL_ARB_query_buffer_object](http://www.opengl.org/registry/specs/ARB/query_buffer_object.txt)
+
+- [GL_ARB_texture_mirror_clamp_to_edge](http://www.opengl.org/registry/specs/ARB/texture_mirror_clamp_to_edge.txt)
+
+- [GL_ARB_texture_stencil8](http://www.opengl.org/registry/specs/ARB/texture_stencil8.txt)
+
+- [GL_ARB_vertex_type_10f_11f_11f_rev](http://www.opengl.org/registry/specs/ARB/vertex_type_10f_11f_11f_rev.txt)
+
+- [GL_ARB_compute_variable_group_size](http://www.opengl.org/registry/specs/ARB/compute_variable_group_size.txt)
+
+- [GL_ARB_indirect_parameters](http://www.opengl.org/registry/specs/ARB/indirect_parameters.txt)
+
+- [GL_ARB_seamless_cube_texture_per_texture](http://www.opengl.org/registry/specs/ARB/seamless_cubemap_per_texture.txt)
+
+- [GL_ARB_shader_draw_parameters](http://www.opengl.org/registry/specs/ARB/shader_draw_parameters.txt)
+
+- [GL_ARB_shader_group_vote](http://www.opengl.org/registry/specs/ARB/shader_group_vote.txt)
+
+  
 
 ## 5. Shader Language
 
@@ -391,15 +554,13 @@ OpenGL 4.4 渲染管线
 
 ## 2. 垂直同步 vsync
 
-定义：确保 显卡的运算频率（GPU 一秒绘制的帧数）和 显示器刷新频率（硬件决定）一致，**以达到动画的流畅性**
+定义：确保显卡的运算频率（GPU 一秒绘制的帧数）和 显示器刷新频率（硬件决定）一致，防止在快速运动场景下，由于**显卡运算速率大于显示器运算速率**导致快速运动的动作割裂情况（画面撕裂）
 
-流程：`显卡绘制一帧时间 > 显示器渲染一帧时间 ? 显示器等待显卡绘制完成再刷新(屏幕卡顿) : 显卡刷新;`
+流程：`显卡绘制一帧时间 > 显示器刷新一帧时间 ? 显示器刷新(显卡等待) : 显示器显示上一帧，等待显卡绘制完成(屏幕卡顿);`
 
-缺点：
+缺点：开启垂直同步，画面会有延迟，但并没有卡顿
 
-规避缺点的方法，三重缓冲：
-
-
+规避缺点的方法：用三重缓冲代替垂直同步（三重缓冲：在双缓冲的基础上加了一个缓冲，显卡不需要等待显示器把画面显示完整了再开始画下一幅，而是选择直接在另一个后缓冲画图）
 
 
 
@@ -407,7 +568,13 @@ OpenGL 4.4 渲染管线
 # 引用
 
 1. [OpenGL 加载库](https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library)
+
 2. [更多 OpenGL 的 lib 库文件](http://www.opengl-tutorial.org/miscellaneous/useful-tools-links/)
+
 3. [从未停止！OpenGL的版本历史和发展](https://www.cnblogs.com/vertexshader/articles/2917540.html)
+
 4. [水平同步 垂直同步](https://blog.csdn.net/hankern/article/details/90344384)
-5. [GLSL Versions](https://github.com/mattdesl/lwjgl-basics/wiki/glsl-versions)
+
+5. [Android 的 16ms 和垂直同步以及三重缓存](https://www.jianshu.com/p/3750db831aca)
+
+6. [GLSL Versions](https://github.com/mattdesl/lwjgl-basics/wiki/glsl-versions)

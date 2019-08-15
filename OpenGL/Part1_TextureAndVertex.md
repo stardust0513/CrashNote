@@ -121,13 +121,220 @@ glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 异向程度);
 
 
 
-# 二、点位信息传输
+# 二、顶点信息传输
 
-# 三、DisplayList
+## 1. 立即模式 glBegin()/glEnd()
+
+方式：立即绘制
+
+优点：功能适配范围广，写法直观
+缺点：频繁调用 OpenGL 函数，效率低，共享点使用次数多
+
+例子：
+
+1. 直接提交 OpenGL 命令到 GPU
+
+```c
+// Note that not all of OpenGL commands can be placed in between glBegin() and glEnd()
+// Only a subset of commands can be used
+// glVertex*(), glColor*(), glNormal*(), glTexCoord*(), glMaterial*(), glCallList(), etc.
+glBegin(GL_TRIANGLES);
+    glColor3f(1, 0, 0); // set vertex color to red
+    glVertex3fv(v1);    // draw a triangle with v1, v2, v3
+    glVertex3fv(v2);
+    glVertex3fv(v3);
+glEnd();
+```
+
+2. 将命令放到 DisplayList 后，批量一次传入到 GPU
+   DisplayList 会将其中命令的所有资源存储到自己的内存中
+   DisplayList 是服务端的状态，本身存储在 GPU 缓存中，只能存储与服务端有关的部分命令
+   DisplayList 的命令和数据一旦上传便不可修改
+
+```c
+// create one display list
+GLuint index = glGenLists(1);
+
+// compile the display list, store a triangle in it
+// Option: GL_COMPILE or GL_COMPILE_AND_EXECUTE(render)
+glNewList(index, GL_COMPILE);
+    glBegin(GL_TRIANGLES);
+    glVertex3fv(v0);
+    glVertex3fv(v1);
+    glVertex3fv(v2);
+    glEnd();
+glEndList();
+...
+
+// draw the display list
+glCallList(index);
+...
+
+// delete it if it is not used any more
+glDeleteLists(index, 1);
+```
 
 
 
-# 四、Tessellation 曲面细分
+## 2. VertexArray
+
+方式：批量数据传入绘制
+
+优点：数据以数组的形式**存储在应用缓存**，减少了 OpenGL 函数的频繁调用
+缺点：每次绘制都要占用带宽上传到显存
+
+例子：
+
+```c
+GLfloat vertices[] = {...}; // 36 of vertex coords
+
+glUseProgram(progId);
+
+// activate and specify pointer to vertex array
+// 因为 vertices 存储在应用程序上，所以这里 enable client state
+glEnableClientState(GL_VERTEX_ARRAY);
+// 也可以用 
+// glNormalPointer、glColorPointer、glIndexPointer、glTexCoordPointer、glEdgeFlagPointer
+glVertexPointer(3, GL_FLOAT, 0, vertices);
+
+// draw a cube
+// 也可以用 glDrawElements、glDrawRangeElements
+glDrawArrays(GL_TRIANGLES, 0, 36);
+
+// deactivate vertex arrays after drawing
+glDisableClientState(GL_VERTEX_ARRAY);
+```
+
+
+
+## 3. VertexBuffer
+
+方式：批量数据传入绘制
+
+优点：
+1. 数据以数组的形式**存储在显卡高速缓存**，每次使用时不用重新上传，只需要在显卡绑定即可
+2. 数据由于存储在显存，可以被应用程序在不同线程访问和修改
+
+例子：
+
+1. 创建和销毁
+
+```c
+GLuint vboId;                              // ID of VBO
+GLfloat* vertices = new GLfloat[vCount*3]; // create vertex array
+
+// generate a new VBO and get the associated ID
+glGenBuffers(1, &vboId);
+
+// bind VBO in order to use
+// Option: GL_ARRAY_BUFFER or GL_ELEMENT_ARRAY_BUFFER
+// This Option assists VBO to decide the most efficient locations of buffer objects
+// For example, some systems may prefer indices in AGP or system memory, and vertices in video memory
+// Once glBindBuffer() is first called, VBO initializes the buffer with a zero-sized memory buffer and set the initial VBO states, such as usage and access properties.
+glBindBuffer(GL_ARRAY_BUFFER, vboId);
+
+// upload data to VBO
+// Option: glBufferSubData, GL_[STATIC/DYNAMIC/STREAM]_[DRAW/READ/COPY]
+// GL_STATIC_DRAW 决定了数据的存储位置
+// Static: 更新一次，使用多次
+// Dynamic: 不断更新，使用多次
+// Stream: 更新一次，最多使用几次
+// Draw: application upload to GPU
+// Read: GPU copy to application
+// Copy: Draw and Read
+glBufferData(GL_ARRAY_BUFFER, dataSize, vertices, GL_STATIC_DRAW);
+
+// it is safe to delete after copying data to VBO
+delete [] vertices;
+
+// delete VBO when program terminated
+glDeleteBuffers(1, &vboId);
+```
+
+2. 过去的使用方式：不同的 API  开启/关闭 不同的顶点属性
+```c
+glUseProgram(progId);
+
+// bind VBOs for vertex array and index array
+glBindBuffer(GL_ARRAY_BUFFER, vboId1);            // for vertex attributes
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId2);    // for indices
+
+glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex position array
+glEnableClientState(GL_NORMAL_ARRAY);             // activate vertex normal array
+glEnableClientState(GL_TEXTURE_COORD_ARRAY);      // activate texture coord array
+
+// do same as vertex array except pointer
+glVertexPointer(3, GL_FLOAT, stride, offset1);    // last param is offset, not ptr
+glNormalPointer(GL_FLOAT, stride, offset2);
+glTexCoordPointer(2, GL_FLOAT, stride, offset3);
+
+// draw 6 faces using offset of index array
+glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0);
+
+glDisableClientState(GL_VERTEX_ARRAY);            // deactivate vertex position array
+glDisableClientState(GL_NORMAL_ARRAY);            // deactivate vertex normal array
+glDisableClientState(GL_TEXTURE_COORD_ARRAY);     // deactivate vertex tex coord array
+
+// bind with 0, so, switch back to normal pointer operation
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+```
+
+3. OpenGL 2.0 + 使用方式：同一个 API 开启/关闭 不同的顶点属性
+```c
+glUseProgram(progId);
+
+// bind VBOs for vertex array and index array
+glBindBuffer(GL_ARRAY_BUFFER, vboId1);            // for vertex coordinates
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId2);    // for indices
+
+glEnableVertexAttribArray(attribVertex);          // activate vertex position array
+glEnableVertexAttribArray(attribNormal);          // activate vertex normal array
+glEnableVertexAttribArray(attribTexCoord);        // activate texture coords array
+
+// set vertex arrays with generic API
+glVertexAttribPointer(attribVertex, 3, GL_FLOAT, false, stride, offset1);
+glVertexAttribPointer(attribNormal, 3, GL_FLOAT, false, stride, offset2);
+glVertexAttribPointer(attribTexCoord, 2, GL_FLOAT, false, stride, offset3);
+
+// draw 6 faces using offset of index array
+glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0);
+
+glDisableVertexAttribArray(attribVertex);         // deactivate vertex position
+glDisableVertexAttribArray(attribNormal);         // deactivate vertex normal
+glDisableVertexAttribArray(attribTexCoord);       // deactivate texture coords
+
+// bind with 0, so, switch back to normal pointer operation
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+```
+
+4. 更新 VAO
+```c
+// 方法 1：重新向 GPU 上传数据（缺点：应用程序和 GPU 要存储 2 份数据，每次更新都要占用带宽）
+glBufferData(GL_ARRAY_BUFFER, dataSize, vertices, GL_STATIC_DRAW);
+
+// 方法 2：通过映射 GPU 上缓存数据地址到应用程序的缓存地址
+//        将应用程序对地址的操作用于对 GPU 缓存操作，达到在应用程序控制 GPU 缓存的效果
+
+// bind then map the VBO
+glBindBuffer(GL_ARRAY_BUFFER, vboId);
+
+// Option: GL_READ_ONLY, GL_WRITE_ONLY, GL_READ_WRITE
+// 如果 GPU 正在使用这个 buffer，将会返回 NULL
+float* ptr = (float*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+
+// if the pointer is valid(mapped), update VBO
+if(ptr)
+{
+    updateMyVBO(ptr, ...);          // custom function modify buffer data
+    glUnmapBuffer(GL_ARRAY_BUFFER); // unmap it after use it's return GLboolean
+}
+```
+
+
+
+# 三、Tessellation 曲面细分
 
 Tessellation（曲面细分，可选阶段）：
 当 Tessellation 阶段存在时，只能给管线提供 GL_PATCHES 类型的图元
@@ -141,3 +348,6 @@ Tessellation（曲面细分，可选阶段）：
 
 # 引用
 
+1. [Render To Texture](http://www.paulsprojects.net/opengl/rtotex/rtotex.html)
+2. [OpenGL Vertex Buffer Object (VBO)](http://www.songho.ca/opengl/gl_vbo.html)
+3. [How to choose between GL_STREAM_DRAW or GL_DYNAMIC_DRAW?](https://stackoverflow.com/questions/8281653/how-to-choose-between-gl-stream-draw-or-gl-dynamic-draw)
