@@ -1,6 +1,6 @@
 [TOC]
 
-# 四、彩色图像处理
+# 一、彩色图像处理
 
 ## 1. 颜色的特性
 
@@ -617,11 +617,13 @@ $RGB \in [0,1]、Y \in [0,1]、U \in [-0.436,0.436]、V \in [-0.615,0.615]$，[m
 
 
 
-# 参考
+# 引用
 
-- Luminance 和 Luma 的区别 https://cs.stackexchange.com/questions/92569/what-is-the-difference-between-luma-and-luminance
-- YUV 维基百科 https://en.wikipedia.org/wiki/YUV
-- YUV 的采样方式 https://en.wikipedia.org/wiki/Chroma_subsampling
-- YUV 的打包方式 https://msdn.microsoft.com/en-us/library/aa904813%28VS.80%29.aspx
-- YUV 420 数据格式详解 http://www.cnblogs.com/azraelly/archive/2013/01/01/2841269.html
+1. [Lumiance 计算性能优化](http://www.songho.ca/dsp/luminance/luminance.html)
+2. [Luminance 和 Luma 的区别](https://cs.stackexchange.com/questions/92569/what-is-the-difference-between-luma-and-luminance)
+3. [YUV 维基百科](https://en.wikipedia.org/wiki/YUV)
+4. [YUV 的采样方式](https://en.wikipedia.org/wiki/Chroma_subsampling)
+5. [YUV 的打包方式](https://msdn.microsoft.com/en-us/library/aa904813%28VS.80%29.aspx)
+6. [YUV 420 数据格式详解](http://www.cnblogs.com/azraelly/archive/2013/01/01/2841269.html)
+7. [IJKPlayer](https://github.com/bilibili/ijkplayer)
 
