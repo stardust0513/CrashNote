@@ -156,18 +156,79 @@ $$
 
 ### 3.5 图像的直方图处理
 
-图像的直方图：图像各个灰度级出现概率的直方图
+作用：通过在单张灰度图中统计 0 - 255 每个灰度级出现的总次数（概率），作为图像增强或图像阈值判断标准
+限制：直方图只能测量一种强度值（R、G、B、A、Gray）的分布概率范围
 特点：暗的图像直方图主要分布在灰度级低的位置，高对比度的图像直方图分布均匀，低对比度的直方图主要分布在灰度级的中间位置
 
-**直方图均衡**：利用图像直方图 **对** 对比度进行调整的方法
+直方图的生成
 
-- 方法：原始直方图 => 灰度变换函数 处理 => 均衡后的直方图
+```c
+int pixelCount = width * height;
+for (int i = 0; i < pixelCount; ++i )
+{
+    histogram[imageData[i]]++; // 计算单张图中每个灰度级出现的总次数
+}
+```
+
+
+
+累加直方图：在单张灰度图中统计 0 - 255 每个灰度等级，小于等于该灰度的等级出现总次数之和
+
+生成累加直方图
+
+```c
+// build a cumulative histogram as LUT (Look Up Table)
+int sum = 0;
+for (int i=0; i < HISTOGRAM_SIZE; ++i )
+{
+    sum += histogram[i];
+    sumHistogram[i] = sum;
+}
+```
+
+
+
+**直方图均衡**：利用图像直方图 **对** 对比度进行调整的**方法**
+
 - 作用：用于作为增强局部对比度而不影响整体对比度的自适应工具
+
+- 方法：原始直方图 => 累加直方图 =>将最大强度通过出现概率平滑过度到每个像素  => 均衡后的直方图
+
+  ```c
+  // 一、直接对图像进行直方图均衡
+  // transform image using sum histogram as a LUT (Look Up Table)
+  for (int i = 0; i < pixelCount; ++i )
+  {
+    	// 通过这张图的最大强度和当前像素的累加出现概率来求出修改后的像素值
+      outImage[i] = sumHistogram[image[i]] * MAX_INTENSITY / pixelCount;
+  }
+  
+  // 二、由于 pixelCount 远大于 HISTOGRAM_SIZE 这种固定值
+  //    通过提前制作的查找表来做直方图均衡（减少计算量，提高效率）
+  // build a LUT containing scale factor
+  for (int i=0; i < HISTOGRAM_SIZE; ++i )
+  {
+      sum += histogram[i];
+      lut[i] = sum * MAX_INTENSITY / pixelCount;
+  }
+  
+  // transform image using sum histogram as a LUT
+  for (int i = 0; i < pixelCount; ++i )
+  {
+      outImage[i] = lut[image[i]];
+  }
+  ```
+
+- 效果对比：均衡后的累加直方图几乎是线性增长的
+
+  ![](./images/histoEqualization.png)
+
+  
 
 **直方图匹配**：处理图像使其得到指定的概率密度
 
-- 方法：不需要求得 灰度变换函数，只需要存储 灰度变换函数对应的 输入输出表格用查表法来得到相应的数据
 - 作用：通过得到**指定**概率密度的 灰度变换函数使图像局部增强
+- 方法：不需要求得 灰度变换函数，只需要存储 灰度变换函数对应的 输入输出表格用查表法来得到相应的数据
 
 
 
@@ -441,4 +502,6 @@ $$
 
 
 
-  
+  # 引用
+
+1. [Histogram](http://www.songho.ca/dsp/histogram/histogram.html)
