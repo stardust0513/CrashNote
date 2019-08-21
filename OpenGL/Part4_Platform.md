@@ -239,7 +239,7 @@ int main(int argc, char ** argv)
 
 ###4.1 TEXTURE_EXTERNAL_OES
 
-TEXTURE_EXTERNAL_OES 是 OpenGL ES 在 Android 上的扩展，在获取相机纹理时只有 TEXTURE_EXTERNAL_OES 类型的纹理
+[TEXTURE_EXTERNAL_OES](https://www.khronos.org/registry/OpenGL/extensions/OES/OES_EGL_image_external.txt) 是 OpenGL ES 在 Android 上的扩展，在获取相机纹理时只有 TEXTURE_EXTERNAL_OES 类型的纹理
 
 使用扩展纹理 TEXTURE_EXTERNAL_OES 步骤
 
