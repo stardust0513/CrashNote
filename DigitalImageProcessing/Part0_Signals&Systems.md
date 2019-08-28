@@ -14,12 +14,31 @@
 
 ## 1. 信号的系统
 
-> 信号的系统指一系列处理信号的**方法**，
+> 信号的系统指一系列处理信号的**方法**
 
 ### 1.1 系统的分类
 
-- 线性转换 Linear / 非线性转换 Non-linear
-- 时间不是自变量 time-inveriant / 时间是自变量 time-varying
+以下系统类型可以组合为多个系统类型
+
+- **线性转换** Linear / **非线性转换** Non-linear
+  线性：输入信号与输出信号满足可加性和同质性（缩放一致）
+  $$
+  \alpha \cdot x(t) \rarr [Linear \space System] \rarr \alpha \cdot y(t) \\
+  x_1(t) + x_2(t) \rarr [Linear \space System] \rarr y_1(t) + y_2(t) \\
+  \alpha \cdot x_1(t) + \beta \cdot x_2(t) 
+  \rarr [Linear \space System] \rarr 
+  \alpha \cdot y_1(t) + \beta \cdot y_2(t) \\
+  $$
+  
+- **时不变** time-inveriant / **时变** time-varying
+  时不变：同样的时间偏移，输入和输出的值是对应的
+$$
+x(t-t_0) \rarr [Time-Invariant \space System] \rarr y(t-t_0)\\
+$$
+
+- 因果系统 Causal
+根据现在和过去的输入输出值推出输出值
+
 
 
 
@@ -37,7 +56,12 @@
 
 **脉冲信号**：一种**离散信号**（即，离散时间信号，指信号在时间这个轴上是离散的），波形之间在 Y 轴不连续，具有一定周期性
 
+
+
 ### 2.1 单位脉冲信号
+
+一维信号中的单位脉冲信号
+
 ![](./images/unit_impulse.png)
 
 $$
@@ -52,7 +76,27 @@ Offset & \delta(n-n') =&
 1,& n=n'\\
 0,& otherwise
 \end{cases}\\\\
-2D Discrete & \delta(n) =& f_1(n_1)\cdot f_2(n_2)
+2D \space Discrete & \delta(n) =& f_1(n_1)\cdot f_2(n_2)
+\end{array}
+$$
+
+
+
+二维信号中的单位脉冲信号
+
+![](./images/unit_impulse_2D.png)
+$$
+\begin{array}{rrl}
+Original & \delta(m,n) =& 
+\begin{cases}
+1,& m=n=0\\
+0,& otherwise
+\end{cases}\\
+Offset & \delta(m-m',n-n') =& 
+\begin{cases}
+1,& m=m',n=n'\\
+0,& otherwise
+\end{cases}
 \end{array}
 $$
 
@@ -73,7 +117,7 @@ Offset & u(n-n') =&
 1,& n \geq n'\\
 0,& otherwise
 \end{cases}\\\\
-2D Discrete & u(n_1, n_2) =& 
+2D \space Discrete & u(n_1, n_2) =& 
 u_1(n_1)\cdot u_2(n_2)
 \end{array}
 $$
@@ -114,9 +158,11 @@ $$
 
 
 
+
+
 # 二、卷积
 
-## 1. 信号的可以被拆解
+## 1. 信号的拆解
 
 > 一般来说，一个脉冲信号可以被分解为多个单位脉冲信号加权之和
 
@@ -128,7 +174,7 @@ $$
 
 ### 1.2 离散信号序列的拆解
 
-以下图 $x$ 信号序列为例：
+以下图的一维 $x$ 信号序列为例：
 
 ![](./images/impulse.png)
 
@@ -147,21 +193,42 @@ x[0] &= 2 &= 2 \cdot \delta[n - 0] &= x[0] \cdot \delta[n - 0] \\
 x[1] &= 3 &= 3 \cdot \delta[n - 1] &= x[1] \cdot \delta[n - 1] \\
 x[2] &= 1 &= 1 \cdot \delta[n - 2] &= x[2] \cdot \delta[n - 2] \\ \\
 \end{array} \\
-\begin{array}{lll}
-x[n] &= x[0] + x[1] + x[2],(n=1,2,3) \\
-&= x[0] \cdot \delta[n - 0] + x[1] \cdot \delta[n - 1] + x[2] \cdot \delta[n - 2],(n=1,2,3) \\ \\
-x[n] &= \sum_{k = - \infin}^\infin x[k] \cdot \delta[n - k], \space(这里将序列信号 x 的序列个数 n 推广到 -\infin 到 \infin)
+\begin{array}{llll}
+当 \space n \in [1,2,3] \space 时 & x[n] &= x[0] + x[1] + x[2] \\
+& &= x[0] \cdot \delta[n - 0] + x[1] \cdot \delta[n - 1] + x[2] \cdot \delta[n - 2]\\ \\
+当 \space n \in (-\infin, \infin) \space 时 & x[n] &= \sum_{k = - \infin}^\infin x[k] \cdot \delta[n - k]
 \end{array}
 $$
 
 
 
+同理，二维离散信号序列也可以拆解为：
+$$
+\begin{array}{lll}
+当 \space n \in [1,2,3] \space 时 & 
+x[m][n] &= x[0][0] \cdot \delta[m][n] + x[1][2] \cdot \delta[m-1][n-2] + ... +  x[m][n]\cdot \delta[0][0]\\
+当 \space n \in (-\infin, \infin) \space 时 &
+x[m][n] &= 
+\sum_{i = - \infin}^\infin
+\sum_{j = - \infin}^\infin 
+x[i][j] \cdot \delta[m - i][n - j]
+\end{array}
+$$
+
+
+
+
+
 ## 2. 单位脉冲响应
 
-**单位脉冲响应**：通过单位脉冲信号输入系统后，得到的输出信号（信号经过系统处理后的结果），一般用 $h[n]$ 表示
+**单位脉冲响应**：通过单位脉冲信号输入**线性时不变系统**后，得到的输出信号，一般用 $h[n]$ 表示
+一般作为卷积的参数之一，使得全部的信号能通过该方法处理
+
 ![](./images/impulse_response01.png)
 
-**单位脉冲响应有以下几个特性**：
+### 2.1 单位脉冲响应的特性
+
+以下特性，适用于一维和二维等信号
 
 1. 系统以时间为变量时，输入单位脉冲会得到对应时间偏移的单位脉冲响应
 ![](./images/impulse_response02.png)
@@ -171,17 +238,73 @@ $$
    
 3. 多个单位脉冲输入时，在经过系统处理后也会得到相应数目个单位响应脉冲
    ![](./images/impulse_response04.png)
-   
-   
 
-结合单位相应脉冲的性质和离散信号的拆解方式后的处理过程，就是卷积
-   ![](./images/impulse_response05.png)
+
+
+结合**单位脉冲响应的性质**和**离散信号的拆解方式**后的处理过程，就是卷积
+
+![](./images/impulse_response05.png)
+
+
+
+### 2.2 二维的单位脉冲响应（卷积核）
+
+一般来说二维的脉冲响应（卷积核）多以中心为起点排列，如下图
+
+- 注意：输入信号的排列方式与二维脉冲响应信号的排列**无关**
+
+![](./images/kernel.png)
+
+
+
+**为了减少计算量**，我们可以通过将一个二维脉冲响应（卷积核）拆解为两个一维脉冲响应分别依次做卷积
+这样假如原本为 3X3 的卷积核要做 3 X 3 = 9 次乘法，拆分后只需要做 3 + 3 = 6 次乘法
+
+- 作用：**通过拆解来降低二维脉冲响应的计算量**
+
+- 例，其中 * 表示卷积：
+  $$
+  \begin{align}
+  \begin{bmatrix}
+  A \cdot a & A \cdot b & A \cdot c \\
+  B \cdot a & B \cdot b & B \cdot c \\
+  C \cdot a & C \cdot b & C \cdot c 
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+  A \\ B \\ c
+  \end{bmatrix}
+  \cdot 
+  \begin{bmatrix}
+  a & b & c
+  \end{bmatrix} \\
+  x[m,n] * \begin{bmatrix}
+  A \cdot a & A \cdot b & A \cdot c \\
+  B \cdot a & B \cdot b & B \cdot c \\
+  C \cdot a & C \cdot b & C \cdot c 
+  \end{bmatrix}
+  &= x[m,n] * 
+  \begin{pmatrix}
+  \begin{bmatrix}A \\ B \\ c\end{bmatrix}
+  \cdot 
+  \begin{bmatrix}a & b & c\end{bmatrix} 
+  \end{pmatrix}\\
+  &=
+  \begin{pmatrix}
+  x[m,n] * \begin{bmatrix}A \\ B \\ c\end{bmatrix}
+  \end{pmatrix}
+  * 
+  \begin{bmatrix}a & b & c\end{bmatrix} 
+  
+  \end{align}
+  $$
+  
 
 
 
 ## 3. 离散时阈下的卷积
 
-**卷积公式**，其中
+**卷积公式（一维信号）**，其中
 y 为输出信号序列（卷积结果）
 x 为输入信号序列
 h 当前输入信号对应的**脉冲响应结果**（信号系统处理后的到的值）
@@ -192,7 +315,9 @@ $$
 
 
 
-## 4. 一维信号的卷积
+## 4. 卷积
+
+### 4.1 一维信号的卷积过程
 
 假设：
 
@@ -201,7 +326,6 @@ $$
 
 求卷积：
 ![](./images/convolution.png)
-
 $$
 \begin{array}{lll}
 y[0] &= x[0]·h[0] & 需要采样 \space x_0  \\
@@ -211,7 +335,7 @@ y[3] &= x[3]·h[0] + x[2]·h[1] & 需要采样 \space x_2,x_3 \\
 \end{array}
 $$
 
-归纳可得
+归纳可得，其中 i 表示 **信号序号**，k 表示 **响应脉冲序号**
 $$
 y[i] =
 \begin{cases}
@@ -222,16 +346,153 @@ $$
 
 
 
+CPU 代码计算示例
 
-## 5. 二维信号的卷积
+- 注意：卷积后的结果可能会超出原来数值的范围，即使原来的数值都在范围内
+
+```c
+// 1D convolution
+// We assume input and kernel signal start from t=0.
+bool convolve1D(float* in, float* out, int dataSize, float* kernel, int kernelSize)
+{
+    int i, j, k;
+
+    // check validity of params
+    if(!in || !out || !kernel || dataSize <=0 || kernelSize <= 0) return false;
+
+    // start convolution from out[kernelSize-1] to out[dataSize-1] (last)
+    for(i = kernelSize-1; i < dataSize; ++i)
+    {
+        out[i] = 0;                             // init to 0 before accumulate
+
+        for(j = i, k = 0; k < kernelSize; --j, ++k)
+            out[i] += in[j] * kernel[k];
+    }
+
+    // convolution from out[0] to out[kernelSize-2]
+    for(i = 0; i < kernelSize - 1; ++i)
+    {
+        out[i] = 0;                             // init to 0 before sum
+
+        for(j = i, k = 0; j >= 0; --j, ++k)
+            out[i] += in[j] * kernel[k];
+    }
+
+    return true;
+}
+```
 
 
+
+
+### 4.2 二维信号的卷积过程
+
+二维信号的卷积是一维信号卷积的扩展，根据二维的单位脉冲响应和二维的信号拆解可得
+
+- 注意：二维响应信号（卷积核）在最后使用的时候和原来**左右上下都颠倒**
+
+![](./images/convolution1.png)
+
+
+
+例：在采样（输入）是（1，1）位置的卷积计算为
+
+![](./images/convolution2D.png)
+
+
+
+卷积的输入、卷积核、卷积输出如下
+
+![](./images/convolution2.png)
+
+
+
+CPU 代码计算示例
+
+- 注意：卷积后的结果可能会超出原来数值的范围，即使原来的数值都在范围内
+
+```c
+bool convolve2D(int* in, int* out, int dataSizeX, int dataSizeY, 
+                float* kernel, int kernelSizeX, int kernelSizeY)
+{
+    int i, j, m, n;
+    int *inPtr, *inPtr2, *outPtr;
+    float *kPtr;
+    int kCenterX, kCenterY;
+    int rowMin, rowMax;                             // to check boundary of input array
+    int colMin, colMax;                             //
+    float sum;                                      // temp accumulation buffer
+
+    // check validity of params
+    if(!in || !out || !kernel) return false;
+    if(dataSizeX <= 0 || kernelSizeX <= 0) return false;
+
+    // find center position of kernel (half of kernel size)
+    kCenterX = kernelSizeX >> 1;
+    kCenterY = kernelSizeY >> 1;
+
+    // init working  pointers
+    // note that it is shifted (kCenterX, kCenterY)
+    inPtr = inPtr2 = &in[dataSizeX * kCenterY + kCenterX];  
+    outPtr = out;
+    kPtr = kernel;
+
+    // start convolution
+    for(i= 0; i < dataSizeY; ++i)           	 // number of rows
+    {
+        // compute the range of convolution
+        // the current row of kernel should be between these
+        rowMax = i + kCenterY;
+        rowMin = i - dataSizeY + kCenterY;
+
+        for(j = 0; j < dataSizeX; ++j)     		// number of columns
+        {
+            // compute the range of convolution, 
+            // the current column of kernel should be between these
+            colMax = j + kCenterX;
+            colMin = j - dataSizeX + kCenterX;
+
+            sum = 0;                           // set to 0 before accumulate
+
+            // flip the kernel and traverse all the kernel values
+            // multiply each kernel value with underlying input data
+            for(m = 0; m < kernelSizeY; ++m)   // kernel rows
+            {
+                // check if the index is out of bound of input array
+                if(m <= rowMax && m > rowMin)
+                {
+                    for(n = 0; n < kernelSizeX; ++n)
+                    {
+                        // check the boundary of array
+                        if(n <= colMax && n > colMin)
+                            sum += *(inPtr - n) * *kPtr;
+
+                        ++kPtr;            // next kernel
+                    }
+                }
+                else
+                    kPtr += kernelSizeX;   // out of bound, move to next row of kernel
+
+                inPtr -= dataSizeX;        // move input data 1 raw up
+            }
+
+            // convert integer number
+            if(sum >= 0) *outPtr = (int)(sum + 0.5f);
+            else *outPtr = (int)(sum - 0.5f);
+
+            kPtr = kernel;      // reset kernel to (0,0)
+            inPtr = ++inPtr2;   // next input
+            ++outPtr;           // next output
+        }
+    }
+
+    return true;
+}
+```
 
 
 
 # 三、傅立叶变换
-
-
 
 
 
@@ -244,3 +505,4 @@ $$
 3. [Fundamentals of Digital Image and Video Processing](https://github.com/giosans/Fundamentals-of-Digital-Image-and-Video-Processing-course)
 4. [Signals and Systems](http://open.163.com/movie/2011/8/7/A/M8AROL7GG_M8AROT67A.html)
 5. [Convolution](http://www.songho.ca/dsp/convolution/convolution.html)
+6. [单位脉冲响应、单位阶跃响应的作用是什么？](https://know.baidu.com/question/b83161b20e2bf9de79624dd98fa89b47c70e1cf)
