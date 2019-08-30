@@ -257,46 +257,62 @@ $$
 
 
 
-**为了减少计算量**，我们可以通过将一个二维脉冲响应（卷积核）拆解为两个一维脉冲响应分别依次做卷积
-这样假如原本为 3X3 的卷积核要做 3 X 3 = 9 次乘法，拆分后只需要做 3 + 3 = 6 次乘法
+**为了减少计算量**，我们可以通过将一个二维脉冲响应（卷积核）拆解为两个一维脉冲响应分别依次（顺序可以颠倒）做卷积
+这样假如原本为 3X3 的卷积核，**9 个输入**要做 9 X 9 = 81 次乘法，拆分后只需要做 9 + 9 =18 次乘法
 
 - 作用：**通过拆解来降低二维脉冲响应的计算量**
 
 - 例，其中 * 表示卷积：
   $$
-  \begin{align}
+  \begin{array}{lrl}
+  \because & y[m,n] =& x[m,n] * h[m,n] = 
+  \sum_{j = - \infin}^\infin
+  \sum_{i = - \infin}^\infin
+  x[i,j] \cdot h[m-i,n-j] \\
+  &=& h[m,n] * x[m,n] = 
+  \sum_{j = - \infin}^\infin
+  \sum_{i = - \infin}^\infin
+  h[i,j] \cdot x[m-i,n-j] \\
+  &=& (h_1[m] \cdot h_2[n]) * x[m,n],(线性代数中对矩阵的向量拆分) \\
+  &=& 
+  \sum_{j = - \infin}^\infin
+  \sum_{i = - \infin}^\infin
+  (h_1[i] \cdot h_2[j]) \cdot x[m-i,n-j] \\
+  &=& 
+  \sum_{j = - \infin}^\infin
+  h_2[j] \cdot(\sum_{i = - \infin}^\infin h_1[i] \cdot x[m-i,n-j]) \\
+  &=& h_2[j] * (h_1[i] * x[m-i,n-j]) \\\\
+  or 
+  &=& h_1[i] * (h_2[j] * x[m-i,n-j]) \\
+  \\
+  \therefore &
   \begin{bmatrix}
   A \cdot a & A \cdot b & A \cdot c \\
   B \cdot a & B \cdot b & B \cdot c \\
   C \cdot a & C \cdot b & C \cdot c 
   \end{bmatrix}
-  &= 
-  \begin{bmatrix}
-  A \\ B \\ c
-  \end{bmatrix}
+  =& 
+  \begin{bmatrix}A \\ B \\ c\end{bmatrix}
   \cdot 
+  \begin{bmatrix}a & b & c\end{bmatrix} \\
+  &
+  x[m,n] * 
   \begin{bmatrix}
-  a & b & c
-  \end{bmatrix} \\
-  x[m,n] * \begin{bmatrix}
   A \cdot a & A \cdot b & A \cdot c \\
   B \cdot a & B \cdot b & B \cdot c \\
   C \cdot a & C \cdot b & C \cdot c 
   \end{bmatrix}
-  &= x[m,n] * 
+  =& x[m,n] * 
   \begin{pmatrix}
   \begin{bmatrix}A \\ B \\ c\end{bmatrix}
   \cdot 
   \begin{bmatrix}a & b & c\end{bmatrix} 
   \end{pmatrix}\\
-  &=
-  \begin{pmatrix}
-  x[m,n] * \begin{bmatrix}A \\ B \\ c\end{bmatrix}
-  \end{pmatrix}
+  &=&
+  \begin{pmatrix} x[m,n] * \begin{bmatrix}A \\ B \\ c\end{bmatrix} \end{pmatrix}
   * 
   \begin{bmatrix}a & b & c\end{bmatrix} 
-  
-  \end{align}
+  \end{array}
   $$
   
 
@@ -492,6 +508,8 @@ bool convolve2D(int* in, int* out, int dataSizeX, int dataSizeY,
 
 
 
+
+
 # 三、傅立叶变换
 
 
@@ -501,8 +519,17 @@ bool convolve2D(int* in, int* out, int dataSizeX, int dataSizeY,
 # 引用
 
 1. [正弦信号，指数信号](https://www.cnblogs.com/zhiyinglky/p/5805315.html)
+
 2. [跃阶信号](https://www.cnblogs.com/zhiyinglky/p/5805314.html)
-3. [Fundamentals of Digital Image and Video Processing](https://github.com/giosans/Fundamentals-of-Digital-Image-and-Video-Processing-course)
-4. [Signals and Systems](http://open.163.com/movie/2011/8/7/A/M8AROL7GG_M8AROT67A.html)
-5. [Convolution](http://www.songho.ca/dsp/convolution/convolution.html)
-6. [单位脉冲响应、单位阶跃响应的作用是什么？](https://know.baidu.com/question/b83161b20e2bf9de79624dd98fa89b47c70e1cf)
+
+3. [单位脉冲响应、单位阶跃响应的作用是什么？](https://know.baidu.com/question/b83161b20e2bf9de79624dd98fa89b47c70e1cf)
+
+4. [Fundamentals of Digital Image and Video Processing](https://github.com/giosans/Fundamentals-of-Digital-Image-and-Video-Processing-course)
+
+5. [Signals and Systems](http://open.163.com/movie/2011/8/7/A/M8AROL7GG_M8AROT67A.html)
+
+6. [Convolution](http://www.songho.ca/dsp/convolution/convolution.html)
+
+7. [Proof of Separable Convolution 2D](http://www.songho.ca/dsp/convolution/convolution2d_separable.html)
+
+   
